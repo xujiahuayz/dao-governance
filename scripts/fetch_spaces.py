@@ -1,8 +1,8 @@
 import gzip
 import json
 
-from governenv.graphql import graphdata, query_structurer
 from governenv.constants import SNAPSHOT_PATH
+from governenv.graphql import graphdata, query_structurer
 
 BATCH_SIZE = 1_000
 # check documentation: https://docs.snapshot.org/tools/api

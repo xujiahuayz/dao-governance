@@ -1,11 +1,10 @@
 # dao-governance
 
-
 ## Setup
 
 ```
 git clone https://github.com/xujiahuayz/dao-governance.git
-cd fork  
+cd fork
 ```
 
 ### Give execute permission to your script and then run `setup_repo.sh`
@@ -58,4 +57,10 @@ pip install toml
 
 ```bash
 pip install -e ".[dev]"
+```
+
+# fetch snapshot spaces data
+
+```
+python scripts/fetch_spaces.py
 ```
