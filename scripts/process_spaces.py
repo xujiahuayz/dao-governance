@@ -1,8 +1,10 @@
 import gzip
 import json
-from governenv.constants import SNAPSHOT_PATH
-import pandas as pd
+
 import matplotlib.pyplot as plt
+import pandas as pd
+
+from governenv.constants import SNAPSHOT_PATH
 
 # load the data
 
