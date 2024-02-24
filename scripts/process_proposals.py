@@ -4,12 +4,12 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from governenv.constants import SNAPSHOT_PATH
+from governenv.constants import SNAPSHOT_PATH_PROPOSALS
 
 # load the data
 
 
-with gzip.open(SNAPSHOT_PATH, "rt") as f:
+with gzip.open(SNAPSHOT_PATH_PROPOSALS, "rt") as f:
     # load data and skip duplicates
     data = [json.loads(line) for line in f]
 
@@ -22,7 +22,7 @@ data_unique = [
 # extract id, created, rank, proposalsCount, proposalsCount7d from each item in the list and make dataframe
 # specify type of each column as str, int, int, int, int
 
-df_spaces = pd.DataFrame(
+df = pd.DataFrame(
     [
         {
             "id": item["id"],
@@ -36,20 +36,18 @@ df_spaces = pd.DataFrame(
 )
 
 # sort by rank and remove those with no proposalsCount
-df_spaces = df_spaces.sort_values(by="rank")
+df = df.sort_values(by="rank")
+df = df[df["proposalsCount"] >= 1]
 
-if __name__ == "__main__":
-    df_spaces = df_spaces[df_spaces["proposalsCount"] >= 1]
+# plot the distribution of proposalsCount and proposalsCount7d
 
-    # plot the distribution of proposalsCount and proposalsCount7d
-
-    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
-    df_spaces["proposalsCount"].plot.hist(ax=ax[0], bins=500)
-    ax[0].set_title("proposalsCount")
-    df_spaces["proposalsCount7d"].plot.hist(ax=ax[1], bins=500)
-    ax[1].set_title("proposalsCount7d")
-    # log scale
-    ax[0].set_yscale("log")
-    ax[1].set_yscale("log")
-    # show plot
-    plt.show()
+fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+df["proposalsCount"].plot.hist(ax=ax[0], bins=500)
+ax[0].set_title("proposalsCount")
+df["proposalsCount7d"].plot.hist(ax=ax[1], bins=500)
+ax[1].set_title("proposalsCount7d")
+# log scale
+ax[0].set_yscale("log")
+ax[1].set_yscale("log")
+# show plot
+plt.show()
