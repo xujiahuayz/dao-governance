@@ -36,7 +36,7 @@ with gzip.open(SNAPSHOT_PATH_VOTES, "wt") as f:
             reservepara_query = query_structurer(
                 series,
                 specs,
-                arg=f"first: {BATCH_SIZE}, where: {{created_gte: {last_created}, space: {space}}}"
+                arg=f'first: {BATCH_SIZE}, where: {{created_gte: {last_created}, space: "{space}"}}'
                 + ', skip: 1, orderBy: "created", orderDirection: asc',
             )
             res = graphdata(reservepara_query, url=SNAPSHOT_ENDPOINT)
