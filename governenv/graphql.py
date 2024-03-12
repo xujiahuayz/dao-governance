@@ -19,7 +19,7 @@ def graphdata(*q, url: str):
     query = "{" + "\n".join(q) + "}"
 
     # pretty print out query
-    pprint(query)
+    # pprint(query)
 
     r = requests.post(url, json={"query": query})
 

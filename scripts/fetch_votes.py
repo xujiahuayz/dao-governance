@@ -2,6 +2,7 @@ import gzip
 import json
 
 from governenv.constants import SNAPSHOT_PATH_VOTES
+from governenv.settings import SNAPSHOT_API_KEY
 from governenv.graphql import graphdata, query_structurer
 from scripts.process_spaces import df_spaces
 
@@ -11,7 +12,7 @@ spaces = df_spaces[df_spaces["proposalsCount"] >= 1]["id"].values[:500]
 
 BATCH_SIZE = 1_000
 # check documentation: https://docs.snapshot.org/tools/api
-SNAPSHOT_ENDPOINT = "https://hub.snapshot.org/graphql"
+SNAPSHOT_ENDPOINT = f"https://hub.snapshot.org/graphql?apiKey={SNAPSHOT_API_KEY}"
 
 series = "votes"
 specs = """
@@ -30,8 +31,10 @@ specs = """
 """
 
 last_created = 0
+res = {}
 with gzip.open(SNAPSHOT_PATH_VOTES, "wt") as f:
     for space in spaces:
+        print(space)
         while True:
             reservepara_query = query_structurer(
                 series,
@@ -40,9 +43,13 @@ with gzip.open(SNAPSHOT_PATH_VOTES, "wt") as f:
                 + ', skip: 1, orderBy: "created", orderDirection: asc',
             )
             res = graphdata(reservepara_query, url=SNAPSHOT_ENDPOINT)
-            if "data" in set(res) and res["data"][series]:
+            # if unauthoraized / forbidden, print res and break both while and for loops
+            if "data" in res and res["data"][series]:
                 rows = res["data"][series]
                 f.write("\n".join([json.dumps(row) for row in rows]) + "\n")
                 last_created = rows[-1]["created"]
             else:
+                print(res)
                 break
+        if "error" in res:
+            break
