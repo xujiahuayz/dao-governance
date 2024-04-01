@@ -1,5 +1,5 @@
-import gzip
 import json
+import gzip
 import matplotlib.pyplot as plt
 import pandas as pd
 

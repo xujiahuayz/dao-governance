@@ -2,7 +2,7 @@ import gzip
 import json
 import requests
 
-from governenv.constants import GITHUB_PATH_PULL_REQUESTS
+from governenv.constants import GITHUB_PATH_REFCLIENT_PULLREQUESTS
 from governenv.settings import GITHUB_TOKEN
 
 # GitHub GraphQL endpoint
@@ -13,8 +13,8 @@ def get_github_query(after_cursor=None):
     after = f', after: "{after_cursor}"' if after_cursor else ""
     return f"""
     {{
-      # fetch BIPs 
-      repository(owner: "bitcoin", name: "bips") {{
+      # Fetch Reference Client Pull Requests
+      repository(owner: "bitcoin", name: "bitcoin") {{
         pullRequests(first: 100{after}) {{
           pageInfo {{
             endCursor
@@ -70,9 +70,10 @@ def fetch_github_data():
 
     return pull_requests
 
+
 # Fetch the data 
 data = fetch_github_data()
 
 # Save the data to a gzip file
-with gzip.open(GITHUB_PATH_PULL_REQUESTS, "wt") as f:
-    f.write("\n".join([json.dumps(pr['node']) for pr in data]) + "\n")
+with gzip.open(GITHUB_PATH_REFCLIENT_PULLREQUESTS, "wt") as f:
+    f.write("\n".join([json.dumps(item['node']) for item in data]) + "\n")
