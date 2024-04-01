@@ -30,9 +30,18 @@ df_spaces = pd.DataFrame(
             "rank": item["rank"],
             "proposalsCount": item["proposalsCount"],
             "proposalsCount7d": item["proposalsCount7d"],
+            "symbol": item["symbol"],
+            "created": item["created"],
+            "params": item["strategies"][0]["params"],
+            # "params_address": item["strategies"][0]["params"]["address"],
+            # "params_decimals": item["strategies"][0]["params"]["decimals"],
         }
         for item in data_unique
     ]
+)
+
+df_spaces["params_symbol"] = df_spaces["params"].apply(
+    lambda x: x["symbol"] if "symbol" in x else None
 )
 
 # sort by rank and remove those with no proposalsCount
