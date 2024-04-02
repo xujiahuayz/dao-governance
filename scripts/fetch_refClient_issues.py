@@ -14,7 +14,7 @@ def get_github_query(after_cursor=None):
     return f"""
     {{
       # Fetch Reference Client Issues
-      repository(owner: "bitcoin", name: "bitcoin") {{
+      repository(owner: "algorand", name: "go-algorand") {{
         issues(first: 100{after}) {{
           pageInfo {{
             endCursor
