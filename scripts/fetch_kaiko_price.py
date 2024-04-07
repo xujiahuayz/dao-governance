@@ -1,3 +1,4 @@
+import gzip
 import json
 
 import requests
@@ -33,22 +34,18 @@ if __name__ == "__main__":
         "X-Api-Key": KAIKO_API_KEY,
     }
 
-    # with gzip.open(KAIKO_SLIPPAGE_PATH, "wt") as f:
-
-    # for base_asset in BASE_ASSET_LIST:
-    # print(base_asset)
-    base_asset = "btc"
-    params = {
-        "start_time": "2021-01-01T00:00:00.000Z",
-        # "page_size": 1000,
-        "interval": "1h",
-        "sort": "asc",
-    }
     result_dict = {}
-    for base_asset in base_assets:
+    for base_asset in ["BTC"] + base_assets:
         results = []
         next_url = f"https://us.market-api.kaiko.io/v2/data/trades.v1/exchanges/bnce/spot/{base_asset.lower()}-usdt/aggregations/count_ohlcv_vwap"
+        params = {
+            "start_time": "2021-01-01T00:00:00.000Z",
+            "page_size": 1000,
+            "interval": "1h",
+            "sort": "asc",
+        }
         while True:
+            print(f"Fetching data for {base_asset} from {next_url}")
             response = requests.get(
                 url=next_url,
                 headers=headers,
@@ -60,11 +57,16 @@ if __name__ == "__main__":
             result_data = result["data"]
             if result_data:
                 results.extend(result_data)
-                next_url = result["next_url"]
+                if "next_url" in result:
+                    next_url = result["next_url"]
+                    # remove "start_time" from params
+                    params.pop("start_time", None)
+                else:
+                    result_dict[base_asset] = results
+                    break
             else:
-                result_dict[base_asset] = results
                 break
 
-    # save result_dict to a file
-    with open(KAIKO_PRICE_PATH, "w") as f:
+    # save result_dict to a json.gz file
+    with gzip.open(KAIKO_PRICE_PATH, "wt") as f:
         json.dump(result_dict, f)
