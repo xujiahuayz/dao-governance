@@ -33,6 +33,8 @@ with gzip.open(SNAPSHOT_PATH_PROPOSALS, "rt") as f:
 
 proposals = pd.DataFrame(proposal_data)
 proposals["hhi"] = proposals["scores"].apply(hhi_index)
+
+proposals["start_time"] = pd.to_datetime(proposals["start"], unit="s")
 proposals["end_time"] = pd.to_datetime(proposals["end"], unit="s")
 # make a dataframe with data in float format
 btc_price = pd.DataFrame(price_data["BTC"])
@@ -51,7 +53,7 @@ base_asset_proposals = proposals[
 
 # pick only top 10 based on votes or hhi
 base_asset_proposals = base_asset_proposals.sort_values(by="hhi", ascending=True).head(
-    5
+    8
 )
 
 # get BTC denominated price for base_asset
@@ -78,13 +80,36 @@ plt.ylabel(f"Price (in BTC)")
 
 
 plt.xticks(rotation=45)
-for proposal in base_asset_proposals.itertuples():
-    plt.axvline(proposal.end_time, color="r", linestyle="--", lw=0.4)
+for i, proposal in enumerate(base_asset_proposals.itertuples()):
+    # mark proposal start time with vertical line
+    plt.axvline(
+        proposal.start_time,
+        color="g",
+        linestyle="--",
+        lw=0.4,
+        label="proposal start" if i == 0 else None,
+    )
+    plt.axvline(
+        proposal.end_time,
+        color="r",
+        linestyle="--",
+        lw=0.4,
+        label="proposal end" if i == 0 else None,
+    )
+
+    # color the area between start and end time
+    plt.axvspan(
+        proposal.start_time,
+        proposal.end_time,
+        color="orange",
+        alpha=0.1,
+    )
+
     # mark proposal ID vertically on the line with background color with tiny font
     # take the first and last 6 letters from proposal.ipfs as text, put ... in the middle
     label = f"{proposal.ipfs[:7]}...{proposal.ipfs[-7:]}"
     plt.text(
-        proposal.end_time,
+        proposal.start_time + (proposal.end_time - proposal.start_time) / 2,
         max_price,
         label,
         rotation=90,
@@ -95,6 +120,9 @@ for proposal in base_asset_proposals.itertuples():
         # alpha=0.8,
         # backgroundcolor needs transparency
     )
+
+# add legend only once
+plt.legend()
 
 # plot volume on another axis as bar chart
 plt.twinx()
@@ -108,6 +136,7 @@ plt.bar(
 
 # set y label
 plt.ylabel(f"Volume (in {base_asset})")
+
 
 # set x limit to be 2022-09-01 to 2023-04-30
 # plt.xlim(pd.Timestamp("2022-09-01"), pd.Timestamp("2023-04-30"))
