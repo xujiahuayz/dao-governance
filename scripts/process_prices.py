@@ -1,11 +1,26 @@
 import gzip
 import json
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from governenv.constants import KAIKO_PRICE_PATH, SNAPSHOT_PATH_PROPOSALS
 from scripts.fetch_kaiko_price import base_assets_df
+
+
+# create HHI index for each proposal's "scores" (list of floats)
+def hhi_index(scores: list[float]) -> float:
+    total_score = sum(scores)
+    if total_score == 0:
+        return np.nan
+    else:
+        scores = [score / total_score for score in scores]
+    # calculate HHI index
+    # HHI index = sum of squares of scores
+    hhi = sum([score**2 for score in scores])
+    return hhi
+
 
 # read json file
 with gzip.open(KAIKO_PRICE_PATH, "r") as f:
@@ -17,6 +32,7 @@ with gzip.open(SNAPSHOT_PATH_PROPOSALS, "rt") as f:
     proposal_data = [json.loads(line) for line in f]
 
 proposals = pd.DataFrame(proposal_data)
+proposals["hhi"] = proposals["scores"].apply(hhi_index)
 proposals["end_time"] = pd.to_datetime(proposals["end"], unit="s")
 # make a dataframe with data in float format
 btc_price = pd.DataFrame(price_data["BTC"])
@@ -33,6 +49,10 @@ base_asset_proposals = proposals[
     proposals["space"].apply(lambda x: x["id"]) == base_asset_id
 ]
 
+# pick only top 10 based on votes or hhi
+base_asset_proposals = base_asset_proposals.sort_values(by="hhi", ascending=True).head(
+    5
+)
 
 # get BTC denominated price for base_asset
 base_asset_price = pd.DataFrame(price_data[base_asset])
@@ -54,13 +74,7 @@ plt.plot(btc_base_asset_price["time"], btc_base_asset_price["price_in_btc"], lw=
 # set y limit to be 0 to max price
 max_price = btc_base_asset_price["price_in_btc"].max()
 plt.ylim(0, max_price * 1.05)
-
-
-# mark proposal end time
-# pick only top 10 based on votes
-base_asset_proposals = base_asset_proposals.sort_values(
-    by="votes", ascending=False
-).head(5)
+plt.ylabel(f"Price (in BTC)")
 
 
 plt.xticks(rotation=45)
@@ -75,7 +89,7 @@ for proposal in base_asset_proposals.itertuples():
         label,
         rotation=90,
         # backgroundcolor="white",
-        fontsize=8,
+        fontsize=7,
         horizontalalignment="center",
         verticalalignment="top",
         # alpha=0.8,
@@ -92,5 +106,8 @@ plt.bar(
     width=0.1,
 )
 
+# set y label
+plt.ylabel(f"Volume (in {base_asset})")
+
 # set x limit to be 2022-09-01 to 2023-04-30
-plt.xlim(pd.Timestamp("2022-09-01"), pd.Timestamp("2023-04-30"))
+# plt.xlim(pd.Timestamp("2022-09-01"), pd.Timestamp("2023-04-30"))
