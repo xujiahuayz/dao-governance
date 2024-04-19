@@ -22,6 +22,15 @@ def hhi_index(scores: list[float]) -> float:
     return hhi
 
 
+def close_call_index(scores: list[float]) -> float:
+    score_len = len(scores)
+    total_score = sum(scores)
+    if score_len == 0 or total_score == 0:
+        return np.nan
+    theoretical_min = 1 / score_len
+    return max(scores) / total_score - theoretical_min
+
+
 # read json file
 with gzip.open(KAIKO_PRICE_PATH, "r") as f:
     price_data = json.load(f)
@@ -33,6 +42,7 @@ with gzip.open(SNAPSHOT_PATH_PROPOSALS, "rt") as f:
 
 proposals = pd.DataFrame(proposal_data)
 proposals["hhi"] = proposals["scores"].apply(hhi_index)
+proposals["close_call"] = proposals["scores"].apply(close_call_index)
 
 proposals["start_time"] = pd.to_datetime(proposals["start"], unit="s")
 proposals["end_time"] = pd.to_datetime(proposals["end"], unit="s")
@@ -42,19 +52,22 @@ btc_price["price"] = btc_price["price"].astype(float)
 
 base_asset = "UNI"
 # get id from base_assets_df based on base_asset
-base_asset_id = base_assets_df[base_assets_df["symbol_cleaned"] == base_asset][
-    "id"
-].values[0]
+base_asset_id = base_assets_df[base_assets_df["symbol_cleaned"] == base_asset]
+base_asset_id = base_asset_id["id"].values[0]
 
 # get proposals for base_asset_id from proposal_data using ['space']['id']
 base_asset_proposals = proposals[
     proposals["space"].apply(lambda x: x["id"]) == base_asset_id
 ]
+# remove  type == "weighted" and type == "approval" from base_asset_proposals
+base_asset_proposals = base_asset_proposals[
+    ~base_asset_proposals["type"].isin(["weighted", "approval"])
+]
 
 # pick only top 10 based on votes or hhi
-base_asset_proposals = base_asset_proposals.sort_values(by="hhi", ascending=True).head(
-    8
-)
+base_asset_proposals = base_asset_proposals.sort_values(
+    by="close_call", ascending=True
+).head(2)
 
 # get BTC denominated price for base_asset
 base_asset_price = pd.DataFrame(price_data[base_asset])
@@ -67,10 +80,13 @@ btc_base_asset_price = pd.merge(
 btc_base_asset_price["price_in_btc"] = (
     btc_base_asset_price[f"price_{base_asset}"] / btc_base_asset_price["price_BTC"]
 )
-# plot price in BTC with matplotlib
 btc_base_asset_price["time"] = pd.to_datetime(
     btc_base_asset_price["timestamp"], unit="ms"
 )
+
+
+# plot price in BTC with matplotlib
+
 plt.plot(btc_base_asset_price["time"], btc_base_asset_price["price_in_btc"], lw=0.3)
 
 # set y limit to be 0 to max price
@@ -139,4 +155,4 @@ plt.ylabel(f"Volume (in {base_asset})")
 
 
 # set x limit to be 2022-09-01 to 2023-04-30
-# plt.xlim(pd.Timestamp("2022-09-01"), pd.Timestamp("2023-04-30"))
+plt.xlim(pd.Timestamp("2023-08-01"), pd.Timestamp("2023-11-30"))
