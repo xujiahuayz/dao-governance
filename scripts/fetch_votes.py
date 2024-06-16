@@ -1,8 +1,7 @@
 import gzip
 import json
 
-from governenv.constants import SNAPSHOT_PATH_VOTES
-from governenv.settings import SNAPSHOT_API_KEY
+from governenv.constants import SNAPSHOT_PATH_VOTES, SNAPSHOT_ENDPOINT
 from governenv.graphql import graphdata, query_structurer
 from scripts.process_spaces import df_spaces
 
@@ -12,7 +11,6 @@ spaces = df_spaces[df_spaces["proposalsCount"] >= 1]["id"].values[:500]
 
 BATCH_SIZE = 1_000
 # check documentation: https://docs.snapshot.org/tools/api
-SNAPSHOT_ENDPOINT = f"https://hub.snapshot.org/graphql?apiKey={SNAPSHOT_API_KEY}"
 
 series = "votes"
 specs = """
