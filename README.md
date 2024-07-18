@@ -59,6 +59,22 @@ pip install toml
 pip install -e ".[dev]"
 ```
 
+
+## Set up the environmental variables
+
+put your APIs in `.env`:
+
+```
+COINGLASS_SECRET="abc123"
+KAIKO_API_KEY="abc123"
+TALLY_API_KEY="xxx"
+SNAPSHOT_API_KEY="aaa"
+```
+
+```
+export $(cat .env | xargs)
+```
+
 # fetch snapshot spaces data
 
 ```
