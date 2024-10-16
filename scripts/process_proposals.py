@@ -46,22 +46,20 @@ with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "at") as f:
         discussion = data_unique[key]
         # Define the prompt
         prompt = f"""
-        Evaluate the following forum discussion based on four criteria:
-
-        1. Level of support (0 = most disapproving, 1 = most supportive)
-        2. Professionalism (0 = least professional, 1 = most professional)
-        3. Objectiveness (0 = purely subjective, 1 = purely objective)
-        4. Unanimity (0 = completely polarized opinions and there is no "majority", 1 = unanimous)
-
-        Return the result as a JSON dictionary with these criteria as keys and their corresponding numeric values as floating-point numbers between 0 and 1.
-
-        The URL to the discussion is:
+        Please determined the content of the following page:
         {discussion}
 
-        Return only the JSON object with 5 entries; 
-        the first 4 being "support", "professionalism", "objectiveness", "unanimity", with floating-point numbers being the value of each entry; 
+        Please return just "NA" with if  you cannot access the URL or if the content is obviously not a forum discussion.
+
+        Otherwise, please return only the JSON object with 5 entries containing evaluation of the discussion based on four criteria:
+
+        1. Level of support (Very Low = most disapproving, Very High = most supportive)
+        2. Professionalism (Very Low = least professional, Very High = most professional)
+        3. Objectiveness (Very Low = purely subjective, Very High = purely objective)
+        4. Unanimity (Very Low = completely polarized opinions and there is no "majority", Very High = unanimous)
+
+        the first 4 of the entries being "support", "professionalism", "objectiveness", "unanimity", each with a evaluation result of "Very Low", "Low", "Medium", "High", or "Very High".
         the last one being "explanation", with concise text explaining the reasoning behind the evaluation.
-        If you cannot access the URL or if the content is obviously not a forum discussion, return NAN for the first 4 entries and "Invalid URL" for the last entry.
         No additional information should be returned.
         """
 
@@ -78,7 +76,7 @@ with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "at") as f:
         json_output = response.choices[0].text.strip()
 
         # write key: eval(json_output) in sentiment.jsonl.gz
-        result = {key: {"scores": eval(json_output), "discussion": discussion}}
+        result = {key: {"scores": json_output, "discussion": discussion}}
 
         print(result)
 
