@@ -1,20 +1,11 @@
-from openai import OpenAI
-from governenv.settings import OPENAI_API_KEY
+import gzip
 
+import json
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+from governenv.constants import DATA_DIR
 
-# Set your API key
+# open DATA_DIR / "sentiment.jsonl.gz"
 
-# Define the prompt
-prompt = "Explain how blockchain works in simple terms."
-
-# Make a request to the OpenAI API
-response = client.completions.create(
-    prompt=prompt,
-    model="gpt-3.5-turbo-instruct",
-    max_tokens=100,
-)
-
-# Print the response
-print(response.choices[0].text.strip())
+# load the data
+with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "rt") as f:
+    sentiment = [json.loads(line) for line in f]
