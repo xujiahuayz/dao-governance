@@ -4,7 +4,7 @@
 
 ```
 git clone https://github.com/xujiahuayz/dao-governance.git
-cd fork
+cd dao-governance
 ```
 
 ### Give execute permission to your script and then run `setup_repo.sh`
@@ -59,7 +59,6 @@ pip install toml
 pip install -e ".[dev]"
 ```
 
-
 ## Set up the environmental variables
 
 put your APIs in `.env`:
@@ -69,6 +68,7 @@ COINGLASS_SECRET="abc123"
 KAIKO_API_KEY="abc123"
 TALLY_API_KEY="xxx"
 SNAPSHOT_API_KEY="aaa"
+OPENAI_API_KEY="sk-xxx"
 ```
 
 ```
