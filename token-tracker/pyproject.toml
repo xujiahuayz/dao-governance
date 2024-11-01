@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "token_tracker"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "A project for tracking tokens on Ethereum."
+authors = [
+    { name = "Magnus Hansson", email = "hansson.carl.magnus@gmail.com" }
+]
+dependencies = [
+    "web3>=7.2.0",
+    "requests>=2.26.0",
+    "pandas>=2.2.3",
+    "pandas-stubs>=2.2.3.241009",
+    "pyarrow>=17.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",    # Add your development dependencies here
+    "pylint"
+]
+
+[tool.setuptools]
+packages = ["token_tracker"]
