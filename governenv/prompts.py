@@ -7,8 +7,8 @@ whether it satisfies the following criteria. If it satisfies all three criteria,
 return "Yes". Otherwise, return "No".
 
 Criteria:
-1. The URL is accessible.
-2. The content of the URL is a forum discussion.
+1. The website is accessible.
+2. The content of the website is a forum discussion.
 3. The forum discussion has at least one response.
 (End of Criteria)
 
