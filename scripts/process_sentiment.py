@@ -1,74 +1,90 @@
-from openai import OpenAI
 import gzip
 import json
 import pickle
-from governenv.settings import OPENAI_API_KEY
-from governenv.constants import DATA_DIR
+import math
 
-# unpickle data_unique
-with open(DATA_DIR / "discussion_links.pkl", "rb") as f:
-    data_unique = pickle.load(f)
+import requests
+
+from governenv.constants import DATA_DIR, EXKW, HEADERS
+from governenv.instructions import IDF_INSTRUCT, EVAL_INSTRUCT
+from governenv.llm import ChatGPT
+from governenv.prompts import IDF_PROMPT, EVAL_PROMPT
 
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+def kw_filt(data: dict[str, str]) -> dict[str, str]:
+    """
+    Function to filter discussions based on keywords
+    """
 
-# check if jsonl.gz file "sentiment.jsonl.gz" exists in DATA_DIR
-# if not, create it
-# if it exists, load the data
-# if the data is empty, process the first proposal
-# if the data is not empty, process the next proposal
+    return {k: v for k, v in data.items() if not any([i in v for i in EXKW])}
 
-if not (DATA_DIR / "sentiment.jsonl.gz").exists():
-    with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "wt") as f:
-        # create an empty list
-        json.dump([], f)
-else:
-    # load the data
-    with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "rt") as f:
-        sentiment = [json.loads(line) for line in f]
 
-# # get ids not in sentiment
-# ids = set([list(i.keys())[0] for i in sentiment])
-# ids = [i for i in data_unique if list(i.keys())[0] not in ids]
-with gzip.open(DATA_DIR / "sentiment.jsonl.gz", "at") as f:
-    for key, value in data_unique.items():
+def slash_filt(data: dict[str, str]) -> dict[str, str]:
+    """
+    Function to filter discussions based on slashes
+    """
 
-        discussion = data_unique[key]
-        # Define the prompt
-        prompt = f"""
-        Please determine the content of the following page:
-        {discussion}
+    # typically, a discussion has at least 4 levels of slashes
+    # if the slash count is less than 4, remove the discussion
+    return {k: v for k, v in data.items() if v.count("/") >= 4}
 
-        Please return just "NA"  if you cannot access the URL or if the content is obviously not a forum discussion.
 
-        Otherwise, please return only the JSON object with 5 entries containing evaluation of the discussion based on four criteria:
+if __name__ == "__main__":
 
-        1. Level of support (Very Low = most disapproving, Very High = most supportive)
-        2. Professionalism (Very Low = least professional, Very High = most professional)
-        3. Objectiveness (Very Low = purely subjective, Very High = purely objective)
-        4. Unanimity (Very Low = completely polarized opinions and there is no "majority", Very High = unanimous)
+    llm = ChatGPT()
 
-        the first 4 of the entries being "support", "professionalism", "objectiveness", "unanimity", 
-        each with a evaluation result of "Very Low", "Low", "Medium", "High", or "Very High".
-        the last one being "explanation", with concise text explaining the reasoning behind the evaluation.
-        No additional information should be returned.
-        """
+    # unpickle data_unique
+    with open(DATA_DIR / "discussion_links.pkl", "rb") as f:
+        data_unique = pickle.load(f)
+        print(f"Data length before filtering: {len(data_unique)}")
 
-        # Make the request to the OpenAI API
-        response = client.completions.create(
-            model="gpt-3.5-turbo-instruct",
-            prompt=prompt,
-            max_tokens=200,
-            temperature=0.1,  # We want a deterministic response (no creativity)
-            # stop=["}"],  # Stop after the JSON object is complete
-        )
+    # filter discussions
+    data_unique = slash_filt(kw_filt(data_unique))
+    print(f"Data length after filtering: {len(data_unique)}")
 
-        # Extract the JSON string from the response
-        json_output = response.choices[0].text.strip()
+    for idx, (_, url) in enumerate(data_unique.items()):
 
-        # write key: eval(json_output) in sentiment.jsonl.gz
-        result = {key: {"scores": json_output, "discussion": discussion}}
+        try:
+            http_response = requests.get(url, headers=HEADERS, timeout=10).text
 
-        print(result)
+            idf = llm(
+                instruction=IDF_INSTRUCT,
+                message=IDF_PROMPT.format(http_response=http_response),
+            )
+            print("\n")
+            print(f"URL: {url}")
+            if idf == "Yes":
+                eval_res = llm(
+                    instruction=EVAL_INSTRUCT,
+                    message=EVAL_PROMPT.format(http_response=http_response),
+                    logprobs=True,
+                    top_logprobs=2,
+                )
 
-        f.write(json.dumps(result) + "\n")
+                eval, prob = (
+                    eval_res if isinstance(eval_res, tuple) else (eval_res, None)
+                )
+                eval_prob = [_ for _ in prob if _.token in [" Yes", " No"]]
+                yes_prob = [
+                    math.exp(binary.logprob)
+                    for top_log_probs in eval_prob
+                    for binary in top_log_probs.top_logprobs
+                    if binary.token == " Yes"
+                ]
+
+                class_prob = {
+                    "Support": yes_prob[0],
+                    "Professionalism": yes_prob[1],
+                    "Objectiveness": yes_prob[2],
+                }
+
+                print(f"Evaluation: {eval}")
+                print(f"Class Probabilities: {class_prob}")
+
+            else:
+                print("IDF: Not a forum discussion")
+
+            if idx == 5:
+                break
+        except Exception as e:  # pylint: disable=broad-except
+            print(f"URL: {url} failed with error: {e}")

@@ -15,3 +15,31 @@ IMPROVEMENT_PROPOSALS_DIR = DATA_DIR / "ImprovementProposals"
 REFERENCE_CLIENTS_DIR = DATA_DIR / "ReferenceClients"
 
 SNAPSHOT_ENDPOINT = f"https://hub.snapshot.org/graphql?apiKey={SNAPSHOT_API_KEY}"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+}
+
+EXKW = [
+    # remove social media
+    "discord",
+    "t.me",
+    "t.co",
+    "telegram",
+    "x.com",
+    "twitter",
+    "reddit",
+    "youtube",
+    "youtu",
+    "github",
+    "bilibili",
+    "gmail",
+    # remove plain websites
+    "baidu",
+    "google",
+    "coingecko",
+    "blockscape",
+    "helpen",
+    "metamask.io",
+    "opensea.io",
+]
