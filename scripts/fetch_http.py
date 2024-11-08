@@ -3,8 +3,9 @@ Fetch the http response of the discussion links
 """
 
 import asyncio
+import gzip
+import json
 import pickle
-import time
 
 import aiohttp
 import requests
@@ -30,7 +31,7 @@ def slash_filt(data: dict[str, str]) -> dict[str, str]:
     return {k: v for k, v in data.items() if v.count("/") >= 4}
 
 
-def fetch_http_response(url: str, timeout: int = 10) -> str:
+def fetch_http_response(url: str, timeout: int = 60) -> str:
     """
     Fetches the HTTP response from a given URL.
     """
@@ -49,7 +50,9 @@ async def fetch(session, url: str) -> str:
         )  # Use .text() for HTML/text response or .json() for JSON
 
 
-async def fetch_all(urls: list[str], time_out: int = 10) -> list[str | BaseException]:
+async def fetch_all(
+    urls: list[str], time_out: int = 60
+) -> dict[str, str | BaseException]:
     """
     Fetch all HTTP responses from a list of URLs
     """
@@ -59,7 +62,11 @@ async def fetch_all(urls: list[str], time_out: int = 10) -> list[str | BaseExcep
         results = await asyncio.gather(
             *[fetch(session, url) for url in urls], return_exceptions=True
         )
-        return results
+        return {
+            url: html
+            for url, html in zip(urls, results)
+            if not isinstance(html, Exception)
+        }
 
 
 if __name__ == "__main__":
@@ -72,22 +79,14 @@ if __name__ == "__main__":
     data_unique = slash_filt(kw_filt(data_unique))
     print(f"Data length after filtering: {len(data_unique)}")
 
-    # omly keep the first 10 for demonstration
-    data_unique = dict(list(data_unique.items())[:100])
-
-    # record start time
-    start_time = time.time()
-
-    # for idx, (_, url) in enumerate(data_unique.items()):
-    #     try:
-    #         http_response = requests.get(url, headers=HEADERS, timeout=10).text
-    #     except Exception as e:  # pylint: disable=broad-except
-    #         pass
-
     urls = list(data_unique.values())
     htmls = asyncio.run(fetch_all(urls))  # Use asyncio.run for a cleaner main loop
 
     # print the length of the correct responses
-    print(len([html for html in htmls if not isinstance(html, Exception)]))
+    print(htmls)
+    print(len(htmls))
 
-    print(f"Total time taken: {time.time() - start_time}")
+    # save the htmls to jsonl.gz
+    with gzip.open(DATA_DIR / "htmls.jsonl.gz", "wt") as f:
+        for url, html in htmls.items():
+            f.write(json.dumps({"url": url, "html": html}) + "\n")
