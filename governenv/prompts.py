@@ -2,7 +2,7 @@
 Prompts and instructions
 """
 
-IDF_PROMPT = """Given the following website HTTP response, determine \
+IDF_PROMPT = """Given the following HTTP website response, determine \
 whether it satisfies the following criteria. If it satisfies all three criteria, \
 return "Yes". Otherwise, return "No".
 
