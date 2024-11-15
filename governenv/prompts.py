@@ -2,23 +2,22 @@
 Prompts and instructions
 """
 
-IDF_PROMPT = """Given the following HTTP website response, determine \
-whether it satisfies the following criteria. If it satisfies all three criteria, \
+IDF_PROMPT = """Given the following contents extracted from the website HTML, determine \
+whether it satisfies the following criteria. If it satisfies all two criteria, \
 return "Yes". Otherwise, return "No".
 
 Criteria:
-1. The website is accessible.
-2. The content of the website is a forum discussion.
-3. The forum discussion has at least one response.
+1. The content of the website is a forum discussion.
+2. The forum discussion has at least one response.
 (End of Criteria)
 
-HTTP Response:
-{http_response}
-(End of HTTP Response)
+Contents:
+{content}
+(End of Contents)
 """
 
-EVAL_PROMPT = """Given the following website HTTP response, evaluate the \
-content based on the following 3 criteria with either "Yes" or "No". You also \
+EVAL_PROMPT = """Given the following contents extracted from the website HTML, evaluate the \
+contents based on the following 3 criteria with either "Yes" or "No". You also \
 need to provide concise text explaining the reasoning behind the evaluation.
 
 Criteria:
@@ -27,9 +26,9 @@ Criteria:
 3. Objectiveness
 (End of Criteria)
 
-HTTP Response:
-{http_response}
-(End of HTTP Response)
+Contents:
+{content}
+(End of Contents)
 """
 
 

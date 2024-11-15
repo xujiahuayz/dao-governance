@@ -27,6 +27,9 @@ def fetch_http_response(url: str, timeout: int = 10) -> str:
 
 
 if __name__ == "__main__":
+
+    HTML_200_DIR = DATA_DIR / "html_200"
+
     # unpickle data_unique
     with open(DATA_DIR / "discussion_links.pkl", "rb") as f:
         data_unique = pickle.load(f)
@@ -37,7 +40,7 @@ if __name__ == "__main__":
     print(f"Data length after filtering: {len(data_unique)}")
 
     fetched_data = [
-        _.split("/")[-1].split(".")[0] for _ in glob(str(DATA_DIR / "html" / "*.html"))
+        _.split("/")[-1].split(".")[0] for _ in glob(str(HTML_200_DIR / "*.html"))
     ]
 
     # fetch http response
@@ -47,7 +50,7 @@ if __name__ == "__main__":
         try:
             # save the html
             html = fetch_http_response(v)
-            with open(DATA_DIR / "html_200" / f"{i}.html", "w", encoding="utf-8") as f:
+            with open(HTML_200_DIR / f"{i}.html", "w", encoding="utf-8") as f:
                 f.write(html)
         except Exception as e:
             print(f"Error fetching {v}: {e}")

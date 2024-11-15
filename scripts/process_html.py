@@ -50,7 +50,8 @@ if __name__ == "__main__":
     print(f"Data length after filtering: {len(data_unique)}")
 
     fetched_data = [
-        _.split("/")[-1].split(".")[0] for _ in glob(str(DATA_DIR / "html" / "*.html"))
+        _.split("/")[-1].split(".")[0]
+        for _ in glob(str(DATA_DIR / "html_200" / "*.html"))
     ]
 
     # save the html
@@ -58,7 +59,9 @@ if __name__ == "__main__":
         for i, (k, v) in tqdm(enumerate(data_unique.items())):
             if str(i) in fetched_data:
                 # save the html
-                with open(DATA_DIR / "html" / f"{i}.html", "r", encoding="utf-8") as f:
+                with open(
+                    DATA_DIR / "html_200" / f"{i}.html", "r", encoding="utf-8"
+                ) as f:
                     html = f.read()
 
                 # distill the html
