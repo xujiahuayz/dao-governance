@@ -1,5 +1,4 @@
 import math
-import pickle
 import json
 
 
@@ -9,9 +8,11 @@ from governenv.prompts import EVAL_INSTRUCT, EVAL_PROMPT
 
 if __name__ == "__main__":
 
+    senti_res = {}
+
     llm = ChatGPT()
 
-    with open(DATA_DIR / "idf.json", "r") as f:
+    with open(DATA_DIR / "idf.json", "r", encoding="utf-8") as f:
         idf = json.load(f)
 
     for idx, (url, info) in enumerate(idf.items()):
@@ -45,8 +46,15 @@ if __name__ == "__main__":
             print(f"Evaluation: {eval}")
             print(f"Class Probabilities: {class_prob}")
 
+            senti_res[url] = {
+                "evaluation": eval,
+                "class_prob": class_prob,
+            }
+
         except Exception as e:  # pylint: disable=broad-except
             print(f"URL: {url} failed with error: {e}")
 
-        if idx == 10:
+        if idx == 50:
+            with open(DATA_DIR / "senti_res.json", "w", encoding="utf-8") as f:
+                json.dump(senti_res, f, indent=4)
             break
