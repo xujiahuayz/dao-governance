@@ -6,45 +6,10 @@ tool reconstructs token balance histories and outputs time series data in Parque
 format.
 
 ## The virtual environment
-
-Create a python virtual environment,
 ```bash
-python3 -m venv .venv
+poetry shell
+poetry install
 ```
-
-To activate the virtual environment,
-```bash
-source .venv/bin/activate
-```
-
-Update pip (such that setuptools is up to date),
-```bash
-python3 -m pip install --upgrade pip
-```
-
-Install the project in editable mode,
-```bash
-pip install -e .
-```
-
-`pip install -e ".[dev]"` if you also want to install the optional dependencies from
-`pyproject.toml`.
-
-To deactivate the virtual environment,
-```bash
-deactivate
-```
-
-## Adding Required Packages
-Install via `pip`,
-
-```bash
-source .venv/bin/activate
-pip install <package-name>
-```
-
-Then check the package version with `pip show <package-name>`, and then add it manually
-to `pyproject.toml`.
 
 ## Running token-tracker
 
