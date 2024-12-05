@@ -17,13 +17,14 @@ Contents:
 """
 
 EVAL_PROMPT = """Given the following contents extracted from the website HTML, evaluate the \
-contents based on the following 3 criteria with either "Yes" or "No". You also \
+contents based on the following 4 criteria with either "Yes" or "No". You also \
 need to provide concise text explaining the reasoning behind the evaluation.
 
 Criteria:
 1. Support
 2. Professionalism
 3. Objectiveness
+4. Unanimity
 (End of Criteria)
 
 Contents:
@@ -41,4 +42,5 @@ who is proficient in evaluating forum discussions. Your output format should be 
 Support: {Yes/No}
 Professionalism: {Yes/No}
 Objectiveness: {Yes/No}
+Unanimity: {Yes/No}
 Explanation: {Your explanation here}"""

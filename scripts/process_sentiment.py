@@ -40,6 +40,7 @@ if __name__ == "__main__":
                 "Support": yes_prob[0],
                 "Professionalism": yes_prob[1],
                 "Objectiveness": yes_prob[2],
+                "Unanimity": yes_prob[3],
             }
 
             print(f"URL: {url}")
