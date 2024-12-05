@@ -1,266 +1,272 @@
 {
     "https://dao.aavegotchi.com/t/requesting-alchemica-and-30-dao-parcels-for-the-dtf-to-use-as-contributor-compensation/4401": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion demonstrates support for the proposal by engaging in constructive dialogue about leveraging DAO assets for contributor compensation. Participants discuss the potential benefits and challenges, showing a willingness to explore the idea further. The tone remains professional throughout, with contributors expressing their thoughts respectfully and seeking clarification where needed. Objectivity is maintained as participants consider both the advantages and potential drawbacks of the proposal, such as the need for transparency and the current availability of funds. The discussion includes diverse viewpoints, including skepticism and support, which contributes to a balanced evaluation of the proposal.",
+        "evaluation": "Support: No  \nProfessionalism: Yes  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation:  \nThe forum discussion does not show clear support for the proposal, as there are mixed opinions and some confusion about the necessity and execution of the plan. While the conversation is conducted in a professional manner, with participants respectfully sharing their views and seeking clarification, the objectiveness is lacking. Some comments are based on personal opinions and assumptions rather than factual analysis. There is no unanimity in the discussion, as participants express differing views on the proposal's merits and implementation, indicating a lack of consensus.",
         "class_prob": {
-            "Support": 0.9875671060717849,
-            "Professionalism": 0.9995113081487801,
-            "Objectiveness": 0.9959277744892124
+            "Support": 0.07585782608999354,
+            "Professionalism": 0.9986730244117565,
+            "Objectiveness": 0.34854563863847,
+            "Unanimity": 3.120191770917735e-05
         }
     },
     "https://gov.frax.finance/t/fip-142-frax-gauges-on-kyberswap-elastic-ethereum-polygon-arbitrum-and-optimism/1963": {
-        "evaluation": "Support: No  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \n- **Support**: The forum discussion does not show unanimous support for the proposal. There are differing opinions, with some participants expressing skepticism about the need for KyberSwap when FraxSwap exists, and concerns about liquidity fragmentation.  \n- **Professionalism**: The discussion is conducted in a professional manner, with participants providing detailed explanations and reasoning for their positions. The responses are respectful and focused on the topic.  \n- **Objectiveness**: The discussion includes objective points, such as comparisons between KyberSwap and Uniswap, and data on liquidity and volume. Participants provide factual information and analysis to support their arguments, maintaining an objective tone.",
+        "evaluation": "Support: No  \nProfessionalism: Yes  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation:  \nThe forum discussion does not show clear support for the proposal, as there are opposing views, such as the comment from \"tan\" who votes against it, questioning the need for Kyber when FraxSwap exists. The discussion maintains professionalism, with participants providing detailed explanations and comparisons between KyberSwap Elastic and other platforms like Uniswap V3. However, the objectiveness is lacking as some comments appear biased, particularly those defending KyberSwap's features without addressing all concerns raised. Unanimity is absent, as there are differing opinions on the proposal, with some participants expressing concerns about liquidity fragmentation and the need for independent voting on each gauge.",
         "class_prob": {
-            "Support": 0.18242365905903635,
-            "Professionalism": 0.8175460561495729,
-            "Objectiveness": 0.5309665256152067
+            "Support": 0.0010322304836382094,
+            "Professionalism": 0.7980908108094505,
+            "Objectiveness": 0.10665030225343683,
+            "Unanimity": 1.670141686374561e-05
         }
     },
     "https://forum.balancer.fi/t/bip-149-funding-proposal-for-silverlight-labs-revised/4241": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion reflects a supportive environment where participants are generally in favor of the proposal, with some expressing concerns about costs and suggesting adjustments. The tone is professional, with contributors providing constructive feedback and clarifications. The discussion is objective, focusing on the proposal's merits, potential risks, and financial implications. Participants engage in a rational debate, considering the DAO's financial health and strategic goals, which demonstrates a balanced and objective approach to decision-making.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The forum discussion shows support for the proposal, with several participants expressing their willingness to back it, albeit with some concerns about costs and payment structures. The conversation is conducted professionally, with participants providing constructive feedback and clarifications. The discussion is objective, focusing on the proposal's merits, costs, and potential risks. However, unanimity is not achieved as there are differing opinions on the cost and payment structure, and the proposal was ultimately voted down in governance.",
         "class_prob": {
-            "Support": 0.9875660641890376,
-            "Professionalism": 0.9999592779711644,
-            "Objectiveness": 0.9997687155703684
+            "Support": 0.7057796646005305,
+            "Professionalism": 0.9999138642598959,
+            "Objectiveness": 0.9840804521077193,
+            "Unanimity": 0.005911007430958649
         }
     },
     "https://forum.alchemix.fi/public/d/373-rfcecosystem-grant-fair-funding-platform-by-unstoppable": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion demonstrates support for the proposal by Unstoppable to receive a grant for auditing their Fair Funding platform. Participants express interest in the potential benefits to the Alchemix ecosystem and discuss various funding options, showing a collaborative and supportive environment. The professionalism is maintained throughout the discussion, with participants engaging respectfully and constructively, even when discussing potential risks and challenges. The objectiveness is evident as participants weigh the pros and cons of different funding options, consider the project's stage and risk, and discuss the strategic use of funds. The conversation remains focused on the proposal's merits and potential impact, rather than personal biases or unfounded opinions.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation:  \nThe forum discussion shows support for the proposal to fund the audit cost of the Fair Funding platform by Unstoppable, indicating a positive reception from participants. The tone of the discussion is professional, with participants engaging in constructive dialogue and providing feedback on the proposal. The discussion is objective, as it considers the project's stage, potential risks, and benefits to the Alchemix ecosystem. However, there is no unanimity, as different opinions are expressed regarding the extent of funding and the approach to be taken, with some participants suggesting alternative funding strategies and expressing concerns about the project's current stage and risk level.",
         "class_prob": {
-            "Support": 0.996404504529435,
-            "Professionalism": 0.8515883723013139,
-            "Objectiveness": 0.9465472204848228
+            "Support": 0.9770206822726593,
+            "Professionalism": 0.973888515853503,
+            "Objectiveness": 0.8665795135376602,
+            "Unanimity": 0.0028009125617191677
         }
     },
     "https://gov.bancor.network/t/proposed-beta-testing-end-date-13-00-utc-may-11-2022-24-hours/3579": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content provides a detailed and structured proposal for the end of the Bancor 3 Beta testing period, including voting instructions and implications for the rewards program. It supports the proposal by outlining the benefits and changes that will occur if the proposal is accepted, such as the removal of restrictions and the establishment of an official launch date. The language used is professional, with clear instructions and explanations of technical details, such as the impact on gas costs and the migration process. The discussion is objective, presenting both options for voting and the consequences of each, allowing stakeholders to make informed decisions based on the provided information. The forum participants also engage in a technical discussion about the costs and processes involved, maintaining a professional tone throughout.",
+        "evaluation": "Support: Yes\nProfessionalism: Yes\nObjectiveness: Yes\nUnanimity: No\nExplanation: The content provides clear voting instructions and outlines the implications of the proposal, indicating support for the proposal to end the beta testing and rewards program within specified dates. The language used is professional and technical, suitable for a DAO forum. The discussion is objective, presenting facts about the beta testing period, the success of the program, and the technical details of the migration process. However, unanimity is not present as the forum includes different opinions and questions about the migration process and costs, indicating that not all participants may agree on the proposal's implications or the best course of action.",
         "class_prob": {
-            "Support": 0.9859343477779927,
-            "Professionalism": 0.9999143410289392,
-            "Objectiveness": 0.9997383407987415
+            "Support": 0.9465937917537144,
+            "Professionalism": 0.9999685755197594,
+            "Objectiveness": 0.9975266899838872,
+            "Unanimity": 0.08483264038862538
         }
     },
     "https://forum.arbitrum.foundation/t/proposal-consolidate-security-proposals-into-a-rfp-process/19328": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion reflects a supportive stance towards the proposal for implementing a Request for Proposal (RFP) process within the Arbitrum ecosystem. The participants provide constructive feedback and express their support for the proposal, highlighting its potential benefits such as increased competition, cost-effectiveness, and flexibility. The discussion is conducted professionally, with participants acknowledging the efforts of the proposal's authors and offering insights based on their experiences. The objectiveness is maintained as the participants focus on the merits and potential improvements of the proposal, considering various perspectives and emphasizing the importance of transparency and fairness in the selection process. Overall, the discussion is aligned with the goals of fostering a secure and efficient ecosystem.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The forum discussion reflects strong support for the proposal to implement a Request for Proposal (RFP) process for security services within the Arbitrum ecosystem. Many participants express agreement with the proposal's objectives, emphasizing the benefits of a structured, competitive, and transparent process. The discussion is conducted professionally, with participants providing constructive feedback and suggestions for improvement. The objectiveness is maintained as contributors focus on the proposal's merits and potential impact on the ecosystem. However, unanimity is not fully achieved, as there are some concerns about the transparency of the committee process and the need for further clarification on operational details. Despite these concerns, the overall sentiment is supportive, with a majority in favor of the proposal.",
         "class_prob": {
-            "Support": 0.999972151525776,
-            "Professionalism": 0.9999806147848957,
-            "Objectiveness": 0.9999033752944676
+            "Support": 0.9999975415208221,
+            "Professionalism": 0.9999907469518097,
+            "Objectiveness": 0.9975209968160558,
+            "Unanimity": 0.5620030230558373
         }
     },
     "https://forum.pokt.network/t/pep-45-get-a-grip-group-to-review-and-improve-proposals/3634": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion around PEP-45 demonstrates strong support for the proposal, as evidenced by the positive comments and the eventual passing of the proposal with 15 approvals and no rejections. The participants in the discussion maintain a professional tone, offering constructive feedback and suggestions for improvement without resorting to personal attacks or unprofessional language. The discussion is objective, with contributors providing reasoned arguments for their positions, acknowledging potential drawbacks, and suggesting solutions to address concerns. The proposal itself is well-structured, with clear objectives, a defined budget, and a trial period to assess its effectiveness, further supporting the professionalism and objectiveness of the discourse.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion reflects strong support for the proposal, as evidenced by the unanimous vote of 15 approvals and 0 rejections. The discussion is conducted professionally, with participants providing constructive feedback and suggestions for improvement. The objectiveness is maintained through the consideration of various viewpoints, including dissenting opinions, which are addressed thoughtfully. Unanimity is evident in the final voting outcome, indicating a consensus among participants. The proposal's revisions and the open invitation for qualified individuals to join the GRIP team further demonstrate a commitment to inclusivity and transparency.",
         "class_prob": {
-            "Support": 0.9999025409494419,
-            "Professionalism": 0.9999534372470786,
-            "Objectiveness": 0.9953862840376173
-        }
-    },
-    "https://forum.balancer.fi/t/bip-541-enable-veth-wsteth-gauge-ethereum/5538": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe proposal to enable a vETH/wstETH gauge on Balancer is well-structured and provides comprehensive details about the incentivization strategy, protocol description, and technical specifications. The content supports the proposal by outlining the benefits and strategic approach, such as the two-pronged incentivization strategy and the symbiotic relationship between vETH and VEC tokens. The language used is professional, with clear explanations and relevant links to additional resources, such as the website, documentation, and GitHub. The proposal maintains objectiveness by presenting factual information about the protocol, its market history, and the technical aspects without subjective opinions or biases.",
-        "class_prob": {
-            "Support": 0.8933052921699473,
-            "Professionalism": 0.979664913291528,
-            "Objectiveness": 0.562155560133054
+            "Support": 0.9999542716355735,
+            "Professionalism": 0.999979422771714,
+            "Objectiveness": 0.9706716445819801,
+            "Unanimity": 0.7549029356884258
         }
     },
     "https://gov.perp.fi/t/proposal-fee-distribution-parameter-vote-relaunch-fee-split/937": {
-        "evaluation": "Support: Yes  \nProfessionalism: No  \nObjectiveness: No  \n\nExplanation:  \n- **Support**: The discussion shows active engagement and support from various community members who are proposing different options and solutions for the fee distribution, indicating a supportive environment for decision-making.  \n- **Professionalism**: The conversation lacks professionalism as it includes emotional language, accusations, and personal motivations, which detract from a constructive and respectful dialogue. For instance, terms like \"gimmick\" and \"sick and tired\" suggest frustration and a lack of decorum.  \n- **Objectiveness**: The discussion is not entirely objective as it is heavily influenced by personal interests and biases. Participants are advocating for options that benefit their own positions, such as maximizing rewards for vePERP holders, without fully considering the broader implications or the needs of all stakeholders involved.",
+        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation: The forum discussion reflects a lack of support for a single proposal, with participants expressing conflicting opinions on the fee distribution between the DAO and vePERP holders. The tone of the discussion is often unprofessional, with participants expressing frustration and accusations, such as calling the situation a \"gimmick\" and expressing being \"sick and tired.\" The objectiveness is compromised by emotional arguments and personal stakes, as seen in the emphasis on maximizing personal gains and the use of hyperbolic language. There is no unanimity, as the community is divided on the best approach, with some advocating for 100% revenue to vePERP holders and others emphasizing the importance of maintaining a balance to support the protocol's operations and previous commitments.",
         "class_prob": {
-            "Support": 0.46878729134148595,
-            "Professionalism": 0.08509233652865725,
-            "Objectiveness": 0.053370319614475484
+            "Support": 0.1645157448472169,
+            "Professionalism": 0.16450949336769158,
+            "Objectiveness": 0.0017007181090920287,
+            "Unanimity": 1.892512790770867e-05
         }
     },
     "https://governance.aave.com/t/bgd-correlated-asset-price-oracle/16133": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion demonstrates support for the introduction of the Correlated-Asset Price Oracle (CAPO) as a mechanism to safeguard against price manipulation of highly correlated assets like stablecoins and Liquid Staking Tokens (LSTs). The participants, including BGD Labs, Addison, Chaos Labs, and Gauntlet, provide detailed insights and constructive feedback on the proposal, indicating a collaborative and supportive environment.  \n\nThe professionalism is evident in the structured presentation of ideas, acknowledgment of contributions, and the use of technical language appropriate for the context. The discussion maintains a respectful tone, even when addressing previous dismissals or potential issues, which reflects a professional approach.  \n\nThe objectiveness is maintained through the use of data-driven arguments, historical references, and the consideration of various risk factors. The participants focus on the technical aspects and potential improvements of the proposal, rather than personal opinions or biases, ensuring an objective evaluation of the CAP",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation:  \nThe forum discussion reflects a high level of support for the introduction of the Correlated-Asset Price Oracle (CAPO) as a mechanism to safeguard against price manipulation of highly correlated assets like stablecoins and Liquid Staking Tokens (LSTs). The discussion is conducted professionally, with participants providing detailed insights and constructive feedback on the proposal. The objectiveness is evident as the discussion includes both the benefits and potential risks associated with the implementation, such as upward and downward manipulation of exchange rates. There is a clear consensus among participants, including BGD Labs, Chaos Labs, and Gauntlet, supporting the proposal and agreeing on the next steps, indicating unanimity in the community's stance.",
         "class_prob": {
-            "Support": 0.9992862732242124,
-            "Professionalism": 0.9980698948531578,
-            "Objectiveness": 0.9890056386605452
+            "Support": 0.999568589424315,
+            "Professionalism": 0.9993709188945427,
+            "Objectiveness": 0.9740110981500002,
+            "Unanimity": 0.8518917535911272
         }
     },
     "https://governance.aave.com/t/arc-increase-supply-cap-of-susd-on-v3-optimism-fast-track/9196": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content supports the proposal to increase the supply cap of sUSD on v3 Optimism, as evidenced by the detailed explanation of the current parameters and the reasons for the proposed increase. The discussion is conducted in a professional manner, with clear and structured arguments presented by Matt Losquadro and Marc Zeller. The objectiveness is maintained through the use of factual data, such as the current supply cap, DEX liquidity, and the healthy peg of sUSD, to justify the proposal. The content avoids subjective language and focuses on the implications and benefits of the proposal, ensuring an objective presentation.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The forum discussion supports the proposal to increase the supply cap of sUSD on v3 Optimism, as indicated by the detailed reasoning and the favorable comment from MarcZeller. The discussion is conducted professionally, using appropriate terminology and structured arguments. The objectiveness is maintained by providing data and logical reasons for the proposal, such as increased DEX liquidity and maintaining the sUSD peg. However, unanimity is not achieved as the content only includes one supportive comment, and there is no indication of broader community consensus or dissent.",
         "class_prob": {
-            "Support": 0.9997961227857844,
-            "Professionalism": 0.9999717939237989,
-            "Objectiveness": 0.9996641174211877
+            "Support": 0.9997037887092296,
+            "Professionalism": 0.9999640459343629,
+            "Objectiveness": 0.9953888839899867,
+            "Unanimity": 0.16400350162728372
         }
     },
     "https://dao.aavegotchi.com/t/vp-for-wapghst-alchemica-lps-and-glitter-lps/4106": {
-        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \n\nExplanation:  \n- **Support**: The discussion lacks clear consensus or support for the proposal. Participants express uncertainty and request more information and discussion, indicating that the proposal is not fully supported or understood by the community.  \n- **Professionalism**: The tone of the conversation is informal and lacks professionalism. Comments like \"LOL, whoever said discuss it more\u2026 please speak up\" suggest a casual and dismissive attitude rather than a constructive and respectful dialogue.  \n- **Objectiveness**: The discussion is subjective, with participants expressing personal opinions and uncertainties without providing objective data or analysis. There is a lack of detailed explanation or evidence to support the proposal, leading to a subjective and unclear debate.",
+        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation: The discussion lacks clear support for the proposal, as participants express uncertainty and request more information and explanation. The tone is informal and includes casual language, such as \"LOL,\" which detracts from professionalism. The discussion is not entirely objective, as it includes personal opinions and lacks comprehensive data or analysis to support claims. There is no unanimity, as participants express differing views and concerns about the proposal's clarity and implications.",
         "class_prob": {
-            "Support": 0.16451592581463576,
-            "Professionalism": 0.18242258276262296,
-            "Objectiveness": 0.407223648315966
+            "Support": 0.029312163868913166,
+            "Professionalism": 0.13296079083181173,
+            "Objectiveness": 0.2226813173045861,
+            "Unanimity": 9.61024257856652e-05
         }
     },
     "https://gov.push.org/t/week-16-rockstar-of-push-v2-nominations/852": {
-        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \n\nExplanation: The content provided is largely fragmented and lacks coherence, making it difficult to determine if there is any support for a particular proposal or idea. The repeated mentions of \"Rockstars of Push v2\" and various Twitter handles without context do not provide a clear indication of support. The professionalism is lacking due to the disorganized presentation and absence of structured discussion or argumentation. Objectiveness cannot be assessed as there is no clear argument or discussion presented; the content appears to be a series of disjointed references and congratulatory remarks without any evaluative or analytical content.",
+        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation: The content provided is largely fragmented and lacks coherent discussion or argumentation that would indicate support for a particular proposal or idea. There is no clear evidence of professionalism, as the text is mostly a series of repeated phrases and links without context or structured communication. Objectiveness cannot be assessed due to the absence of any evaluative or analytical content. Unanimity is also not determinable because there is no discussion or indication of consensus or dissent among participants. The content appears to be a collection of nominations and congratulatory messages without substantive dialogue.",
         "class_prob": {
-            "Support": 0.0850985740255263,
-            "Professionalism": 0.09534913679422717,
-            "Objectiveness": 0.007577216220606315
+            "Support": 0.10668995153914769,
+            "Professionalism": 0.2018117392618778,
+            "Objectiveness": 0.0031726724566341975,
+            "Unanimity": 0.01796834644409723
         }
     },
     "https://gov.paladin.vote/t/pgm-31-allocation-of-resources-in-warlord/416": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The discussion supports the proposal to allocate resources to Warlord, as evidenced by the voting in favor and the rationale provided. The tone of the conversation is professional, with clear communication about the proposal, the town hall meeting, and the voting process. The objectiveness is maintained through the presentation of both potential benefits and downsides of the proposal, allowing stakeholders to make informed decisions. The discussion includes factual data, such as the amount of CVX and AURA involved and the estimated value, which supports an objective evaluation.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion shows clear support for the proposal to allocate resources to Warlord, as evidenced by the voting results and the positive comments about the benefits of the decision. The discussion is conducted professionally, with organized communication about the town hall meeting and voting process. The rationale provided for the proposal is objective, outlining both the benefits and potential downsides of the decision. The final vote indicates unanimity, as the decision to deposit all liquid CVX and AURA was agreed upon, suggesting a consensus among participants.",
         "class_prob": {
-            "Support": 0.9982985352351745,
-            "Professionalism": 0.999858924942022,
-            "Objectiveness": 0.9875661757840092
+            "Support": 0.9986743266822294,
+            "Professionalism": 0.9998757304221038,
+            "Objectiveness": 0.952566319150845,
+            "Unanimity": 0.7308450730986467
         }
     },
     "https://gov.silo.finance/t/credit-line-extension-to-cbeth-wsteth-dai-usdt-gohm-and-ohm-silos/331": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe content provides a detailed and structured proposal for extending credit lines to various silos, including cbETH, wstETH, DAI, USDT, gOHM, and OHM. The proposal is well-organized, with clear sections outlining the basics, parameters, and recommendations for each asset. The language used is professional, and the proposal is supported by data and simulations, which adds to its objectiveness. The discussion includes assessments based on a risk framework, ensuring that the recommendations are grounded in a systematic approach. Additionally, the comments from other participants in the forum are supportive and constructive, indicating a collaborative and professional environment.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion presents a well-structured proposal to extend credit lines to various silos, with detailed assessments of each asset based on a risk framework. The proposal is supported by multiple participants, indicating a consensus. The language used is professional and objective, focusing on data and risk assessments to justify the recommendations. The discussion includes constructive feedback and suggestions for further improvements, such as increasing the USDC credit line, which shows a collaborative and supportive environment.",
         "class_prob": {
-            "Support": 0.9997381024511521,
-            "Professionalism": 0.9999028985246534,
-            "Objectiveness": 0.9999828796125555
+            "Support": 0.9991953405122167,
+            "Professionalism": 0.9999537948404913,
+            "Objectiveness": 0.9995687085828937,
+            "Unanimity": 0.7051033437734394
         }
     },
     "https://gov.uniswap.org/t/temperature-check-competition-of-delegation-of-uni-to-active-but-underrepresented-delegates/22319": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe content provides a detailed and structured overview of the delegation process for UNI tokens to active but underrepresented delegates. It includes a summary of the proposal, the criteria for delegate qualification, and the results of the voting process. The discussion is supportive as it aims to enhance governance participation by empowering active delegates. The tone is professional, with clear communication and acknowledgment of contributions from various participants. The objectiveness is maintained by presenting factual information about the process, criteria, and outcomes without bias or subjective opinions.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion reflects support for the proposal as it has passed the temperature check and moved to the next steps, indicating community backing. The tone and language used in the discussion are professional, with delegates presenting their qualifications and intentions clearly and respectfully. The discussion is objective, focusing on the qualifications and contributions of the delegates without personal bias or emotional language. There is unanimity in the process, as the top delegates were chosen based on a structured voting process, and the results were accepted and confirmed by the participants.",
         "class_prob": {
-            "Support": 0.9968265019239688,
-            "Professionalism": 0.9999714363229496,
-            "Objectiveness": 0.9993723484556897
+            "Support": 0.9989673649349183,
+            "Professionalism": 0.9999845484373766,
+            "Objectiveness": 0.994777206461347,
+            "Unanimity": 0.5925537457264064
         }
     },
     "https://community.venus.io/t/proposal-xvs-emission-reduction/3121": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion shows a general consensus in support of the proposal to reduce XVS emissions, with multiple participants expressing agreement and appreciation for the initiative. The discussion is conducted in a professional manner, with participants providing constructive feedback and suggestions, such as the need for transparency and the potential impact on VAI vault emissions. The objectiveness is maintained as the proposal is backed by a detailed analysis of the potential impacts on the protocol's competitiveness and token supply, and participants discuss both the benefits and concerns regarding the proposal. The conversation includes factual data and analysis, contributing to an objective evaluation of the proposal.",
+        "evaluation": "Support: Yes  \nProfessionalism: No  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation:  \n- **Support**: The proposal to reduce XVS emissions is generally supported by several participants, with many expressing agreement and planning to vote in favor.  \n- **Professionalism**: The discussion lacks professionalism in parts, with some comments being dismissive or accusatory, such as calling others uninformed or suggesting conspiracy without evidence.  \n- **Objectiveness**: The discussion includes subjective opinions and assumptions, particularly regarding the motivations of certain stakeholders and the financial transparency of the Venus team. Some comments are speculative and lack evidence.  \n- **Unanimity**: There is no unanimity in the discussion. While many support the proposal, there are concerns and disagreements about transparency and the handling of XVS emissions, indicating a lack of consensus.",
         "class_prob": {
-            "Support": 0.9975259837352407,
-            "Professionalism": 0.6510626987287004,
-            "Objectiveness": 0.6223037882048844
+            "Support": 0.996405692045031,
+            "Professionalism": 0.37704211005999044,
+            "Objectiveness": 0.20170553351813453,
+            "Unanimity": 0.01798596225623539
         }
     },
     "https://forum.pokt.network/t/pep-55-poktscan-geo-mesh-reimbursement/4059": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion reflects a supportive environment where members express enthusiasm and backing for the PEP-55 proposal. The comments are professional, with participants providing constructive feedback and suggestions, such as using a 7-day trailing average at the time of funding to mitigate risks. The discussion maintains objectivity by addressing both the positive contributions of the Poktscan Geo-Mesh and the concerns regarding the proposed funding amount exceeding the recommended cap. The participants engage in a balanced dialogue, considering both the benefits and potential drawbacks of the proposal.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation:  \n- **Support**: The forum discussion shows a general support for the proposal, with several members expressing excitement and backing for the initiative.  \n- **Professionalism**: The discussion is conducted in a professional manner, with participants providing constructive feedback and suggestions.  \n- **Objectiveness**: The discussion lacks complete objectiveness as some comments are subjective, expressing personal excitement and gratitude without critically evaluating the proposal's merits or drawbacks.  \n- **Unanimity**: There is not complete unanimity. While many support the proposal, there are concerns about the funding amount exceeding recommended limits and the evaluation method, indicating differing opinions within the community.",
         "class_prob": {
-            "Support": 0.9971975164094153,
-            "Professionalism": 0.9995683511072004,
-            "Objectiveness": 0.6224207114004109
+            "Support": 0.9626713371877252,
+            "Professionalism": 0.9992887748106214,
+            "Objectiveness": 0.11918390007000455,
+            "Unanimity": 0.0024726159492893325
         }
     },
     "https://forum.balancer.fi/t/bip-143-save-earn-borrow-w-balancerp2p-includes-licensing-fees-increased-lp-activity-new-product-more-engagement/4139": {
-        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \n\nExplanation: \n\n1. **Support**: The forum discussion shows a lack of consensus and support for the proposal. Several participants express skepticism and concerns about the proposal's value and the potential risks involved. There is a clear division in opinions, with some members explicitly stating their intention to vote against it.\n\n2. **Professionalism**: The discussion lacks professionalism in several instances. There are accusations of \"fishing\" for liquidity and using template proposals, which suggests a lack of genuine engagement. The tone of the conversation is sometimes dismissive and defensive, which detracts from a professional discourse.\n\n3. **Objectiveness**: The discussion is not entirely objective. Participants express emotionally charged opinions and personal biases, which cloud the evaluation of the proposal's merits. There is a lack of clear, data-driven analysis to support the arguments for or against the proposal, leading to subjective judgments rather than objective assessments.",
+        "evaluation": "Support: No  \nProfessionalism: No  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation: The forum discussion reveals a lack of support for the proposal, as several members express skepticism and concerns about the benefits and risks involved. The professionalism is questionable due to the use of canned responses and a perceived sales pitch approach, which some members found off-putting. Objectiveness is lacking as the discussion includes emotionally charged opinions and a lack of concrete data to support claims. Unanimity is absent, with clear divisions in opinion and a lack of consensus among participants. The proposal was eventually removed from consideration, indicating significant opposition and unresolved issues.",
         "class_prob": {
-            "Support": 0.002182712302646951,
-            "Professionalism": 0.437793868169461,
-            "Objectiveness": 0.0021827101199357393
+            "Support": 0.0001233945022197082,
+            "Professionalism": 0.2941230681741115,
+            "Objectiveness": 0.0010322287288478784,
+            "Unanimity": 1.6701400162337082e-05
         }
     },
     "https://talk.stake.link/t/slurp-6-and-slurp-7-support-cbeth-and-sfrxeth-in-ixeth/71": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion supports the proposals SLURP-6 and SLURP-7, which aim to add cbETH and sfrxETH to ixETH. The participants express agreement and readiness to move the proposals to a council vote, indicating support. The language used is professional, with participants thanking each other and using respectful terms. The discussion is objective, focusing on factual data such as market capitalization, APR rates, and audit information, without personal bias or emotional language. The proposals are backed by data from reputable sources like DeFiLlama and Etherscan, and the discussion includes technical details and specifications, maintaining an objective tone throughout.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation:  \nThe forum discussion supports the proposals SLURP-6 and SLURP-7, as indicated by the positive comments and the intention to push them to a council vote. The language used is professional, with detailed explanations and references to data sources, audits, and specifications. The discussion is objective, presenting both the rationale for the proposals and acknowledging discrepancies in data sources. There is unanimity in the responses, with all participants expressing agreement or support for the proposals.",
         "class_prob": {
-            "Support": 0.9984972207053457,
-            "Professionalism": 0.798086413341198,
-            "Objectiveness": 0.9770153340760825
-        }
-    },
-    "https://forum.balancer.fi/t/bip-391-enable-bets-wsteth-gauge-ethereum/5050": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content provides a detailed proposal for adding gauge support for the BetSwirl 80/20 BETS/wstETH pool. It includes references, useful links, and a comprehensive protocol description, which supports the proposal by providing necessary background and context. The language used is professional, with a clear structure and technical details that are appropriate for the audience. The proposal is objective, focusing on factual information such as the motivation for the migration, governance details, and market history, without displaying bias or subjective opinions.",
-        "class_prob": {
-            "Support": 0.9241392234142475,
-            "Professionalism": 0.9993716336348857,
-            "Objectiveness": 0.9990882371086109
+            "Support": 0.998829748179347,
+            "Professionalism": 0.7977365291666596,
+            "Objectiveness": 0.9398423956287866,
+            "Unanimity": 0.7302449304134552
         }
     },
     "https://forum.alchemix.fi/public/d/333-aip-52-alchemix-aave-strategy-launch-configuration": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion presents a detailed proposal for launching AAVE V2 strategies on Alchemix, including specific parameters such as accepted collateral, deposit caps, and repayment caps. The proposal is well-structured and provides context for the changes, indicating a professional approach. The discussion includes links to further documentation, which supports transparency and objectivity. Comments from users express excitement and agreement, which shows support for the proposal. The mention of an audit by Runtime Verification adds credibility and objectivity to the proposal. Overall, the content is supportive, professional, and objective.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion presents a proposal for launching AAVE V2 strategies with detailed parameters and context, indicating support for the proposal. The language used is professional, focusing on technical details and strategic decisions. The objectiveness is maintained by providing factual information, such as the audit by Runtime Verification and comparisons with existing strategies. The comments from users express excitement and agreement, suggesting unanimity in support of the proposal.",
         "class_prob": {
-            "Support": 0.9626704573065252,
-            "Professionalism": 0.9626472524148298,
-            "Objectiveness": 0.9924207093855595
+            "Support": 0.985935394840826,
+            "Professionalism": 0.88072569318623,
+            "Objectiveness": 0.730979451317675,
+            "Unanimity": 0.7052866733187786
         }
     },
     "https://discourse.metricsdao.xyz/t/metip-11-metricsdao-and-data-providers/258": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content provides a detailed and structured proposal regarding MetricsDAO's engagement with data providers. It outlines the motivation, proposal details, and the intended outcomes clearly, which supports the proposal's objectives. The language used is professional, maintaining a formal tone throughout the document. The proposal is objective as it presents the rationale behind the decision to engage with data providers, the benefits of such engagements, and how it aligns with MetricsDAO's agnostic approach. It also includes voting outcomes and invites feedback, indicating a transparent and inclusive decision-making process.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion supports the proposal to engage with data providers in paid engagements, as evidenced by the unanimous vote (9 in favor, 0 against). The content is presented in a professional manner, with clear structure and rationale for the proposal. The discussion maintains objectiveness by outlining both the benefits and the approach to maintaining a data provider agnostic stance. The unanimous voting results indicate consensus among participants, supporting the proposal's acceptance.",
         "class_prob": {
-            "Support": 0.9997037887092296,
-            "Professionalism": 0.9999982567412194,
-            "Objectiveness": 0.999984906043415
-        }
-    },
-    "https://forum.balancer.fi/t/bip-537-replace-ggp-incentives-on-avax/5509": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe content provides a detailed explanation of a proposal to rectify a misconfiguration in reward distribution for the ggAVAX/wAVAX pool. It outlines the issue, the proposed solution, and future mitigation measures, demonstrating support for the affected parties by proposing compensation. The language used is professional, focusing on the technical aspects and solutions without any informal or inappropriate language. The proposal is objective, presenting facts about the misconfiguration, the steps taken to address it, and the measures planned to prevent future occurrences, without any bias or subjective opinions.",
-        "class_prob": {
-            "Support": 0.9770211395184456,
-            "Professionalism": 0.9999033752944676,
-            "Objectiveness": 0.9999026601378318
+            "Support": 0.9999037328639782,
+            "Professionalism": 0.9999933694113825,
+            "Objectiveness": 0.9999248301053981,
+            "Unanimity": 0.9998598784379432
         }
     },
     "https://governance.aave.com/t/temp-check-aave-financial-management-working-group/15193": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The proposal to create an Aave Financial Management Working Group (FMWG) is well-structured and aims to enhance financial management within the Aave DAO. It outlines a clear plan to involve multiple service providers through a Request for Proposal (RFP) process, ensuring a collaborative approach to managing financial reporting, stablecoin management, treasury management, and safety module management. The discussion is professional, with contributors providing constructive feedback and suggestions, such as the potential merging of Treasury Management and Financial Reporting and Accounting to reduce costs. The proposal and subsequent discussions are objective, focusing on the benefits and logistics of implementing the FMWG without bias or personal opinions. The proposal's discontinuation due to a lack of quorum in the Snapshot vote is also communicated transparently.",
+        "evaluation": "Support: No  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation:  \n- **Support**: The proposal did not receive enough support to pass, as indicated by the failure to secure the required quorum of Yes votes in the Snapshot vote.  \n- **Professionalism**: The discussion and proposal are presented in a professional manner, with clear outlines of the objectives, scopes, and processes involved. Feedback is acknowledged and addressed respectfully.  \n- **Objectiveness**: The proposal and subsequent discussions focus on factual information and logical reasoning, such as the need for financial management and the benefits of consolidating certain functions.  \n- **Unanimity**: There is a lack of unanimity, as evidenced by the proposal's discontinuation due to insufficient support and differing opinions on the structure of the working groups.",
         "class_prob": {
-            "Support": 0.9324479096402986,
-            "Professionalism": 0.9999717939237989,
-            "Objectiveness": 0.999903256099993
+            "Support": 0.13296387555794173,
+            "Professionalism": 0.9999746547351966,
+            "Objectiveness": 0.9796461509287777,
+            "Unanimity": 3.120191770917735e-05
         }
     },
     "https://forum.cow.fi/t/core-contributor-copywriter-september-2023-february-2024/1873/1": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content is a detailed grant application for a core contributor role within the CoW DAO, specifically for copywriting and marketing services. The applicant, Hertzov, provides a comprehensive overview of their qualifications, past contributions, and future plans, which supports their request for funding. The tone is professional, as it clearly outlines the applicant's experience, responsibilities, and the financial aspects of the proposal. The application is objective, focusing on factual information about the applicant's work history, contributions, and the specific services they intend to provide. The discussion is moved to a voting platform, indicating a structured and formal process within the DAO.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The content reflects support for the grant application as it outlines the applicant's qualifications, contributions, and plans for future work with CoW Protocol. The tone is professional, detailing past achievements and future goals in a structured manner. The objectiveness is maintained through factual descriptions of the applicant's experience and contributions. However, unanimity is not evident as the discussion has been moved to Snapshot for voting, indicating that a decision has not yet been reached by the community.",
         "class_prob": {
-            "Support": 0.9933055945404342,
-            "Professionalism": 0.9999877668918251,
-            "Objectiveness": 0.9964048608437495
+            "Support": 0.9706789430895143,
+            "Professionalism": 0.9999797803764193,
+            "Objectiveness": 0.9465886650156214,
+            "Unanimity": 0.17098242594711488
         }
     },
     "https://forum.balancer.fi/t/proposal-whitelist-olympusdao-gnosis-safe-for-balancer-s-votingescrow/3312": {
-        "evaluation": "Support: Yes\nProfessionalism: Yes\nObjectiveness: Yes\nExplanation: The content provides a clear and structured proposal for whitelisting the OlympusDAO Gnosis Safe multisig for participation in Balancer DAO governance. It includes an introduction, motivation, risks, and specifications, which are typical components of a well-structured proposal. The response from \"solarcurve\" expresses support in a professional manner, indicating a positive outlook on the collaboration. The discussion remains objective, focusing on the potential benefits and risks without any subjective or biased language.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion shows clear support for the proposal to whitelist the OlympusDAO Gnosis Safe for Balancer's VotingEscrow, as indicated by the positive comment from a participant expressing happiness to support the whitelisting. The language used is professional, focusing on the technical and strategic aspects of the proposal. The discussion is objective, presenting both the motivation for the proposal and the associated risks, which are acknowledged and addressed. There is no indication of dissent or disagreement in the provided content, suggesting unanimity among the participants.",
         "class_prob": {
-            "Support": 0.9995690660187321,
-            "Professionalism": 0.9999896741293122,
-            "Objectiveness": 0.9980725120952747
+            "Support": 0.9996643557411417,
+            "Professionalism": 0.9999243533313535,
+            "Objectiveness": 0.9933035965082403,
+            "Unanimity": 0.6134683717192311
         }
     },
     "https://forum.plancker.org/t/notfellows-tokyo-plancker-dao-collab/60/1": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The forum discussion reflects a supportive environment where members are actively engaging with the proposal for the Notfellows Tokyo event. The participants express their support and provide constructive feedback, indicating a collaborative effort to enhance the proposal. The language used is professional, with a focus on the potential benefits and strategic alignment of the event with the goals of Plancker DAO. The discussion is objective, as it considers various aspects of the proposal, such as the involvement of reputable sponsors and the potential for community building, while also addressing logistical considerations and the need for further discussion and voting. Overall, the forum maintains a respectful and constructive tone throughout the conversation.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: Yes  \n\nExplanation: The forum discussion reflects strong support for the Notfellows Tokyo event collaboration with Plancker DAO, as evidenced by the positive comments and the voting results. The tone of the discussion is professional, with participants providing constructive feedback and suggestions for the proposal. The objectiveness is maintained as participants discuss the potential benefits and considerations of the collaboration, such as community exposure and alignment with Plancker DAO's goals. Unanimity is evident from the voting results, where the proposal received overwhelming support, indicating a consensus among the participants.",
         "class_prob": {
-            "Support": 0.9998412891059067,
-            "Professionalism": 0.9964042781463572,
-            "Objectiveness": 0.952555837168741
+            "Support": 0.9999908661547138,
+            "Professionalism": 0.9993723484556897,
+            "Objectiveness": 0.81737829656233,
+            "Unanimity": 0.9914217241870744
         }
     },
     "https://tribe.fei.money/t/use-tribe-dao-s-vebal-to-vote-on-the-core-pools-proposal/4408": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: No  \n\nExplanation:  \nThe content supports the \"Core Pools\" proposal by explaining its benefits and encouraging the Tribe DAO to participate in the vote. It is written in a professional manner, addressing the community respectfully and providing detailed information about the proposal and its implications. However, the content lacks objectiveness as it primarily presents the proposal in a positive light, emphasizing the benefits and potential gains for the Tribe DAO without discussing any potential drawbacks or alternative perspectives.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: No  \nUnanimity: No  \n\nExplanation: The content supports the \"Core Pools\" proposal by encouraging the Tribe DAO to vote in favor of it, indicating a clear stance of support. The language used is professional, addressing the community respectfully and providing detailed information about the proposal. However, the content lacks objectiveness as it presents a biased view favoring the proposal without discussing potential drawbacks or alternative perspectives. Unanimity is not present as the content does not provide evidence of a consensus or differing opinions within the community; it primarily reflects the author's viewpoint.",
         "class_prob": {
-            "Support": 0.992421874388914,
-            "Professionalism": 0.9859346948269442,
-            "Objectiveness": 0.29420399256080526
+            "Support": 0.9324509121274016,
+            "Professionalism": 0.9740348555444274,
+            "Objectiveness": 0.1480384413637626,
+            "Unanimity": 0.09708065025603008
         }
     },
     "https://agora.ohgeez.org/proposals/p/multi-chain-deployment-of-levxio": {
-        "evaluation": "Support: Yes\nProfessionalism: Yes\nObjectiveness: Yes\nExplanation: The forum discussion is supportive of the proposal to deploy on zkSync as the hub chain, with multiple participants expressing agreement and suggesting additional options for expansion. The tone is professional, with participants providing constructive feedback and asking clarifying questions. The discussion remains objective, focusing on the technical aspects and potential benefits of the multi-chain deployment strategy without personal biases or emotional language.",
+        "evaluation": "Support: Yes\nProfessionalism: Yes\nObjectiveness: Yes\nUnanimity: No\nExplanation: The discussion supports the proposal for deploying on zkSync as the hub chain, with several participants expressing agreement and suggesting additional chains like Arbitrum and Optimism for future expansion. The tone is professional, focusing on technical aspects and strategic considerations. The discussion is objective, presenting facts about the protocol's design and potential benefits. However, there is no unanimity, as some participants express preferences for different chains, indicating a diversity of opinions rather than a consensus.",
         "class_prob": {
-            "Support": 0.9579100777293252,
-            "Professionalism": 0.9796629666992793,
-            "Objectiveness": 0.8807621383694597
+            "Support": 0.9399108393237942,
+            "Professionalism": 0.9669027667811876,
+            "Objectiveness": 0.8175286099028868,
+            "Unanimity": 0.03308587913035667
         }
     },
     "https://forum.apecoin.com/t/aip-306-apecoin-price-tracking-bot/16632": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion reflects a supportive environment where participants are engaging positively with the proposal for an ApeCoin Price Tracking Bot. The original proposal is well-structured, providing detailed information about the project, its motivation, and potential benefits to the ApeCoin community. The responses from other forum members are constructive, offering suggestions, asking clarifying questions, and expressing interest in collaboration, which indicates a professional and respectful tone throughout the discussion. Additionally, the discussion remains objective, focusing on the technical aspects, potential benefits, and challenges of the proposal without personal biases or irrelevant commentary. Overall, the conversation is conducive to productive discourse within the DAO community.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The forum discussion shows a generally supportive attitude towards the proposal of the ApeCoin Price Tracking Bot, with several members expressing interest and appreciation for the idea. The conversation is conducted in a professional manner, with participants asking relevant questions and providing constructive feedback. The discussion remains objective, focusing on the technical aspects and potential benefits of the bot. However, there is not complete unanimity, as some members raise concerns about the uniqueness of the bot and potential regulatory issues, indicating that not all participants are in full agreement.",
         "class_prob": {
-            "Support": 0.9953882944213254,
-            "Professionalism": 0.9998590441352115,
-            "Objectiveness": 0.9840672930718952
+            "Support": 0.9626707923159026,
+            "Professionalism": 0.9997025970330327,
+            "Objectiveness": 0.7766891290384386,
+            "Unanimity": 0.04206853941299922
         }
     },
     "https://forum.nexusmutual.io/t/rfc-utilizing-nexus-capital-pool-in-morpho/1111": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation:  \nThe forum discussion is supportive as it provides a detailed proposal for utilizing the Nexus Capital Pool in Morpho, including a comprehensive analysis of risks, potential returns, and strategic considerations. The participants engage constructively, offering feedback and suggestions, which indicates a supportive environment.  \n\nThe professionalism is evident in the structured presentation of the proposal, the use of technical language appropriate for the audience, and the respectful tone maintained throughout the discussion. Participants provide well-reasoned arguments and acknowledge each other's contributions, which reflects a professional approach.  \n\nThe objectiveness is maintained as the discussion presents both the potential benefits and risks associated with the proposal. Participants consider various factors, such as smart contract risks, opportunity costs, and technical integration challenges, without showing bias towards a particular outcome. The inclusion of data and references to audits and safety scores further supports the objectivity of the discussion.",
+        "evaluation": "Support: No  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation:  \n- **Support**: The forum discussion does not show clear support for the proposal. While some participants express interest in the Morpho investment, others raise concerns about the risks and opportunity costs, suggesting alternative investments like ETH staking derivatives.  \n- **Professionalism**: The discussion is conducted in a professional manner, with participants providing detailed feedback and constructive criticism. The language used is respectful and focused on the topic.  \n- **Objectiveness**: The participants present objective arguments, discussing both the potential benefits and risks associated with the proposal. They consider various factors such as risk profiles, returns, and technical integration challenges.  \n- **Unanimity**: There is no unanimity in the discussion. Participants have differing opinions on the proposal, with some supporting it and others expressing reservations or preferring alternative strategies.",
         "class_prob": {
-            "Support": 0.9770171552343626,
-            "Professionalism": 0.9999585627785453,
-            "Objectiveness": 0.9986707625197849
+            "Support": 0.4378171331537607,
+            "Professionalism": 0.9999236381607137,
+            "Objectiveness": 0.5926084231830303,
+            "Unanimity": 4.5397796015929434e-05
         }
     },
     "https://governance.aave.com/t/arfc-grant-op-emission-admin-for-optimism-v3-liquidity-pool-to-lido-dao/11905": {
-        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \n\nExplanation: The content provides a detailed proposal for granting the OP Emission_Admin role for the Optimism v3 Liquidity Pool to Lido DAO. It includes a clear summary, abstract, motivation, and specifications, which are typical components of a well-structured proposal. The discussion includes supportive comments and questions, indicating engagement and backing from the community. The language used is professional, focusing on the technical and governance aspects of the proposal without any subjective or biased statements. The content maintains objectivity by presenting facts and the intended outcomes of the proposal without personal opinions.",
+        "evaluation": "Support: Yes  \nProfessionalism: Yes  \nObjectiveness: Yes  \nUnanimity: No  \n\nExplanation: The forum discussion shows support for the proposal, as indicated by comments like \"In full support!\" and the creation of a Snapshot to progress the proposal. The language used is professional, with clear and structured presentation of the proposal's details, motivations, and specifications. The discussion is objective, focusing on the technical and governance aspects of the proposal without personal bias. However, unanimity is not fully evident as there are limited comments, and not all participants have explicitly expressed their stance on the proposal.",
         "class_prob": {
-            "Support": 0.998829867339743,
-            "Professionalism": 0.9999680987188567,
-            "Objectiveness": 0.9998905026252752
+            "Support": 0.9968265019239688,
+            "Professionalism": 0.9999638075349631,
+            "Objectiveness": 0.9971976355745257,
+            "Unanimity": 0.46813732341737896
         }
     }
 }
