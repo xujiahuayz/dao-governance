@@ -69,6 +69,7 @@ KAIKO_API_KEY="abc123"
 TALLY_API_KEY="xxx"
 SNAPSHOT_API_KEY="aaa"
 OPENAI_API_KEY="sk-xxx"
+HEADERS="{xxxxx}"
 ```
 
 ```

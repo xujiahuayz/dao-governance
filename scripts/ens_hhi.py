@@ -4,6 +4,7 @@ Calculate the HHI for each url to evaluate the concentration of activity:
 
 import json
 from governenv.constants import DATA_DIR
+from collections import defaultdict
 
 output = []
 
@@ -16,21 +17,32 @@ for entry in data:
     url = entry["discussion_url"]
     discussions = entry["discussion"]
 
-    content_lengths = [len(post["content"]) for post in discussions]
-    total_len = sum(content_lengths)
+    authors_count = defaultdict(int)
+    content_group_authors = defaultdict(int)
+    total_len=0
 
-    # Calculate the normalised lenth of discussions HHI
-    HHI_len = sum(length**2 for length in content_lengths)
+    for post in discussions:
+        author = post["author"]
+        authors_count[author] += 1 # Count the number of discussions each author posted
+        content_individual = len(post["content"])
+        content_group_authors[author] += content_individual # Count the total length of content each author posted
+        total_len += content_individual # Count the toal length of content in the whole discussion thread
+
+
+    # Calculate the lenth of discussions HHI
+    HHI_len = sum(value**2 for value in content_group_authors.values())
     if total_len > 0:
         HHI_len_normalised = HHI_len / (total_len**2)
     else:
-        HHI_len_normalised = "null"
+        HHI_len_normalised = None
 
-    # Calculate equal weighed HHI 
+
+    # Calculate equal weight HHI 
+    HHI_eq = sum(value**2 for value in authors_count.values())
     if len(discussions) > 0:
-        HHI_eq = 1 / len(discussions)
+        HHI_eq_normalised = HHI_eq / (len(discussions)**2)
     else:
-        HHI_eq = "null"
+        HHI_eq_normalised = None
 
     output.append(
         {
@@ -38,7 +50,7 @@ for entry in data:
             "url": url,
             "number_of_discussions": len(discussions),
             "HHI_length_weighted": HHI_len_normalised,
-            "HHI_equal_weighted": HHI_eq,
+            "HHI_equal_weighted": HHI_eq_normalised,
         }
     )
 

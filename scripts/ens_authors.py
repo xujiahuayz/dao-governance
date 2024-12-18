@@ -7,10 +7,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from governenv.constants import DATA_DIR
+from governenv.settings import HEADERS 
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-}
 
 with open(DATA_DIR / "ens_snapshot_filtered.json", "r") as f:
     data = json.load(f)
@@ -18,7 +16,8 @@ with open(DATA_DIR / "ens_snapshot_filtered.json", "r") as f:
 all_discussions = []
 
 for id, url in data.items():
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=HEADERS) # The function can still run without the headers parameter in .env 
+
     if response.status_code == 200:
 
         html_content = response.text
@@ -32,7 +31,7 @@ for id, url in data.items():
         for post in posts:
             # Extract author name
             author_tag = post.find("span", {"itemprop": "name"})
-            author_name = author_tag.get_text(strip=True) if author_tag else "Unknown"
+            author_name = author_tag.get_text(strip=True)
 
             # Extract text inside <div class='post' itemprop='text'>
             content_div = post.find("div", {"class": "post", "itemprop": "text"})
@@ -43,8 +42,7 @@ for id, url in data.items():
 
                 content = content_div.get_text(" ", strip=True)
 
-                if content:
-                    discussion.append({"author": author_name, "content": content})
+                discussion.append({"author": author_name, "content": content})
 
         all_discussions.append(
             {"id": id, "discussion_url": url, "discussion": discussion}

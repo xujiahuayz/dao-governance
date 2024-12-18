@@ -1,6 +1,6 @@
-```
+"""
 Filter ENS links (with discussion link) from snapshot:
-```
+"""
 
 from governenv.constants import DATA_DIR
 import json
