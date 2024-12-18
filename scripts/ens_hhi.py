@@ -3,46 +3,43 @@ Calculate the HHI for each url to evaluate the concentration of activity:
 """
 
 import json
+import pandas as pd
 from governenv.constants import DATA_DIR
-from collections import defaultdict
 
 output = []
 
 with open(DATA_DIR / "ens_authors.json", "r") as f:
     data = json.load(f)
 
-
 for entry in data:
     id = entry["id"]
     url = entry["discussion_url"]
     discussions = entry["discussion"]
 
-    authors_count = defaultdict(int)
-    content_group_authors = defaultdict(int)
-    total_len=0
+    if not discussions:
+        output.append(
+            {
+                "id": id,
+                "url": url,
+                "number_of_discussions": 0,
+                "HHI_length_weighted": None,
+                "HHI_equal_weighted": None,
+            }
+        )
+        continue
 
-    for post in discussions:
-        author = post["author"]
-        authors_count[author] += 1 # Count the number of discussions each author posted
-        content_individual = len(post["content"])
-        content_group_authors[author] += content_individual # Count the total length of content each author posted
-        total_len += content_individual # Count the toal length of content in the whole discussion thread
+    df = pd.DataFrame(discussions)
+    df["content_length"] = df["content"].str.len()
 
+    author_grouped = df.groupby("author")["content_length"].agg(["sum", "size"])
 
-    # Calculate the lenth of discussions HHI
-    HHI_len = sum(value**2 for value in content_group_authors.values())
-    if total_len > 0:
-        HHI_len_normalised = HHI_len / (total_len**2)
-    else:
-        HHI_len_normalised = None
-
-
-    # Calculate equal weight HHI 
-    HHI_eq = sum(value**2 for value in authors_count.values())
-    if len(discussions) > 0:
-        HHI_eq_normalised = HHI_eq / (len(discussions)**2)
-    else:
-        HHI_eq_normalised = None
+    total_len = df["content_length"].sum()
+    HHI_len_normalised = (
+        (author_grouped["sum"]**2).sum() / (total_len**2) if total_len > 0 else None
+    )
+    HHI_eq_normalised = (
+        (author_grouped["size"]**2).sum() / (len(discussions)**2) if len(discussions) > 0 else None
+    )
 
     output.append(
         {
@@ -54,5 +51,6 @@ for entry in data:
         }
     )
 
-with open(DATA_DIR / "ens_hhi.json", "w") as file:
+with open(DATA_DIR / "ens_hhi_df.json", "w") as file:
     json.dump(output, file, indent=4)
+
