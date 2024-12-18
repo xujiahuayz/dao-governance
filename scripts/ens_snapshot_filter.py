@@ -4,8 +4,9 @@ Filter ENS links (with discussion link) from snapshot:
 
 from governenv.constants import DATA_DIR
 import json
+import gzip
 
-with open(DATA_DIR / "snapshot_proposals.jsonl", "r") as f:
+with gzip.open(DATA_DIR / "snapshot_proposals.jsonl.gz", "r") as f:
     data_unique = {
         w["id"]: w["discussion"] 
         for line in {json.dumps(row, sort_keys=True) for row in (json.loads(line) for line in f)}
