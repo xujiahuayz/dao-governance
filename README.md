@@ -80,3 +80,21 @@ export $(cat .env | xargs)
 ```
 python scripts/fetch_spaces.py
 ```
+
+
+# Calculate the HHI for ENS discussion forum:
+
+1. Filter ENS links (with discussion link) from snapshot:
+```
+python scripts/ens_snapshot_filter.py
+```
+
+2. For each post in the discussion forum URLs, find the author and their associated discussions: 
+```
+python scripts/ens_authors.py
+```
+
+3. Calculate the HHI for each url to evaluate the concentration of activity:
+```
+python scripts/ens_hhi.py
+```
