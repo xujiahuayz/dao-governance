@@ -8,9 +8,12 @@ import gzip
 
 with gzip.open(DATA_DIR / "snapshot_proposals.jsonl.gz", "r") as f:
     data_unique = {
-        w["id"]: w["discussion"] 
-        for line in {json.dumps(row, sort_keys=True) for row in (json.loads(line) for line in f)}
-        if (w := json.loads(line)).get("space", {}).get("id") == "ens.eth" and len(w.get("discussion", "")) > 5 
+        w["id"]: w["discussion"]
+        for line in {
+            json.dumps(row, sort_keys=True) for row in (json.loads(line) for line in f)
+        }
+        if (w := json.loads(line)).get("space", {}).get("id") == "ens.eth"
+        and len(w.get("discussion")) > 5
     }
 
 with open(DATA_DIR / "ens_snapshot_filtered.json", "w") as f:
