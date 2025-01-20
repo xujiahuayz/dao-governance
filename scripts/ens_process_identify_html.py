@@ -16,7 +16,7 @@ from governenv.constants import DATA_DIR
 from governenv.llm import ChatGPT
 from governenv.prompts import IDF_INSTRUCT, IDF_PROMPT
 
-tokenizer = tiktoken.encoding_for_model("gpt-4o")
+tokenizer = tiktoken.encoding_for_model("gpt-4o-mini")
 
 
 llm = ChatGPT()
