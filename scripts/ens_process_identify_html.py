@@ -30,14 +30,14 @@ if __name__ == "__main__":
     ]
 
     with gzip.open(DATA_DIR / "ens_html.jsonl.gz", "rt") as gz_f:
-        for idx, line in tqdm(enumerate(gz_f)):
-
-            if str(idx) in fetched_idf:
-                continue
-
+        for line in tqdm(gz_f):
             data = json.loads(line.strip())
+            id = data["id"]
             url = data["url"]
             html = data["html"]
+
+            if id in fetched_idf:
+                continue
 
             time.sleep(1)
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
                 }
 
                 with open(
-                    DATA_DIR / "ens_idf" / f"{idx}.json", "w", encoding="utf-8"
+                    DATA_DIR / "ens_idf" / f"{id}.json", "w", encoding="utf-8"
                 ) as f:
                     json.dump(idf_dict, f)
 
@@ -77,14 +77,15 @@ if __name__ == "__main__":
     res_dict = {}
 
     with gzip.open(DATA_DIR / "ens_html.jsonl.gz", "rt") as gz_f:
-        for idx, line in tqdm(enumerate(gz_f)):
-            if str(idx) in fetched_idf:
-                data = json.loads(line.strip())
-                url = data["url"]
-                html = data["html"]
+        for line in tqdm(gz_f):
+            data = json.loads(line.strip())
+            id = data["id"]
+            url = data["url"]
+            html = data["html"]
 
+            if id in fetched_idf:
                 with open(
-                    DATA_DIR / "ens_idf" / f"{idx}.json", "r", encoding="utf-8"
+                    DATA_DIR / "ens_idf" / f"{id}.json", "r", encoding="utf-8"
                 ) as f:
                     idf_dict = json.load(f)
 

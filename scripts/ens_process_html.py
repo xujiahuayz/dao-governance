@@ -51,21 +51,23 @@ if __name__ == "__main__":
 
     fetched_data = [
         _.split("/")[-1].split(".")[0]
-        for _ in glob(str(DATA_DIR / "html_200" / "*.html"))
+        for _ in glob(str(DATA_DIR / "ens_html_200" / "*.html"))
     ]
 
     # save the html
-    with gzip.open(DATA_DIR / "ens_html.json", "wt") as gz_f:
-        for i, (k, v) in tqdm(enumerate(data_unique.items())):
-            if str(i) in fetched_data:
+    with gzip.open(DATA_DIR / "ens_html.jsonl.gz", "wt") as gz_f:
+        for id, url in tqdm(data_unique.items()):
+            if id in fetched_data:
                 # save the html
                 with open(
-                    DATA_DIR / "html_200" / f"{i}.html", "r", encoding="utf-8"
+                    DATA_DIR / "ens_html_200" / f"{id}.html", "r", encoding="utf-8"
                 ) as f:
                     html = f.read()
 
                 # distill the html
                 html_distilled = distill_html(html)
 
-                json.dump({"url": v, "html": html_distilled}, gz_f)
+                json.dump({"id": id, "url": url, "html": html_distilled}, gz_f)
                 gz_f.write("\n")
+            else:
+                print(f"Skipping {url}, not found in fetched data.")
