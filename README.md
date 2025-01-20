@@ -99,3 +99,42 @@ python scripts/ens_authors.py
 ```
 python scripts/ens_hhi.py
 ```
+
+
+# Calculate the sentiments for ENS discussion forum:
+
+1. For each ENS link (with discussion link) from snapshot, filter out the html formatting code 
+```
+python scripts/ens_process_html.py
+```
+
+2. Check whether the discussion thread have at least one discussion
+```
+python scripts/ens_process_identify_html.py
+```
+
+3. Calculate the sentiment of the discussion thread
+```
+python scripts/ens_process_sentiment.py
+```
+
+
+4. Calculate the statistics of HHI and sentiments and put it in a .tex table
+```
+python scripts/ens_hhi_senti_stats.py
+```
+
+
+# Calculate the votes for ENS discussion forum:
+
+1. Calculate the total number of votes; the number of voters when it reached 50% of the total voting power for each proposal; and the timestamp when it reached 50% of the total voting power for each proposal.
+```
+python scripts/ens_votes.py
+```
+
+2. Put it in a csv table (together with HHI and sentiments for each proposal)
+
+```
+python scripts/ens_votes_HHI_senti.py
+```
+
