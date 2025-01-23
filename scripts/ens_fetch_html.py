@@ -2,7 +2,7 @@
 Fetch the http response of the discussion links
 """
 
-import pickle
+import json
 import time
 from glob import glob
 
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     HTML_200_DIR = DATA_DIR / "html_200"
 
     # unpickle data_unique
-    with open(DATA_DIR / "discussion_links.pkl", "rb") as f:
-        data_unique = pickle.load(f)
+    with open(DATA_DIR / "ens_snapshot_filtered.json", "rb") as f:
+        data_unique = json.load(f)
         print(f"Data length before filtering: {len(data_unique)}")
 
     # filter discussions
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             continue
         try:
             # save the html
-            html = fetch_http_response(v)
+            html = fetch_http_response(url)
             with open(HTML_200_DIR / f"{id}.html", "w", encoding="utf-8") as f:
                 f.write(html)
         except Exception as e:

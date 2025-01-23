@@ -103,23 +103,35 @@ python scripts/ens_hhi.py
 
 # Calculate the sentiments for ENS discussion forum:
 
-1. For each ENS link (with discussion link) from snapshot, filter out the html formatting code 
+1. Create two folders named "html_200" and "idf" under "data" folder, then fetch the http response of the discussion links
+
+```
+mkdir html_200
+mkdir idf
+```
+
+```
+python scripts/ens_fetch_html.py
+```
+
+2. For each ENS link (with discussion link) from snapshot, filter out the html formatting code
+
 ```
 python scripts/ens_process_html.py
 ```
 
-2. Check whether the discussion thread have at least one discussion
+3. Check whether the discussion thread have at least one discussion
 ```
 python scripts/ens_process_identify_html.py
 ```
 
-3. Calculate the sentiment of the discussion thread
+4. Calculate the sentiment of the discussion thread
 ```
 python scripts/ens_process_sentiment.py
 ```
 
 
-4. Calculate the statistics of HHI and sentiments and put it in a .tex table
+5. Calculate the statistics of HHI and sentiments and put it in a .tex table
 ```
 python scripts/ens_hhi_senti_stats.py
 ```

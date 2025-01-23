@@ -15,7 +15,7 @@ from governenv.constants import DATA_DIR
 from governenv.llm import ChatGPT
 from governenv.prompts import IDF_INSTRUCT, IDF_PROMPT
 
-tokenizer = tiktoken.encoding_for_model("gpt-4o")
+tokenizer = tiktoken.encoding_for_model("gpt-4o-mini")
 
 
 llm = ChatGPT()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                     "yes_prob": yes_prob,
                 }
 
-                with open(DATA_DIR / "idf" / f"{idx}.json", "w", encoding="utf-8") as f:
+                with open(DATA_DIR / "idf" / f"{id}.json", "w", encoding="utf-8") as f:
                     json.dump(idf_dict, f)
 
             except Exception as e:  # pylint: disable=broad-except
@@ -74,11 +74,13 @@ if __name__ == "__main__":
     res_dict = {}
 
     with gzip.open(DATA_DIR / "html.jsonl.gz", "rt") as gz_f:
-        for idx, line in tqdm(enumerate(gz_f)):
-            if str(idx) in fetched_idf:
-                data = json.loads(line.strip())
-                url = data["url"]
-                html = data["html"]
+        for line in tqdm(gz_f):
+            data = json.loads(line.strip())
+            id = data["id"]
+            url = data["url"]
+            html = data["html"]
+
+            if id in fetched_idf:
 
                 with open(DATA_DIR / "idf" / f"{idx}.json", "r", encoding="utf-8") as f:
                     idf_dict = json.load(f)
