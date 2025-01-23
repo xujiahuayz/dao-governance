@@ -13,12 +13,6 @@ with gzip.open(DATA_DIR / "snapshot_proposals.jsonl.gz", "r") as f:
             "id": proposal["id"],
             "link": proposal.get("link", ""),
             "discussion": proposal.get("discussion", ""),
-            "number": 0,
-            "vp_sum": 0,
-            "half_vp_sum_time": None,
-            "UTC_time": None,
-            "half_voters_count": None,
-            "ratio": None,
         }
         for line in f
         if (proposal := json.loads(line)).get("space", {}).get("id") == "ens.eth"
