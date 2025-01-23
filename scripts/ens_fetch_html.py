@@ -28,7 +28,7 @@ def fetch_http_response(url: str, timeout: int = 10) -> str:
 
 if __name__ == "__main__":
 
-    HTML_200_DIR = DATA_DIR / "ens_html_200"
+    HTML_200_DIR = DATA_DIR / "html_200"
 
     # unpickle data_unique
     with open(DATA_DIR / "ens_snapshot_filtered.json", "rb") as f:

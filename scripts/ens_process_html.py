@@ -4,7 +4,6 @@ Script to aggregate all the html files in the data folder into a single jsonl fi
 
 import gzip
 import json
-import pickle
 from glob import glob
 
 from bs4 import BeautifulSoup
@@ -51,7 +50,7 @@ if __name__ == "__main__":
 
     fetched_data = [
         _.split("/")[-1].split(".")[0]
-        for _ in glob(str(DATA_DIR / "ens_html_200" / "*.html"))
+        for _ in glob(str(DATA_DIR / "html_200" / "*.html"))
     ]
 
     # save the html
@@ -60,7 +59,7 @@ if __name__ == "__main__":
             if id in fetched_data:
                 # save the html
                 with open(
-                    DATA_DIR / "ens_html_200" / f"{id}.html", "r", encoding="utf-8"
+                    DATA_DIR / "html_200" / f"{id}.html", "r", encoding="utf-8"
                 ) as f:
                     html = f.read()
 

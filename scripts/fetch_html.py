@@ -44,15 +44,15 @@ if __name__ == "__main__":
     ]
 
     # fetch http response
-    for i, (k, v) in tqdm(enumerate(data_unique.items()), total=len(data_unique)):
-        if str(i) in fetched_data:
+    for id, url in tqdm(data_unique.items(), total=len(data_unique)):
+        if id in fetched_data:
             continue
         try:
             # save the html
             html = fetch_http_response(v)
-            with open(HTML_200_DIR / f"{i}.html", "w", encoding="utf-8") as f:
+            with open(HTML_200_DIR / f"{id}.html", "w", encoding="utf-8") as f:
                 f.write(html)
         except Exception as e:
-            print(f"Error fetching {v}: {e}")
+            print(f"Error fetching {url}: {e}")
 
         time.sleep(2)

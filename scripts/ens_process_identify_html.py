@@ -24,9 +24,12 @@ llm = ChatGPT()
 if __name__ == "__main__":
 
     # check fetched idf
+    with open(DATA_DIR / "ens_snapshot_filtered.json", "r", encoding="utf-8") as f:
+        ens_id = set(json.load(f).keys())
+
     fetched_idf = [
         _.split("/")[-1].split(".")[0]
-        for _ in glob.glob(str(DATA_DIR / "ens_idf" / "*.json"))
+        for _ in glob.glob(str(DATA_DIR / "idf" / "*.json"))
     ]
 
     with gzip.open(DATA_DIR / "ens_html.jsonl.gz", "rt") as gz_f:
@@ -35,6 +38,9 @@ if __name__ == "__main__":
             id = data["id"]
             url = data["url"]
             html = data["html"]
+
+            if id not in ens_id:
+                continue
 
             if id in fetched_idf:
                 continue
@@ -65,9 +71,7 @@ if __name__ == "__main__":
                     "yes_prob": yes_prob,
                 }
 
-                with open(
-                    DATA_DIR / "ens_idf" / f"{id}.json", "w", encoding="utf-8"
-                ) as f:
+                with open(DATA_DIR / "idf" / f"{id}.json", "w", encoding="utf-8") as f:
                     json.dump(idf_dict, f)
 
             except Exception as e:  # pylint: disable=broad-except
@@ -83,10 +87,8 @@ if __name__ == "__main__":
             url = data["url"]
             html = data["html"]
 
-            if id in fetched_idf:
-                with open(
-                    DATA_DIR / "ens_idf" / f"{id}.json", "r", encoding="utf-8"
-                ) as f:
+            if id in ens_id and id in fetched_idf:
+                with open(DATA_DIR / "idf" / f"{id}.json", "r", encoding="utf-8") as f:
                     idf_dict = json.load(f)
 
                 res_dict[url] = {

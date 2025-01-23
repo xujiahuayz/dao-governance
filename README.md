@@ -103,7 +103,12 @@ python scripts/ens_hhi.py
 
 # Calculate the sentiments for ENS discussion forum:
 
-1. Create two folders named "ens_html_200" and "ens_idf" under "data" folder, then fetch the http response of the discussion links
+1. Create two folders named "html_200" and "idf" under "data" folder, then fetch the http response of the discussion links
+
+```
+mkdir html_200
+mkdir idf
+```
 
 ```
 python scripts/ens_fetch_html.py
