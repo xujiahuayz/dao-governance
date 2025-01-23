@@ -82,32 +82,33 @@ export $(cat .env | xargs)
 python scripts/fetch_spaces.py
 ```
 
-
 # Calculate the HHI for ENS discussion forum:
 
 1. Filter ENS links (with discussion link) from snapshot:
+
 ```
 python scripts/ens_snapshot_filter.py
 ```
 
-2. For each post in the discussion forum URLs, find the author and their associated discussions: 
+2. For each post in the discussion forum URLs, find the author and their associated discussions:
+
 ```
 python scripts/ens_authors.py
 ```
 
 3. Calculate the HHI for each url to evaluate the concentration of activity:
+
 ```
 python scripts/ens_hhi.py
 ```
-
 
 # Calculate the sentiments for ENS discussion forum:
 
 1. Create two folders named "html_200" and "idf" under "data" folder, then fetch the http response of the discussion links
 
 ```
-mkdir html_200
-mkdir idf
+mkdir data/html_200
+mkdir data/idf
 ```
 
 ```
@@ -121,25 +122,27 @@ python scripts/ens_process_html.py
 ```
 
 3. Check whether the discussion thread have at least one discussion
+
 ```
 python scripts/ens_process_identify_html.py
 ```
 
 4. Calculate the sentiment of the discussion thread
+
 ```
 python scripts/ens_process_sentiment.py
 ```
 
-
 5. Calculate the statistics of HHI and sentiments and put it in a .tex table
+
 ```
 python scripts/ens_hhi_senti_stats.py
 ```
 
-
 # Calculate the votes for ENS discussion forum:
 
 1. Calculate the total number of votes; the number of voters when it reached 50% of the total voting power for each proposal; and the timestamp when it reached 50% of the total voting power for each proposal.
+
 ```
 python scripts/ens_votes.py
 ```
@@ -149,4 +152,3 @@ python scripts/ens_votes.py
 ```
 python scripts/ens_votes_HHI_senti.py
 ```
-
