@@ -3,8 +3,10 @@ combine ens_vp.json, ens_hhi.json and ens_senti.json into a single CSV file
 """
 
 import json
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
+
 from governenv.constants import DATA_DIR
 
 # Load and process `ens_senti.json` file
