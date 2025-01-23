@@ -120,5 +120,5 @@ latex_code = f"""
 \\end{{document}}
 """
 
-with open("ens_stats_table.tex", "w") as file:
+with open(DATA_DIR / "ens_stats_table.tex", "w") as file:
     file.write(latex_code)

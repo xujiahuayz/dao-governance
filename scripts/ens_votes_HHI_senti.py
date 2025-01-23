@@ -31,7 +31,7 @@ df_senti = pd.DataFrame(tidied_json)
 df = pd.merge(df_vp, df_hhi, on="id", how="outer")
 df = pd.merge(df, df_senti, on="discussion", how="outer")
 
-df["index"] = range(1, len(df) + 1)  # Create numbering for 'id'
+
 df.drop(columns=["url"], inplace=True)
 
 df["half_vp_sum_time"] = pd.to_numeric(df["half_vp_sum_time"], errors="coerce").astype(
@@ -56,8 +56,8 @@ df["number_of_discussions"] = pd.to_numeric(
 )  # Convert float to integer
 
 # Reorder columns
-columns_order = ["index"] + [col for col in df.columns if col != "index"]
-columns_order.insert(7, columns_order.pop(-1))
+columns_order = [col for col in df.columns]
+columns_order.insert(6, columns_order.pop(-1))
 df = df[columns_order]
 
 # Rename columns
