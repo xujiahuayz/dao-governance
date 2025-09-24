@@ -76,10 +76,18 @@ HEADERS="{xxxxx}"
 export $(cat .env | xargs)
 ```
 
-# fetch snapshot spaces data
+# Data Feching
+
+1. fetch snapshot spaces data
 
 ```
 python scripts/fetch_spaces.py
+```
+
+2. fetch snapshot proposals data
+
+```
+python scripts/fetch_proposals.py
 ```
 
 # Calculate the HHI for ENS discussion forum:

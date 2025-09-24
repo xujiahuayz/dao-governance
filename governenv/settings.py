@@ -1,3 +1,5 @@
+"""Settings and configuration."""
+
 import os
 from pathlib import Path
 
