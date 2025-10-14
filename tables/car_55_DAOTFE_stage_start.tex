@@ -1,0 +1,34 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Explaining CAR[-5,5] with DAO FE + Time FE (stage=start)}
+\begin{tabular}{l*{9}{c}}
+\hline\hline
+          &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         &\multicolumn{1}{c}{(9)}         \\
+          &     full         &ind\_votes         &ind\_have\_body         &ind\_have\_discussion         &ind\_len\_body\_k         &ind\_len\_title\_k         &ind\_n\_choices         &  ind\_hhi         &ind\_duration         \\
+\hline
+votes     &    0.004         &    0.003         &                  &                  &                  &                  &                  &                  &                  \\
+          &  (0.023)         &  (0.019)         &                  &                  &                  &                  &                  &                  &                  \\
+have\_body &    0.223\sym{***}&                  &    0.206\sym{***}&                  &                  &                  &                  &                  &                  \\
+          &  (0.066)         &                  &  (0.018)         &                  &                  &                  &                  &                  &                  \\
+have\_discussion&    0.069\sym{*}  &                  &                  &    0.069\sym{*}  &                  &                  &                  &                  &                  \\
+          &  (0.041)         &                  &                  &  (0.038)         &                  &                  &                  &                  &                  \\
+len\_body\_k&   -0.009         &                  &                  &                  &    0.005         &                  &                  &                  &                  \\
+          &  (0.009)         &                  &                  &                  &  (0.008)         &                  &                  &                  &                  \\
+len\_title\_k&    0.035         &                  &                  &                  &                  &    0.040\sym{*}  &                  &                  &                  \\
+          &  (0.023)         &                  &                  &                  &                  &  (0.022)         &                  &                  &                  \\
+n\_choices &   -0.003\sym{***}&                  &                  &                  &                  &                  &   -0.004\sym{***}&                  &                  \\
+          &  (0.001)         &                  &                  &                  &                  &                  &  (0.001)         &                  &                  \\
+hhi       &    0.038         &                  &                  &                  &                  &                  &                  &    0.065         &                  \\
+          &  (0.042)         &                  &                  &                  &                  &                  &                  &  (0.042)         &                  \\
+duration  &    0.002         &                  &                  &                  &                  &                  &                  &                  &    0.003         \\
+          &  (0.005)         &                  &                  &                  &                  &                  &                  &                  &  (0.004)         \\
+\_cons    &   -0.380\sym{***}&   -0.022         &   -0.215\sym{***}&   -0.046\sym{**} &   -0.049         &   -0.166\sym{*}  &    0.005         &   -0.066\sym{*}  &   -0.025         \\
+          &  (0.100)         &  (0.074)         &  (0.018)         &  (0.020)         &  (0.061)         &  (0.084)         &  (0.005)         &  (0.035)         &  (0.020)         \\
+\hline
+\(N\)     &      951         &      958         &      958         &      958         &      958         &      958         &      958         &      951         &      958         \\
+r2        &    0.199         &    0.189         &    0.190         &    0.194         &    0.189         &    0.190         &    0.191         &    0.190         &    0.189         \\
+\hline\hline
+\multicolumn{10}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{10}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+\end{table}

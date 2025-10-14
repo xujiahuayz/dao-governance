@@ -1,53 +1,36 @@
-import gzip
-import json
+"""Script to fetch votes given a id"""
 
-from governenv.constants import SNAPSHOT_PATH_VOTES, SNAPSHOT_ENDPOINT
-from governenv.graphql import graphdata, query_structurer
-from scripts.process_spaces import df_spaces
+import glob
+from tqdm import tqdm
 
-# get id from df_spaces for the first 500 spaces
+from governenv.constants import DATA_DIR, SNAPSHOT_ENDPOINT
+from governenv.graphql import query_id
+from governenv.queries import VOTES
 
-spaces = df_spaces[df_spaces["proposalsCount"] >= 1]["id"].values[:500]
+from scripts.process_event_study import df_proposals_adj
 
-BATCH_SIZE = 1_000
-# check documentation: https://docs.snapshot.org/tools/api
 
-series = "votes"
-specs = """
-    id
-    ipfs
-    voter
-    created
-    proposal {id}
-    choice
-    metadata
-    reason
-    app
-    vp
-    vp_by_strategy
-    vp_state
-"""
+# Fetch votes
+save_path = DATA_DIR / "snapshot" / "votes"
+files_list = glob.glob(str(save_path / "*.jsonl"))
+files_list_str = [file.split("/")[-1].split(".")[0] for file in files_list]
 
-last_created = 0
-res = {}
-with gzip.open(SNAPSHOT_PATH_VOTES, "wt") as f:
-    for space in spaces:
-        print(space)
-        while True:
-            reservepara_query = query_structurer(
-                series,
-                specs,
-                arg=f'first: {BATCH_SIZE}, where: {{created_gte: {last_created}, space: "{space}"}}'
-                + ', skip: 1, orderBy: "created", orderDirection: asc',
+for idx in tqdm(df_proposals_adj["id"].tolist(), total=len(df_proposals_adj)):
+    if idx in files_list_str:
+        continue
+    else:
+        print(f"Fetching votes for proposal {idx}")
+        try:
+            query_id(
+                save_path=save_path,
+                idx=idx,
+                idx_var="proposal",
+                time_var="created",
+                series="votes",
+                query_template=VOTES,
+                end_point=SNAPSHOT_ENDPOINT,
+                batch_size=1000,
             )
-            res = graphdata(reservepara_query, url=SNAPSHOT_ENDPOINT)
-            # if unauthoraized / forbidden, print res and break both while and for loops
-            if "data" in res and res["data"][series]:
-                rows = res["data"][series]
-                f.write("\n".join([json.dumps(row) for row in rows]) + "\n")
-                last_created = rows[-1]["created"]
-            else:
-                print(res)
-                break
-        if "error" in res:
-            break
+        except Exception as e:
+            print(f"Error fetching votes for proposal {idx}: {e}")
+            continue

@@ -22,6 +22,15 @@ dependencies = [
     "requests",
     "matplotlib",
     "seaborn",
+    "tqdm",
+    "jellyfish",
+    "dotenv",
+    "web3",
+    "stata_setup",
+    "sklearn",
+    "plotly",
+    "nbformat",
+    "kaleido",
 ]
 
 [project.optional-dependencies]

@@ -100,6 +100,7 @@ PROPOSALS = """
     start
     end
     quorum
+    quorumType
     privacy
     snapshot
     state
@@ -121,4 +122,34 @@ STATEMENTS = """
     delegate
     updated
     created
+"""
+
+VOTES = """
+    id
+    ipfs
+    voter
+    created
+    proposal {id}
+    choice
+    metadata
+    reason
+    app
+    vp
+    vp_by_strategy
+    vp_state
+"""
+
+DELEGATIONS = """
+    id
+    delegator
+    space
+    delegate
+    timestamp
+"""
+
+NETWORKS = """
+    id
+    name
+    premium
+    spacesCount
 """
