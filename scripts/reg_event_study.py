@@ -18,7 +18,7 @@ from scripts.process_event_study import (
 # Load the vote characteristics
 VOTING_CHARACTERISTICS = ["half_vp_ratio", "vn_hhi", "vs_hhi", "cci"]
 df_votes = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_votes.csv")
-df_votes = df_votes[["id"] + VOTING_CHARACTERISTICS]
+df_votes = df_votes[["id"] + VOTING_CHARACTERISTICS + ["reject_pct", "binary"]]
 
 # Proposal created and proposal end
 for stage in ["created", "end"]:
@@ -84,8 +84,13 @@ for stage in ["created", "end"]:
         how="left",
     )
 
-    # dropna and save
-    # panel = panel.dropna(subset=VOTING_CHARACTERISTICS, how="any")
+    # # winsorized all variables
+    # for var in ["car"]:
+    #     lower = panel[var].quantile(0.01)
+    #     upper = panel[var].quantile(0.99)
+    #     panel[var] = np.where(panel[var] < lower, lower, panel[var])
+    #     panel[var] = np.where(panel[var] > upper, upper, panel[var])
+
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",
         index=False,

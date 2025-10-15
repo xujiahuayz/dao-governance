@@ -10,8 +10,8 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR
-from governenv.utils import calc_hhi
+from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR, NO, ABSTAIN, YES
+from governenv.utils import calc_hhi, match_keywords
 
 from scripts.process_event_study import (
     df_proposals_adj,
@@ -169,25 +169,57 @@ if __name__ == "__main__":
     # df_proposals_adj["choices"] = df_proposals_adj["choices"].apply(
     #     lambda choices: [choice.lower() for choice in choices]
     # )
-    # df_proposals_adj["choices_scores"] = df_proposals_adj.apply(
-    #     lambda row: sorted(
-    #         list(zip(row["choices"], row["scores"])), key=lambda x: x[1], reverse=True
-    #     ),
-    #     axis=1,
-    # )
-    # df_proposals_adj["binary"] = df_proposals_adj["choices_scores"].apply(
-    #     lambda choices: any(
-    #         match_keywords(choice_text, NO) for choice_text, _ in (choices or [])
-    #     )
-    # )
 
-    # df_proposals_adj["reject"] = df_proposals_adj["choices_scores"].apply(
-    #     lambda choices: (
-    #         match_keywords(choices[0][0], NO | ABSTAIN)
-    #         if choices and len(choices) > 0
-    #         else False
-    #     )
-    # )
+    # Convert the scores to percentage
+    df_proposals_adj["scores_pct"] = df_proposals_adj.apply(
+        lambda row: (
+            [score / sum(row["scores"]) for score in row["scores"]]
+            if sum(row["scores"]) > 0
+            else [0 for _ in row["scores"]]
+        ),
+        axis=1,
+    )
+    df_proposals_adj["choices_scores_pct"] = df_proposals_adj.apply(
+        lambda row: sorted(
+            list(zip(row["choices"], row["scores_pct"])),
+            key=lambda x: x[1],
+            reverse=True,
+        ),
+        axis=1,
+    )
+
+    df_proposals_adj["binary"] = df_proposals_adj["choices_scores_pct"].apply(
+        lambda choices: any(
+            match_keywords(choice_text, NO) for choice_text, _ in (choices or [])
+        )
+    )
+
+    def share_for_keywords(row: pd.Series, keywords: set) -> float:
+        """Sum of vote shares for options that match the keyword set."""
+
+        if not row["binary"]:
+            return np.nan
+
+        return sum(
+            p
+            for ch, p in zip(row["choices"], row["scores_pct"])
+            if match_keywords(ch, keywords)
+        )
+
+    df_proposals_adj["reject"] = df_proposals_adj["choices_scores_pct"].apply(
+        lambda choices: (
+            match_keywords(choices[0][0], NO | ABSTAIN)
+            if choices and len(choices) > 0
+            else False
+        )
+    )
+    for var in ["reject", "binary"]:
+        df_proposals_adj[var] = df_proposals_adj[var].astype(int)
+
+    # 1) Per-proposal YES share and REJECT share
+    df_proposals_adj["reject_pct"] = df_proposals_adj.apply(
+        lambda r: share_for_keywords(r, NO | ABSTAIN), axis=1
+    )
 
     df_proposals_adj.to_csv(
         PROCESSED_DATA_DIR / "proposals_adjusted_votes.csv", index=False
