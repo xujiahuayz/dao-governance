@@ -69,7 +69,20 @@ for stage in ["created", "end"]:
         event_window["ar"] = event_window["eret"] - (
             alpha + beta * event_window["emret"]
         )
-        event_window["car"] = event_window["ar"].cumsum()
+
+        # calculate the cumulative abnormal return
+        for window in (2, 3, 4, 5):
+            df = event_window.loc[
+                event_window["index"].between(-window, window)
+            ].sort_values("index")
+            df[f"car_{window}"] = df["ar"].cumsum()
+            event_window = event_window.merge(
+                df[["index", f"car_{window}"]],
+                on="index",
+                how="left",
+            )
+
+        # event_window["car"] = event_window["ar"].cumsum()
 
         # Proposal identifier
         event_window["id"] = row["id"]
@@ -85,7 +98,7 @@ for stage in ["created", "end"]:
     )
 
     # # winsorized all variables
-    # for var in ["car"]:
+    # for var in ["car"] + VOTING_CHARACTERISTICS:
     #     lower = panel[var].quantile(0.01)
     #     upper = panel[var].quantile(0.99)
     #     panel[var] = np.where(panel[var] < lower, lower, panel[var])
@@ -96,6 +109,6 @@ for stage in ["created", "end"]:
         index=False,
     )
 
-    panel.groupby("index")["car"].mean().plot()
-    plt.legend()
-    plt.plot()
+    # panel.groupby("index")["car"].mean().plot()
+    # plt.legend()
+    # plt.plot()
