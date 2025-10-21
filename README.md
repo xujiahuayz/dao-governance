@@ -160,7 +160,9 @@ python script/process_smart_contract.py
 
 ## Event Study
 
-### 1. merge spaces data with Coingecko data
+### CAR Processing
+
+#### 1. merge spaces data with Coingecko data
 
 ```
 python scripts / merge_spaces_gecko.py
@@ -168,13 +170,15 @@ python scripts / merge_spaces_gecko.py
 
 - Output: processed_data / spaces_gecko.csv
 
-### 2. process event study CAR
+#### 2. process event study CAR
 
 ```
 python scripts / process_event_study_car
 ```
 
-### 3. fetch block timestamp
+### Vote Characteristics Regression
+
+#### 1. fetch block timestamp
 
 ```
 python scripts/fetch_block_ts.py
@@ -182,25 +186,50 @@ python scripts/fetch_block_ts.py
 
 - Output: data / block_ts.jsonl.gz
 
-### 4. process_votes
+#### 2. process_votes
 
 ```
 python scripts / process_votes.py
 ```
 
-### 5. process address
+#### 3. process address
 
 ```
 python scripts / merge_sc_proposal_adj.py
 ```
 - Output: processed_data / proposals_adjusted_with_sc.csv
 
-### 6. Convert proposal timestamp to block in order to merge the holding
+#### 4. Convert proposal timestamp to block in order to merge the holding
 
 ```
 python scripts / fetch_ts_block.py
 ```
 - Output: processed_data / proposals_adjusted_with_block.csv
+
+#### 5. Process the vote characterstics
+
+```
+python scripts/process_vote_characteristics.py
+```
+- Output: processed_data / proposals_adjusted_votes.csv
+
+#### 6. Vote characteristics regression
+
+```
+reg_car_votes.ipynb
+```
+- Output: tables / reg_car_votes_{created/end}
+
+### Discussion Regression 
+
+#### 1. Fetch discussion html
+```
+python scripts/fetch_discussion.py
+```
+
+We also manually collect the source code of some anti-crawler websites as HTML or TXT.
+
+- Output: data / discussion
 
 ## Difference-in-Difference
 
@@ -227,74 +256,3 @@ python scripts/reg_did_fees
 ```
 
 - Output: processed_data / reg_fee_proposals_panel.csv
-
-## Calculate the HHI for ENS discussion forum:
-
-### Filter ENS links (with discussion link) from snapshot:
-
-```
-python scripts/ens_snapshot_filter.py
-```
-
-### For each post in the discussion forum URLs, find the author and their associated discussions:
-
-```
-python scripts/ens_authors.py
-```
-
-### Calculate the HHI for each url to evaluate the concentration of activity:
-
-```
-python scripts/ens_hhi.py
-```
-
-## Calculate the sentiments for ENS discussion forum:
-
-### Create two folders named "html_200" and "idf" under "data" folder, then fetch the http response of the discussion links
-
-```
-mkdir data/html_200
-mkdir data/idf
-```
-
-```
-python scripts/ens_fetch_html.py
-```
-
-### For each ENS link (with discussion link) from snapshot, filter out the html formatting code
-
-```
-python scripts/ens_process_html.py
-```
-
-### Check whether the discussion thread have at least one discussion
-
-```
-python scripts/ens_process_identify_html.py
-```
-
-### Calculate the sentiment of the discussion thread
-
-```
-python scripts/ens_process_sentiment.py
-```
-
-### Calculate the statistics of HHI and sentiments and put it in a .tex table
-
-```
-python scripts/ens_hhi_senti_stats.py
-```
-
-## Calculate the votes for ENS discussion forum:
-
-### Calculate the total number of votes; the number of voters when it reached 50% of the total voting power for each proposal; and the timestamp when it reached 50% of the total voting power for each proposal.
-
-```
-python scripts/ens_votes.py
-```
-
-### Put it in a csv table (together with HHI and sentiments for each proposal)
-
-```
-python scripts/ens_votes_HHI_senti.py
-```

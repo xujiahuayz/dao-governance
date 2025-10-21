@@ -20,6 +20,16 @@ VOTING_CHARACTERISTICS = ["half_vp_ratio", "vn_hhi", "vs_hhi", "cci"]
 df_votes = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_votes.csv")
 df_votes = df_votes[["id"] + VOTING_CHARACTERISTICS + ["reject_pct", "binary"]]
 
+# Load the discussions characteristics
+DISCUSSION_CHARACTERISTICS = [
+    "Support",
+    "Professionalism",
+    "Objectiveness",
+    "Unanimity",
+]
+df_discussion = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_discussions.csv")
+df_discussion = df_discussion[["id"] + DISCUSSION_CHARACTERISTICS]
+
 # Proposal created and proposal end
 for stage in ["created", "end"]:
     panel = []
@@ -91,18 +101,12 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    panel = panel.merge(
-        df_votes,
-        on="id",
-        how="left",
-    )
-
-    # # winsorized all variables
-    # for var in ["car"] + VOTING_CHARACTERISTICS:
-    #     lower = panel[var].quantile(0.01)
-    #     upper = panel[var].quantile(0.99)
-    #     panel[var] = np.where(panel[var] < lower, lower, panel[var])
-    #     panel[var] = np.where(panel[var] > upper, upper, panel[var])
+    for df in [df_votes, df_discussion]:
+        panel = panel.merge(
+            df,
+            on="id",
+            how="left",
+        )
 
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",

@@ -98,7 +98,7 @@ EXKW = [
     "t.me",
     "t.co",
     "telegram",
-    "x.com",
+    "x.com/",
     "twitter",
     "reddit",
     "youtube",

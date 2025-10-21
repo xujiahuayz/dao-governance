@@ -31,6 +31,10 @@ dependencies = [
     "plotly",
     "nbformat",
     "kaleido",
+    "tenacity",
+    "tiktoken",
+    "bs4",
+    "openai",
 ]
 
 [project.optional-dependencies]

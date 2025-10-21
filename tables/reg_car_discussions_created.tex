@@ -1,0 +1,26 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{8}{c}}
+\hline\hline
+                    &\multicolumn{4}{c}{CAR[-2,2]}                                                          &\multicolumn{4}{c}{CAR[-5,5]}                                                          \\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}&\multicolumn{1}{c}{(7)}&\multicolumn{1}{c}{(8)}\\
+                    &\multicolumn{1}{c}{Support}&\multicolumn{1}{c}{Professionalism}&\multicolumn{1}{c}{Objectiveness}&\multicolumn{1}{c}{Unanimity}&\multicolumn{1}{c}{Support}&\multicolumn{1}{c}{Professionalism}&\multicolumn{1}{c}{Objectiveness}&\multicolumn{1}{c}{Unanimity}\\
+\hline
+Support             &      0.0453\sym{*}  &                     &                     &                     &    -0.00472         &                     &                     &                     \\
+                    &    (0.0229)         &                     &                     &                     &    (0.0244)         &                     &                     &                     \\
+Professionalism     &                     &    -0.00338         &                     &                     &                     &      0.0388         &                     &                     \\
+                    &                     &    (0.0512)         &                     &                     &                     &    (0.0497)         &                     &                     \\
+Objectiveness       &                     &                     &      -0.129         &                     &                     &                     &    -0.00269         &                     \\
+                    &                     &                     &     (0.121)         &                     &                     &                     &     (0.145)         &                     \\
+Unanimity           &                     &                     &                     &      0.0161         &                     &                     &                     &     -0.0206         \\
+                    &                     &                     &                     &    (0.0214)         &                     &                     &                     &    (0.0229)         \\
+Constant            &     -0.0465\sym{**} &    -0.00661         &       0.105         &     -0.0153\sym{**} &    -0.00545         &     -0.0461         &    -0.00688         &    -0.00231         \\
+                    &    (0.0186)         &    (0.0487)         &     (0.108)         &   (0.00723)         &    (0.0198)         &    (0.0472)         &     (0.129)         &   (0.00776)         \\
+\hline
+N                   &         263         &         263         &         263         &         263         &         263         &         263         &         263         &         263         \\
+Adj. R²             &       0.111         &       0.100         &       0.114         &       0.103         &       0.055         &       0.058         &       0.055         &       0.058         \\
+\hline\hline
+\multicolumn{9}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{9}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}

@@ -1,6 +1,7 @@
 """Script to preprocess_event_study_car"""
 
 from ast import literal_eval
+import warnings
 
 import pandas as pd
 from governenv.constants import (
@@ -9,6 +10,8 @@ from governenv.constants import (
     EVENT_WINDOW,
 )
 from governenv.utils import word_count
+
+warnings.filterwarnings("ignore")
 
 # Load the space with Coingecko id
 df_spaces = pd.read_csv(PROCESSED_DATA_DIR / "spaces_gecko.csv")

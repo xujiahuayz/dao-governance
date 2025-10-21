@@ -23,12 +23,12 @@ from web3.providers import HTTPProvider
 from governenv.constants import EXKW
 
 
-def kw_filt(data: dict[str, str]) -> dict[str, str]:
+def kw_filt(url: str) -> bool:
     """
     Function to filter discussions based on keywords
     """
 
-    return {k: v for k, v in data.items() if not any([i in v for i in EXKW])}
+    return not any(i in url for i in EXKW)
 
 
 def slash_filt(data: dict[str, str]) -> dict[str, str]:

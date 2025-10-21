@@ -2,10 +2,44 @@
 Class for the LLM model
 """
 
+import time
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from governenv.settings import OPENAI_API_KEY
+
+
+def build_batch(
+    custom_id: str,
+    user_msg: str,
+    system_instruction: str,
+    json_schema: dict,
+    model: str = "gpt-4.1",
+    temperature: float = 0,
+) -> dict:
+    """
+    Function to build a batch for OpenAI API
+    """
+
+    messages = [
+        {"role": "system", "content": system_instruction},
+        {"role": "user", "content": user_msg},
+    ]
+
+    return {
+        "custom_id": custom_id,
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": {
+            "model": model,
+            "messages": messages,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": json_schema,
+            },
+            "temperature": temperature,
+        },
+    }
 
 
 class ChatGPT:
@@ -15,7 +49,7 @@ class ChatGPT:
 
     def __init__(
         self,
-        model: str = "gpt-4o-mini",
+        model: str = "gpt-4.1",
         api_key: str | None = OPENAI_API_KEY,
     ):
         self.client = OpenAI(api_key=api_key)
@@ -37,25 +71,26 @@ class ChatGPT:
 
         return prompt
 
-    # @retry(
-    #     stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10)
-    # )
+    @retry(
+        stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
     def __call__(
         self,
         message: str,
         instruction: str | None = None,
-        max_tokens: int = 200,
-        temperature: float = 0.1,
+        temperature: float = 0,
         logprobs: bool = False,
         top_logprobs: int | None = None,
-    ):
+        top_p: float = 1.0,
+    ) -> str | tuple[str, dict[str, float]]:
+        time.sleep(2)
         response = self.client.chat.completions.create(
             model=self.model,
             messages=self._build_prompt(message, instruction),
-            max_tokens=max_tokens,
             temperature=temperature,
             logprobs=logprobs,
             top_logprobs=top_logprobs,
+            top_p=top_p,
         ).choices[0]
 
         if logprobs:
@@ -64,3 +99,48 @@ class ChatGPT:
                 response.logprobs.content,
             )
         return response.message.content
+
+    def send_batch(
+        self,
+        batch_path: str,
+    ) -> str:
+        """Function to send a batch request to the GPT-4o API."""
+        batch_input_file = self.client.files.create(
+            file=open(batch_path, "rb"),
+            purpose="batch",
+        )
+        batch_input_file_id = batch_input_file.id
+
+        batch = self.client.batches.create(
+            input_file_id=batch_input_file_id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+        )
+        return batch.id
+
+    def retrieve_batch(self, batch_id: str) -> dict:
+        """Function to retrieve the status of a batch request."""
+        while True:
+            current_batch = self.client.batches.retrieve(batch_id)
+            status = current_batch.status
+            print(f"Batch status: {status}")
+            if status in ("completed", "failed", "cancelled", "expired"):
+                break
+            time.sleep(10)  # Wait before polling again
+
+        if status != "completed":
+            raise RuntimeError(f"Batch ended with status: {status}")
+
+        # Download output file
+        output_file_id = current_batch.output_file_id
+
+        return self.client.files.content(output_file_id).content
+
+
+if __name__ == "__main__":
+    chat_gpt = ChatGPT()
+    response = chat_gpt(
+        "Is Shanghai the capital of China?",
+        logprobs=True,
+    )
+    print(response)
