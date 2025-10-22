@@ -19,9 +19,9 @@ for file in sentiment_files:
 
 df_sentiment = pd.DataFrame(sentiment_data)
 
-# classfify the all scores into high and low based on 0
-for col in ["Support", "Professionalism", "Objectiveness", "Unanimity"]:
-    df_sentiment[col] = df_sentiment[col].apply(lambda x: 0 if x == 0 else 1)
+# # classfify the all scores into high and low based on 0
+# for col in ["Support", "Professionalism", "Objectiveness", "Unanimity"]:
+#     df_sentiment[col] = df_sentiment[col].apply(lambda x: 0 if x == 0 else 1)
 
 df_sentiment.to_csv(
     PROCESSED_DATA_DIR / "proposals_adjusted_discussions.csv",
