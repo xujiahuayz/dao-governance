@@ -1,19 +1,19 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{4}{c}}
+\begin{tabular}{l*{8}{c}}
 \toprule
-                    &\multicolumn{2}{c}{CAR[-2,2]}              &\multicolumn{2}{c}{CAR[-5,5]}              \\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+                    &\multicolumn{4}{c}{CAR[-2,2]}                                                          &\multicolumn{4}{c}{CAR[-5,5]}                                                          \\\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         \\
 \midrule
-$\textit{Has Delegate}_{i,t}$&      -0.010         &                     &       0.030         &                     \\
-                    &      (0.03)         &                     &      (0.04)         &                     \\
-$\textit{# of Delegates}_{i,t}$&                     &      -0.004\sym{**} &                     &      -0.003         \\
-                    &                     &      (0.00)         &                     &      (0.00)         \\
+$\textit{Has Delegate}_{i,t}$&      -0.010         &                     &                     &                     &       0.030         &                     &                     &                     \\
+                    &      (0.03)         &                     &                     &                     &      (0.04)         &                     &                     &                     \\
+$\textit{# of Delegates}_{i,t}$&                     &      -0.004\sym{**} &       0.003         &      -0.004\sym{**} &                     &      -0.003         &       0.001         &      -0.003         \\
+                    &                     &      (0.00)         &      (0.00)         &      (0.00)         &                     &      (0.00)         &      (0.01)         &      (0.00)         \\
 \midrule
-Token FE            &           Y         &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         \\
-Observations        &         943         &         943         &         943         &         943         \\
-Adjusted R²         &       0.038         &       0.039         &       0.045         &       0.045         \\
+Token FE            &           Y         &           Y         &           N         &           Y         &           Y         &           Y         &           N         &           Y         \\
+Year FE             &           Y         &           Y         &           N         &           Y         &           Y         &           Y         &           N         &           Y         \\
+Token-Year FE       &         943         &         943         &         820         &         943         &         943         &         943         &         820         &         943         \\
+DAO FE              &       0.038         &       0.039         &      -0.229         &       0.039         &       0.045         &       0.045         &      -0.226         &       0.045         \\
 \bottomrule
 \end{tabular}
 }
