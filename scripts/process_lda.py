@@ -1,26 +1,23 @@
-#!/usr/bin/env python3
-"""Script to implement LDA topic modeling on proposal texts (simple, no argparse).
-Adds 5 bucket dummies and bucket shares based on 6-topic LDA."""
+"""Script to implement LDA topic modeling on proposal texts"""
+
+from pathlib import Path
 
 import re
 import string
 import joblib
 import numpy as np
 import pandas as pd
-
-from pathlib import Path
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 
-# ========= Config (edit as needed) =========
-from governenv.constants import PROCESSED_DATA_DIR, EVENT_WINDOW
+from governenv.constants import PROCESSED_DATA_DIR
+from scripts.process_event_study import df_proposals_adj
 
-INPUT_CSV = f"{PROCESSED_DATA_DIR}/event_study_panel_created.csv"  # must have columns: id, body, index
 ID_COL = "id"
 TEXT_COL = "body"
 OUT_DIR = f"{PROCESSED_DATA_DIR}/lda_body"
 
-N_TOPICS = 6
+N_TOPICS = 7
 MAX_FEATURES = 30000
 MIN_DF = 5  # int count or float proportion (e.g., 0.01)
 MAX_DF = 0.7  # ignore very common tokens
@@ -78,6 +75,7 @@ def basic_clean(text: str) -> str:
 
 
 def top_words_for_topic(components_row, feature_names, n_top=15):
+    """Get top n words and their weights for a given topic component row."""
     idx = np.argsort(components_row)[::-1][:n_top]
     words = [feature_names[i] for i in idx]
     weights = [components_row[i] for i in idx]
@@ -85,6 +83,7 @@ def top_words_for_topic(components_row, feature_names, n_top=15):
 
 
 def row_entropy(p: np.ndarray) -> float:
+    """Compute entropy of a probability distribution row."""
     p_safe = np.clip(p, 1e-12, 1.0)
     return float(-(p_safe * np.log(p_safe)).sum())
 
@@ -94,15 +93,7 @@ if __name__ == "__main__":
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ---- Load + restrict to one row per proposal (index == EVENT_WINDOW) ----
-    df = pd.read_csv(INPUT_CSV)
-    if "index" not in df.columns:
-        raise ValueError(
-            "INPUT_CSV must include an 'index' column (event-study index)."
-        )
-    df = df.loc[df["index"] == EVENT_WINDOW].copy()
-
-    if ID_COL not in df.columns or TEXT_COL not in df.columns:
-        raise ValueError(f"Input CSV must have columns '{ID_COL}' and '{TEXT_COL}'.")
+    df = df_proposals_adj.copy()
 
     # ---- Clean + drop empties ----
     df["_text_clean"] = df[TEXT_COL].apply(basic_clean)
@@ -147,7 +138,7 @@ if __name__ == "__main__":
             }
         )
     topics_df = pd.DataFrame(rows).sort_values("topic_id")
-    topics_df.to_csv(out_dir / "topics.csv", index=False)
+    topics_df.to_csv(PROCESSED_DATA_DIR / "proposals_adjusted_topics.csv", index=False)
 
     # ---- Per-document topic mixtures + entropy ----
     doc_topic = lda.transform(X)  # rows sum ~1
@@ -163,38 +154,53 @@ if __name__ == "__main__":
     doc_topics_df.insert(2, "topic_entropy", entropy.astype(float))
     doc_topics_df.insert(0, ID_COL, df[ID_COL].values)
 
-    # ---- Build 5 bucket shares from 6 topics (mapping based on your interpretation) ----
-    # Buckets:
-    #   Budget            = topic_0
-    #   Dev/Integrations  = topic_1 + topic_2
-    #   Governance/Grants = topic_3
-    #   Incentives        = topic_4
-    #   Liquidity/Treasury= topic_5
-    doc_topics_df["bucket_budget_share"] = doc_topics_df.get("topic_0", 0.0)
-    doc_topics_df["bucket_devint_share"] = doc_topics_df.get(
-        "topic_1", 0.0
-    ) + doc_topics_df.get("topic_2", 0.0)
-    doc_topics_df["bucket_govgrants_share"] = doc_topics_df.get("topic_3", 0.0)
-    doc_topics_df["bucket_incentives_share"] = doc_topics_df.get("topic_4", 0.0)
-    doc_topics_df["bucket_liqtreasury_share"] = doc_topics_df.get("topic_5", 0.0)
+    # ---- Build 7 bucket shares from 7 topics (1:1 mapping) ----
+    # Buckets (based on your 7-topic interpretation):
+    #   00 Voting/Participation
+    #   01 Incentives & NFTs
+    #   02 Governance Council/Process
+    #   03 Ecosystem & Integrations
+    #   04 Grants/Programs
+    #   05 Liquidity/DeFi Mechanics
+    #   06 Treasury Ops & Budget
 
-    bucket_cols = [
-        "bucket_budget_share",
-        "bucket_devint_share",
-        "bucket_govgrants_share",
-        "bucket_incentives_share",
-        "bucket_liqtreasury_share",
-    ]
-    # Dominant bucket index 0..4
+    bucket_map = {
+        "bucket_vote_share": ["topic_0"],
+        "bucket_incentives_share": ["topic_1"],
+        "bucket_govcouncil_share": ["topic_2"],
+        "bucket_ecosys_share": ["topic_3"],
+        "bucket_grants_share": ["topic_4"],
+        "bucket_liquidity_share": ["topic_5"],
+        "bucket_treasuryops_share": ["topic_6"],
+    }
+
+    # Create bucket shares (sum over listed topics; safe if some topic_* cols missing)
+    for bcol, topics in bucket_map.items():
+        doc_topics_df[bcol] = sum(doc_topics_df.get(t, 0.0) for t in topics)
+
+    bucket_cols = list(bucket_map.keys())
+
+    # Dominant bucket index 0..6
     bucket_argmax = np.asarray(doc_topics_df[bucket_cols].values).argmax(axis=1)
 
-    # Create 5 dummies (one-hot on dominant bucket)
-    names = ["budget", "devint", "govgrants", "incentives", "liqtreasury"]
+    # Create 7 dummies (one-hot on dominant bucket)
+    names = [
+        "vote",
+        "incentives",
+        "govcouncil",
+        "ecosys",
+        "grants",
+        "liquidity",
+        "treasuryops",
+    ]
     for i, name in enumerate(names):
         doc_topics_df[f"d_{name}"] = (bucket_argmax == i).astype(int)
 
-    # Save per-doc topics with bucket shares + dummies
-    doc_topics_df.to_csv(out_dir / "doc_topics.csv", index=False)
+    # only keep the id + dummy
+    doc_topics_df = doc_topics_df[[ID_COL] + [f"d_{name}" for name in names]]
+    doc_topics_df.to_csv(
+        PROCESSED_DATA_DIR / "proposals_adjusted_topics.csv", index=False
+    )
 
     # ---- Persist model + vectorizer ----
     joblib.dump(vectorizer, out_dir / "lda_vectorizer.joblib")
@@ -207,25 +213,3 @@ if __name__ == "__main__":
     for k in range(min(N_TOPICS, 10)):
         words, _ = top_words_for_topic(lda.components_[k], vocab, n_top=10)
         print(f"  Topic {k:02d}: {', '.join(words)}")
-
-    # ---- Merge topic features back to event-study panels (created & end) ----
-    panel_created = pd.read_csv(
-        Path(PROCESSED_DATA_DIR) / "event_study_panel_created.csv"
-    )
-    panel_end = pd.read_csv(Path(PROCESSED_DATA_DIR) / "event_study_panel_end.csv")
-
-    created_enriched = panel_created.merge(doc_topics_df, on=ID_COL, how="left").drop(
-        columns=["body"], errors="ignore"
-    )
-    end_enriched = panel_end.merge(doc_topics_df, on=ID_COL, how="left").drop(
-        columns=["body"], errors="ignore"
-    )
-
-    created_out = Path(PROCESSED_DATA_DIR) / "event_study_panel_created_topics.csv"
-    end_out = Path(PROCESSED_DATA_DIR) / "event_study_panel_end_topics.csv"
-
-    created_enriched.to_csv(created_out, index=False)
-    end_enriched.to_csv(end_out, index=False)
-
-    print(f"[OK] merged created panel -> {created_out}")
-    print(f"[OK] merged end panel     -> {end_out}")

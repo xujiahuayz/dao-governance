@@ -1,0 +1,30 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{12}{c}}
+\hline\hline
+                    &\multicolumn{6}{c}{CAR[-2,2]}                                                                                                      &\multicolumn{6}{c}{CAR[-5,5]}                                                                                                      \\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}&\multicolumn{1}{c}{(7)}&\multicolumn{1}{c}{(8)}&\multicolumn{1}{c}{(9)}&\multicolumn{1}{c}{(10)}&\multicolumn{1}{c}{(11)}&\multicolumn{1}{c}{(12)}\\
+                    &\multicolumn{1}{c}{Votes}&\multicolumn{1}{c}{N Choices}&\multicolumn{1}{c}{Duration}&\multicolumn{1}{c}{Quadratic}&\multicolumn{1}{c}{Ranked Choice}&\multicolumn{1}{c}{Quorum}&\multicolumn{1}{c}{Votes}&\multicolumn{1}{c}{N Choices}&\multicolumn{1}{c}{Duration}&\multicolumn{1}{c}{Quadratic}&\multicolumn{1}{c}{Ranked Choice}&\multicolumn{1}{c}{Quorum}\\
+\hline
+votes               &    -0.00342         &                     &                     &                     &                     &                     &      0.0335         &                     &                     &                     &                     &                     \\
+                    &    (0.0505)         &                     &                     &                     &                     &                     &    (0.0756)         &                     &                     &                     &                     &                     \\
+n\_choices           &                     &    -0.00217\sym{*}  &                     &                     &                     &                     &                     &    -0.00417\sym{**} &                     &                     &                     &                     \\
+                    &                     &   (0.00113)         &                     &                     &                     &                     &                     &   (0.00186)         &                     &                     &                     &                     \\
+duration            &                     &                     &    0.000686         &                     &                     &                     &                     &                     &     0.00735\sym{*}  &                     &                     &                     \\
+                    &                     &                     &   (0.00360)         &                     &                     &                     &                     &                     &   (0.00394)         &                     &                     &                     \\
+quadratic           &                     &                     &                     &      0.0305         &                     &                     &                     &                     &                     &      0.0114         &                     &                     \\
+                    &                     &                     &                     &    (0.0921)         &                     &                     &                     &                     &                     &     (0.148)         &                     &                     \\
+ranked\_choice       &                     &                     &                     &                     &      -0.106\sym{**} &                     &                     &                     &                     &                     &      -0.148\sym{**} &                     \\
+                    &                     &                     &                     &                     &    (0.0517)         &                     &                     &                     &                     &                     &    (0.0583)         &                     \\
+quorum              &                     &                     &                     &                     &                     &           0         &                     &                     &                     &                     &                     &           0         \\
+                    &                     &                     &                     &                     &                     &         (.)         &                     &                     &                     &                     &                     &         (.)         \\
+Constant            &    -0.00713         &    -0.00373         &     -0.0156         &     -0.0132\sym{***}&     -0.0106\sym{***}&     -0.0123\sym{***}&     -0.0754         &    -0.00833         &     -0.0601\sym{***}&     -0.0251\sym{***}&     -0.0224\sym{***}&     -0.0247\sym{***}\\
+                    &    (0.0763)         &   (0.00445)         &    (0.0173)         &   (0.00264)         &  (0.000825)         &  (1.26e-18)         &     (0.114)         &   (0.00733)         &    (0.0189)         &   (0.00425)         &  (0.000931)         &  (1.21e-18)         \\
+\hline
+N                   &         940         &         940         &         940         &         940         &         940         &         940         &         940         &         940         &         940         &         940         &         940         &         940         \\
+Adj. R²             &       0.080         &       0.081         &       0.080         &       0.080         &       0.083         &       0.081         &       0.047         &       0.049         &       0.048         &       0.047         &       0.049         &       0.048         \\
+\hline\hline
+\multicolumn{13}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{13}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}

@@ -152,24 +152,6 @@ if __name__ == "__main__":
     # Calculate the close call index
     df_proposals_adj["cci"] = df_proposals_adj["scores"].apply(close_call_index)
 
-    # # Vote characteristics
-    # df_proposals_adj["votes"] = np.log(df_proposals_adj["votes"] + 1)
-    # df_proposals_adj["n_choices"] = df_proposals_adj["choices"].apply(len)
-    # df_proposals_adj["agree"] = df_proposals_adj["scores"].apply(calc_hhi)
-    # df_proposals_adj["duration"] = (
-    #     df_proposals_adj["end"] - df_proposals_adj["start"]
-    # ).dt.days
-    # df_proposals_adj["quadratic"] = (df_proposals_adj["type"] == "quadratic").astype(
-    #     int
-    # )
-    # df_proposals_adj["ranked_choice"] = (
-    #     df_proposals_adj["type"] == "ranked-choice"
-    # ).astype(int)
-
-    # df_proposals_adj["choices"] = df_proposals_adj["choices"].apply(
-    #     lambda choices: [choice.lower() for choice in choices]
-    # )
-
     # Convert the scores to percentage
     df_proposals_adj["scores_pct"] = df_proposals_adj.apply(
         lambda row: (

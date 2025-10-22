@@ -30,6 +30,37 @@ DISCUSSION_CHARACTERISTICS = [
 df_discussion = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_discussions.csv")
 df_discussion = df_discussion[["id"] + DISCUSSION_CHARACTERISTICS]
 
+# Load the proposal data
+PROPOSAL_CHARACTERISTICS = [
+    "votes",
+    "n_choices",
+    "duration",
+    "quadratic",
+    "ranked_choice",
+    "quorum",
+]
+df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_proposals.csv")
+df_proposals = df_proposals[["id"] + PROPOSAL_CHARACTERISTICS]
+
+# Load the delegation data
+DELEGATION_CHARACTERISTICS = ["delegate_dummy", "delegate"]
+df_delegate = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_delegates.csv")
+df_delegate = df_delegate[["id"] + DELEGATION_CHARACTERISTICS]
+
+# Load the topic data
+TOPICS = [
+    "vote",
+    "incentives",
+    "govcouncil",
+    "ecosys",
+    "grants",
+    "liquidity",
+    "treasuryops",
+]
+TOPIC_CHARACTERISTICS = [f"d_{topic}" for topic in TOPICS]
+df_topics = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_topics.csv")
+df_topics = df_topics[["id"] + TOPIC_CHARACTERISTICS]
+
 # Proposal created and proposal end
 for stage in ["created", "end"]:
     panel = []
@@ -101,7 +132,7 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    for df in [df_votes, df_discussion]:
+    for df in [df_votes, df_discussion, df_proposals, df_delegate, df_topics]:
         panel = panel.merge(
             df,
             on="id",

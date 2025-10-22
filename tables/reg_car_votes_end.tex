@@ -1,26 +1,23 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 \begin{tabular}{l*{8}{c}}
-\hline\hline
+\toprule
                     &\multicolumn{4}{c}{CAR[-2,2]}                                                          &\multicolumn{4}{c}{CAR[-5,5]}                                                          \\
-                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}&\multicolumn{1}{c}{(7)}&\multicolumn{1}{c}{(8)}\\
-                    &\multicolumn{1}{c}{Half VP}&\multicolumn{1}{c}{VN HHI}&\multicolumn{1}{c}{VS HHI}&\multicolumn{1}{c}{CCI}&\multicolumn{1}{c}{Half VP}&\multicolumn{1}{c}{VN HHI}&\multicolumn{1}{c}{VS HHI}&\multicolumn{1}{c}{CCI}\\
-\hline
-half\_vp\_ratio       &      0.0355         &                     &                     &                     &     -0.0473         &                     &                     &                     \\
-                    &     (0.107)         &                     &                     &                     &     (0.124)         &                     &                     &                     \\
-vn\_hhi              &                     &     -0.0111         &                     &                     &                     &      0.0372         &                     &                     \\
-                    &                     &    (0.0357)         &                     &                     &                     &    (0.0518)         &                     &                     \\
-vs\_hhi              &                     &                     &    -0.00556         &                     &                     &                     &      0.0477         &                     \\
-                    &                     &                     &    (0.0348)         &                     &                     &                     &    (0.0490)         &                     \\
-cci                 &                     &                     &                     &     -0.0601         &                     &                     &                     &      0.0290         \\
-                    &                     &                     &                     &    (0.0522)         &                     &                     &                     &    (0.0697)         \\
-Constant            &     -0.0165         &    -0.00291         &    -0.00723         &      0.0173         &     -0.0177         &     -0.0541         &     -0.0644         &     -0.0378         \\
-                    &    (0.0135)         &    (0.0292)         &    (0.0297)         &    (0.0254)         &    (0.0155)         &    (0.0423)         &    (0.0418)         &    (0.0340)         \\
-\hline
-N                   &         924         &         923         &         926         &         925         &         924         &         923         &         926         &         925         \\
-Adj. R²             &       0.078         &       0.077         &       0.078         &       0.079         &       0.044         &       0.043         &       0.044         &       0.044         \\
-\hline\hline
-\multicolumn{9}{l}{\footnotesize Standard errors in parentheses}\\
-\multicolumn{9}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         \\
+\midrule
+half\_vp\_ratio       &      0.0405         &                     &                     &                     &     -0.0380         &                     &                     &                     \\
+                    &     (0.104)         &                     &                     &                     &     (0.120)         &                     &                     &                     \\
+vn\_hhi              &                     &    -0.00354         &                     &                     &                     &      0.0459         &                     &                     \\
+                    &                     &    (0.0345)         &                     &                     &                     &    (0.0497)         &                     &                     \\
+vs\_hhi              &                     &                     &    0.000364         &                     &                     &                     &      0.0558         &                     \\
+                    &                     &                     &    (0.0334)         &                     &                     &                     &    (0.0470)         &                     \\
+cci                 &                     &                     &                     &     -0.0491         &                     &                     &                     &      0.0421         \\
+                    &                     &                     &                     &    (0.0500)         &                     &                     &                     &    (0.0667)         \\
+\midrule
+Token FE            &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Observations        &         930         &         929         &         932         &         931         &         930         &         929         &         932         &         931         \\
+Adjusted R²         &       0.081         &       0.080         &       0.081         &       0.082         &       0.047         &       0.048         &       0.048         &       0.048         \\
+\bottomrule
 \end{tabular}
 }
