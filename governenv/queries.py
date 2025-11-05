@@ -90,8 +90,15 @@ PROPOSALS = """
     network
     symbol
     type
-    strategies {name}
-    validation {name}
+    strategies {
+      name
+      network
+      params
+    }
+    validation {
+      name
+      params
+    }
     plugins
     title
     body

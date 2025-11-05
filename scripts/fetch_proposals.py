@@ -14,25 +14,25 @@ from governenv.queries import SPACES, PROPOSALS, STATEMENTS, DELEGATIONS, NETWOR
 from governenv.graphql import query, query_single
 
 
-# # Fetch spaces data from Snapshot API
-# query(
-#     save_path=SNAPSHOT_PATH,
-#     series="spaces",
-#     query_template=SPACES,
-#     end_point=SNAPSHOT_ENDPOINT,
-#     time_var="created",
-#     batch_size=1000,
-# )
-
-# Fetch proposals data from Snapshot API
+# Fetch spaces data from Snapshot API
 query(
-    save_path=SNAPSHOT_PATH_PROPOSALS,
-    series="proposals",
-    query_template=PROPOSALS,
+    save_path=SNAPSHOT_PATH,
+    series="spaces",
+    query_template=SPACES,
     end_point=SNAPSHOT_ENDPOINT,
     time_var="created",
     batch_size=1000,
 )
+
+# # Fetch proposals data from Snapshot API
+# query(
+#     save_path=SNAPSHOT_PATH_PROPOSALS,
+#     series="proposals",
+#     query_template=PROPOSALS,
+#     end_point=SNAPSHOT_ENDPOINT,
+#     time_var="created",
+#     batch_size=1000,
+# )
 
 # # Fetch statements data from Snapshot API
 # query(

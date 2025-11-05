@@ -1,5 +1,6 @@
 """Script to process the token holding"""
 
+from ast import literal_eval
 import json
 from collections import defaultdict
 import os
@@ -8,14 +9,19 @@ import pandas as pd
 
 from tqdm import tqdm
 
-from governenv.constants import PROCESSED_DATA_DIR, CURRENT_BLOCK
-from scripts.process_event_study import df_proposals_adj
+from governenv.constants import PROCESSED_DATA_DIR, STAKING_TOKEN, MIXED_TYPE_TOKEN
 
 
 def build_snapshot(holding_dict: defaultdict, contract: set) -> dict:
     """Build the snapshot for each proposal."""
-    snap = {k: v for k, v in holding_dict.items() if (k not in contract) and (v > 0)}
-    snap = dict(sorted(snap.items(), key=lambda item: item[1], reverse=True))
+    # snap = {k: v for k, v in holding_dict.items() if (k not in contract) and (v > 0)}
+
+    snap = {}
+    for addr, holdings in holding_dict.items():
+        snap[addr] = {"holding": holdings, "contract": addr in contract}
+
+    # snap = dict(sorted(snap.items(), key=lambda item: item[1], reverse=True))
+    snap = dict(sorted(snap.items(), key=lambda item: item[1]["holding"], reverse=True))
     return snap
 
 
@@ -32,37 +38,90 @@ def save_snapshot(holding_dict: dict, address_str: str, block: int):
         json.dump(holding_dict, f, indent=4)
 
 
-# Merge token smart contract data
-proposals_adjusted_with_sc = pd.read_csv(
-    PROCESSED_DATA_DIR / "proposals_adjusted_with_sc.csv"
-)[["gecko_id", "address", "decimal"]]
-df_proposals_adj = (
-    df_proposals_adj.merge(proposals_adjusted_with_sc, on="gecko_id", how="left")
-    .dropna(subset="address")
-    .sort_values(by=["gecko_id", "end_ts"], ascending=[True, True])
+df_proposals_with_sc = pd.read_csv(
+    PROCESSED_DATA_DIR / "proposals_with_sc.csv",
 )
 
-# Merge block data
-df_block = pd.read_csv(
-    PROCESSED_DATA_DIR / "proposals_adjusted_with_block.csv",
+with open(PROCESSED_DATA_DIR / "snapshot_block.json", "r", encoding="utf-8") as f:
+    snapshot_block = json.load(f)
+
+# Map timestamp to block number
+for ts in ["start", "end", "created"]:
+    for ts_block in [f"{ts}_ts_-5d", f"{ts}_ts_+5d"]:
+        df_proposals_with_sc[f"{ts_block}_block"] = df_proposals_with_sc[ts_block].map(
+            lambda ts: snapshot_block[str(ts)]
+        )
+df_proposals_with_sc["created_ts_block"] = df_proposals_with_sc["created_ts"].map(
+    lambda ts: snapshot_block[str(ts)]
 )
-df_block = df_block[["id"] + [_ for _ in df_block.columns if "block" in _]]
-df_proposals_adj = df_proposals_adj.merge(df_block, on="id", how="left")
-df_proposals_adj = df_proposals_adj.loc[
-    df_proposals_adj["end_ts_+5d_block"] <= CURRENT_BLOCK
+
+df_proposals_with_sc["address"] = df_proposals_with_sc["address"].map(literal_eval)
+
+# Remove mixed type tokens
+df_proposals_with_sc = df_proposals_with_sc.loc[
+    ~df_proposals_with_sc["address"].apply(
+        lambda x: any(token["address"] in MIXED_TYPE_TOKEN for token in x)
+    )
 ]
-df_proposals_adj.to_csv(
-    PROCESSED_DATA_DIR / "proposals_adjusted_with_sc_block.csv", index=False
+
+# Replace staking token address (dedupe by address)
+rows = []
+for _, row in df_proposals_with_sc.iterrows():
+    # Use a dict keyed by address to avoid “dict in set” (unhashable) and dedupe cleanly
+    by_addr = {}
+
+    for tok in row["address"]:
+        addr = tok["address"]
+
+        if addr in STAKING_TOKEN:
+            info = STAKING_TOKEN[addr]
+            # Standardize keys; prefer 'decimals'
+            by_addr[info["address"].lower()] = {
+                "address": info["address"].lower(),
+                "decimals": info["decimal"],
+                "blockNumber": info["blockNumber"],
+            }
+        else:
+            by_addr[addr.lower()] = {
+                "address": addr.lower(),
+                "decimals": tok["decimal"],
+                "blockNumber": tok["blockNumber"],
+            }
+
+    # write back a list of unique tokens
+    new_row = row.copy()
+    new_row["address"] = list(by_addr.values())
+    rows.append(new_row)
+
+underlying_tokens = [v["address"] for _, v in STAKING_TOKEN.items()]
+df_proposals_with_sc = pd.DataFrame(rows)
+
+df_proposals_with_sc.to_csv(
+    PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv",
+    index=False,
 )
 
-for address, group in tqdm(
-    df_proposals_adj.groupby("address"), desc="Processing addresses"
+# get token-block mapping
+token_block = defaultdict(list)
+for idx, row in df_proposals_with_sc.iterrows():
+    for ts in ["start", "end", "created"]:
+        for ts_block in [f"{ts}_ts_-5d", f"{ts}_ts_+5d"]:
+            for address in row["address"]:
+                token_block[address["address"]].append(row[f"{ts_block}_block"])
+
+# de-deup and sort once
+for address, block_list in token_block.items():
+    token_block[address] = sorted(set(block_list))
+
+for address, block_list in tqdm(
+    token_block.items(),
+    desc="Processing token holdings",
 ):
+    df_transfer = pd.read_csv(PROCESSED_DATA_DIR / "transfer" / f"{address}.csv")
+    staking_contract = [k for k, v in STAKING_TOKEN.items() if v["address"] == address]
+
     # Create a directory for the address if it doesn't exist
     os.makedirs(PROCESSED_DATA_DIR / "holding" / f"{address}", exist_ok=True)
-
-    # Load ERC-20 transfer data
-    df_transfer = pd.read_csv(PROCESSED_DATA_DIR / "transfer" / f"{address}.csv")
 
     # Load contract filter
     df_contract = pd.read_csv(PROCESSED_DATA_DIR / "contract" / f"{address}.csv")
@@ -82,13 +141,6 @@ for address, group in tqdm(
         ],
         ascending=True,
     )
-
-    # Get the block numbers for token
-    block_list = []
-    for _, row in group.iterrows():
-        for ts in ["start", "end", "created"]:
-            for ts_block in [f"{ts}_ts_-5d", f"{ts}_ts_+5d", f"{ts}_ts"]:
-                block_list.append(row[f"{ts_block}_block"])
 
     block_list = sorted(list(set(block_list)))
 
@@ -125,6 +177,12 @@ for address, group in tqdm(
         from_addr = r["from"]
         to_addr = r["to"]
         amount = r["amount"]
+
+        # Skip transfer if it is relevant to staking contracts, keep the initial holding unchanged
+        if staking_contract and (
+            (from_addr in staking_contract) or (to_addr in staking_contract)
+        ):
+            continue
         holding[from_addr] -= amount
         holding[to_addr] += amount
 

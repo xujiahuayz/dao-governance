@@ -161,6 +161,19 @@ def fetch_current_block(http: str) -> int:
     return w3.eth.block_number
 
 
+def fetch_erc20_balance_of(
+    w3: Web3, token_address: str, holder_address: str, block: int, abi: dict
+) -> int:
+    """Fetch the ERC-20 balance of a holder"""
+
+    token_contract = w3.eth.contract(
+        address=Web3.to_checksum_address(token_address), abi=abi
+    )
+    return token_contract.functions.balanceOf(
+        Web3.to_checksum_address(holder_address)
+    ).call(block_identifier=block)
+
+
 def _fetch_events_for_all_contracts(
     w3: Web3,
     event: Any,
@@ -283,5 +296,19 @@ def calc_hhi(values):
 
 
 if __name__ == "__main__":
-    print(clean_name("Aave v3"))
-    print(clean_name("Uniswap v1"))
+    import json
+    from governenv.constants import ABI_DIR
+    from governenv.settings import INFURA_API_KEY
+
+    w3 = Web3(HTTPProvider(f"https://mainnet.infura.io/v3/{INFURA_API_KEY}"))
+
+    with open(ABI_DIR / "erc20.json", "r", encoding="utf-8") as f:
+        erc20_abi = json.load(f)
+
+    balance = fetch_erc20_balance_of(
+        w3,
+        "0xC128a9954e6c874eA3d62ce62B468bA073093F25".lower(),
+        "0x849d52316331967b6ff1198e5e32a0eb168d039d".lower(),
+        14787732,
+        erc20_abi,
+    )

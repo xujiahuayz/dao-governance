@@ -7,6 +7,8 @@ import numpy as np
 
 from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR
 
+DATA_START_DATE = "2016-01-01"
+DATA_END_DATE = "2025-09-24"
 
 coingecko_coins = pd.read_csv(DATA_DIR / "coingecko_coins.csv")
 
@@ -49,7 +51,7 @@ for idx, row in tqdm(coingecko_coins.iterrows(), total=coingecko_coins.shape[0])
 df_charts = pd.concat(panel, ignore_index=True)
 df_charts["date"] = pd.to_datetime(df_charts["date"]) - pd.Timedelta(days=1)
 df_charts = df_charts.loc[
-    (df_charts["date"] >= "2016-01-01") & (df_charts["date"] <= "2025-09-01")
+    (df_charts["date"] >= DATA_START_DATE) & (df_charts["date"] <= DATA_END_DATE)
 ]
 
 # check value close to zero to nan

@@ -8,6 +8,7 @@ from governenv.constants import (
     DATA_DIR,
     PROCESSED_DATA_DIR,
     EVENT_WINDOW,
+    DATA_CUTOFF_DATE,
 )
 from governenv.utils import word_count
 
@@ -57,9 +58,12 @@ df_charts.dropna(subset=["rf"], inplace=True)
 # Calculate excess return
 df_charts["eret"] = df_charts["ret"] - df_charts["rf"]
 df_charts["emret"] = df_charts["mret"] - df_charts["rf"]
+df_charts.to_csv(PROCESSED_DATA_DIR / "charts.csv", index=False)
 
 # Load the proposal data
-df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_spaces.csv")
+df_proposals = pd.read_csv(
+    PROCESSED_DATA_DIR / "proposals_spaces.csv", dtype={"network": str}
+)
 for col in ["choices", "scores", "strategies", "validation"]:
     df_proposals[col] = df_proposals[col].apply(literal_eval)
 df_proposals = df_proposals[df_proposals["space"].isin(set(spaces_set))]
@@ -69,30 +73,18 @@ for col in ["created", "start", "end"]:
         "%Y-%m-%d"
     )
     df_proposals[col] = pd.to_datetime(df_proposals[col])
+df_proposals = df_proposals[df_proposals["end"] <= pd.to_datetime(DATA_CUTOFF_DATE)]
 df_proposals["gecko_id"] = df_proposals["space"].map(spaces_gecko)
 df_proposals.sort_values(by=["gecko_id", "created"], ascending=True, inplace=True)
 
-# check duplicate event windows
-df_proposals["last_end"] = df_proposals.groupby("gecko_id")["end"].shift(1)
-df_proposals["next_created"] = df_proposals.groupby("gecko_id")["created"].shift(-1)
-df_proposals["last_overlap"] = df_proposals["last_end"] + pd.Timedelta(
-    days=EVENT_WINDOW
-) >= df_proposals["created"] - pd.Timedelta(days=EVENT_WINDOW)
-df_proposals["next_overlap"] = df_proposals["next_created"] - pd.Timedelta(
-    days=EVENT_WINDOW
-) <= df_proposals["end"] + pd.Timedelta(days=EVENT_WINDOW)
-df_proposals_adj = df_proposals[
-    ~(df_proposals["last_overlap"] | df_proposals["next_overlap"])
-].copy()
-
 # Text characteristics
 for val in ["title", "body"]:
-    df_proposals_adj[f"len_{val}"] = df_proposals_adj[val].apply(word_count)
-df_proposals_adj["have_discussion"] = df_proposals_adj["discussion"].notna().astype(int)
+    df_proposals[f"len_{val}"] = df_proposals[val].apply(word_count)
+df_proposals["have_discussion"] = df_proposals["discussion"].notna().astype(int)
 
 # get the timestamp for event window
-df_proposals_adj_ts = []
-for _, row in df_proposals_adj.iterrows():
+df_proposals_list = []
+for _, row in df_proposals.iterrows():
     for col in ["start", "end", "created"]:
         row[f"{col}_ts_-5d"] = row[f"{col}_ts"] - EVENT_WINDOW * 24 * 3600
         row[f"{col}_-5d"] = pd.to_datetime(
@@ -102,16 +94,18 @@ for _, row in df_proposals_adj.iterrows():
         row[f"{col}_+5d"] = pd.to_datetime(
             pd.to_datetime(row[f"{col}_ts_+5d"], unit="s").strftime("%Y-%m-%d 00:00:00")
         )
-    df_proposals_adj_ts.append(row)
-df_proposals_adj = pd.DataFrame(df_proposals_adj_ts)
+    df_proposals_list.append(row)
+df_proposals = pd.DataFrame(df_proposals_list)
 
 # merge the end date price
 for col in ["start", "end", "created"]:
     for stage in [f"{col}_-5d", col, f"{col}_+5d"]:
-        df_proposals_adj = df_proposals_adj.merge(
+        df_proposals = df_proposals.merge(
             df_charts[["gecko_id", "date", "prices"]].rename(
                 columns={"date": stage, "prices": f"{stage}_price"}
             ),
             on=["gecko_id", stage],
             how="left",
         )
+
+df_proposals.to_csv(PROCESSED_DATA_DIR / "proposals_event_study.csv", index=False)

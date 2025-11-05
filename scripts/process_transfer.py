@@ -1,5 +1,6 @@
 """Script to process the transfer data"""
 
+from ast import literal_eval
 import os
 import glob
 import json
@@ -7,7 +8,7 @@ import json
 import pandas as pd
 from tqdm import tqdm
 
-from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR
+from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR, STAKING_TOKEN
 
 
 for name in ["transfer", "contract"]:
@@ -16,21 +17,32 @@ for name in ["transfer", "contract"]:
 smart_contract = pd.read_csv(f"{DATA_DIR}/smart_contract_flipside.csv")
 smart_contract = set(smart_contract["ADDRESS"].str.lower().tolist())
 
-proposals_adjusted_with_sc = pd.read_csv(
-    PROCESSED_DATA_DIR / "proposals_adjusted_with_sc.csv"
+df_proposals_with_sc = pd.read_csv(
+    PROCESSED_DATA_DIR / "proposals_with_sc.csv",
 )
+df_proposals_with_sc["address"] = df_proposals_with_sc["address"].map(literal_eval)
+token_decimal = {}
+
+# Add governance tokens
+for addr_list in df_proposals_with_sc["address"]:
+    for addr in addr_list:
+        token_decimal[addr["address"].lower()] = addr["decimal"]
+
+    # Add staking tokens
+    for staking_address, info in STAKING_TOKEN.items():
+        token_decimal[info["address"].lower()] = info["decimal"]
 
 existing_files = glob.glob(f"{PROCESSED_DATA_DIR}/transfer/*.csv")
 existing_files = [os.path.basename(i) for i in existing_files]
+todo_tokens = set(token_decimal.keys()) - set(
+    [i.replace(".csv", "") for i in existing_files]
+)
 
-for idx, row in tqdm(
-    proposals_adjusted_with_sc.iterrows(), total=len(proposals_adjusted_with_sc)
-):
+for address, decimal in tqdm(token_decimal.items(), desc="Processing token transfers"):
     # process the transfer data
-    if f"{row['address'].lower()}.csv" in existing_files:
+    if f"{address}.csv" in existing_files:
         continue
-    address = row["address"].lower()
-    decimal = row["decimal"]
+
     files = glob.glob(f"{DATA_DIR}/transfer/{address}/*.jsonl")
     all_data = []
     for file in files:
@@ -42,6 +54,8 @@ for idx, row in tqdm(
                 item["amount"] = int(item["args"]["amount"]) / (10**decimal)
                 all_data.append(item)
     df = pd.DataFrame(all_data)
+    if df.empty:
+        continue
     df.drop(columns=["args"], inplace=True)
     df.sort_values("blockNumber", ascending=True, inplace=True)
     df.to_csv(PROCESSED_DATA_DIR / "transfer" / f"{address}.csv", index=False)

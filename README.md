@@ -150,7 +150,15 @@ python script/process_charts.py
 
 - Output: processed_data / coingecko_charts.csv
 
-### 3. process coingecko id Ethereum smart contract
+#### 3. merge spaces data with Coingecko data
+
+```
+python scripts / merge_spaces_gecko.py
+```
+
+- Output: processed_data / spaces_gecko.csv
+
+### 4. process coingecko id Ethereum smart contract
 
 ```
 python script/process_smart_contract.py
@@ -162,15 +170,7 @@ python script/process_smart_contract.py
 
 ### CAR Processing
 
-#### 1. merge spaces data with Coingecko data
-
-```
-python scripts / merge_spaces_gecko.py
-```
-
-- Output: processed_data / spaces_gecko.csv
-
-#### 2. process event study CAR
+#### 1. process event study CAR
 
 ```
 python scripts / process_event_study_car
@@ -192,12 +192,12 @@ python scripts/fetch_block_ts.py
 python scripts / process_votes.py
 ```
 
-#### 3. process address
+#### 3. process smart contracts
 
 ```
-python scripts / merge_sc_proposal_adj.py
+python scripts / process_proposals_with_sc.py
 ```
-- Output: processed_data / proposals_adjusted_with_sc.csv
+- Output: processed_data / proposals_with_sc.csv
 
 #### 4. Convert proposal timestamp to block in order to merge the holding
 

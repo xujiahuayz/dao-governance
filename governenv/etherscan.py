@@ -3,6 +3,7 @@
 import os
 
 import requests
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 class Etherscan:
@@ -12,6 +13,9 @@ class Etherscan:
         self.api_key = api_key
         self.base_url = "https://api.etherscan.io/v2/api"
 
+    @retry(
+        wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3)
+    )
     def get_contract_creation(self, contract_address: str, chain_id: str = "1") -> dict:
         """Get contract creation information."""
 

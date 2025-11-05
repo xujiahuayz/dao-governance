@@ -10,59 +10,14 @@ from governenv.constants import (
     EST_LOWER,
     EST_UPPER,
 )
-from scripts.process_event_study import (
-    df_charts,
-    df_proposals_adj,
-)
 
-# Load the vote characteristics
-VOTING_CHARACTERISTICS = ["half_vp_ratio", "vn_hhi", "vs_hhi", "cci"]
-df_votes = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_votes.csv")
-df_votes = df_votes[["id"] + VOTING_CHARACTERISTICS + ["reject_pct", "binary"]]
-
-# Load the discussions characteristics
-DISCUSSION_CHARACTERISTICS = [
-    "Support",
-    "Professionalism",
-    "Objectiveness",
-    "Unanimity",
-]
-df_discussion = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_discussions.csv")
-df_discussion = df_discussion[["id"] + DISCUSSION_CHARACTERISTICS]
-
-# Load the proposal data
-PROPOSAL_CHARACTERISTICS = [
-    "votes",
-    "n_choices",
-    "duration",
-    "quadratic",
-    "ranked_choice",
-    "quorum",
-]
-df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_proposals.csv")
-df_proposals = df_proposals[["id"] + PROPOSAL_CHARACTERISTICS]
-
-# Load the delegation data
-DELEGATION_CHARACTERISTICS = ["delegate_dummy", "delegate"]
-df_delegate = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_delegates.csv")
-df_delegate = df_delegate[["id"] + DELEGATION_CHARACTERISTICS]
-
-# Load the topic data
-TOPICS = [
-    "vote",
-    "incentives",
-    "govcouncil",
-    "ecosys",
-    "grants",
-    "liquidity",
-    "treasuryops",
-]
-TOPIC_CHARACTERISTICS = [f"d_{topic}" for topic in TOPICS]
-df_topics = pd.read_csv(PROCESSED_DATA_DIR / "proposals_adjusted_topics.csv")
-df_topics = df_topics[["id"] + TOPIC_CHARACTERISTICS]
+df_proposals_adj = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
+df_charts = pd.read_csv(PROCESSED_DATA_DIR / "charts.csv")
+df_charts["date"] = pd.to_datetime(df_charts["date"])
 
 # Proposal created and proposal end
 for stage in ["created", "end"]:
+    df_proposals_adj[stage] = pd.to_datetime(df_proposals_adj[stage])
     panel = []
     for index, row in tqdm(df_proposals_adj.iterrows(), total=len(df_proposals_adj)):
         space = row["space"]
@@ -111,19 +66,19 @@ for stage in ["created", "end"]:
             alpha + beta * event_window["emret"]
         )
 
-        # calculate the cumulative abnormal return
-        for window in (2, 3, 4, 5):
-            df = event_window.loc[
-                event_window["index"].between(-window, window)
-            ].sort_values("index")
-            df[f"car_{window}"] = df["ar"].cumsum()
-            event_window = event_window.merge(
-                df[["index", f"car_{window}"]],
-                on="index",
-                how="left",
-            )
+        # # calculate the cumulative abnormal return
+        # for window in (2, 3, 4, 5):
+        #     df = event_window.loc[
+        #         event_window["index"].between(-window, window)
+        #     ].sort_values("index")
+        #     df[f"car_{window}"] = df["ar"].cumsum()
+        #     event_window = event_window.merge(
+        #         df[["index", f"car_{window}"]],
+        #         on="index",
+        #         how="left",
+        #     )
 
-        # event_window["car"] = event_window["ar"].cumsum()
+        event_window["car"] = event_window["ar"].cumsum()
 
         # Proposal identifier
         event_window["id"] = row["id"]
@@ -132,18 +87,12 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    for df in [df_votes, df_discussion, df_proposals, df_delegate, df_topics]:
-        panel = panel.merge(
-            df,
-            on="id",
-            how="left",
-        )
-
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",
         index=False,
     )
 
-    # panel.groupby("index")["car"].mean().plot()
-    # plt.legend()
-    # plt.plot()
+    panel.groupby("index")["car"].mean().plot()
+    plt.legend()
+    plt.plot()
+    plt.show()

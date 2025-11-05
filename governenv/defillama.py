@@ -8,6 +8,7 @@ from typing import Literal, Optional
 import pandas as pd
 import requests
 from tqdm import tqdm
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from governenv.constants import DATA_DIR
 from governenv.settings import DEFILLAMA_API_KEY
@@ -206,11 +207,15 @@ class DefiLlama:
             self._get_protocol_user(protocol, path, type_str)
 
     # Fetch block by timestamp
+    @retry(
+        stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=4, max=10)
+    )
     def get_block_by_timestamp(self, timestamp: int) -> Optional[int]:
         """
         Function to get the block by timestamp
         """
 
+        time.sleep(1)
         length = 0
         result = {"timestamp": None, "height": None}
 

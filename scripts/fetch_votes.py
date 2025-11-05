@@ -1,25 +1,29 @@
 """Script to fetch votes given a id"""
 
 import glob
+
+import pandas as pd
 from tqdm import tqdm
 
-from governenv.constants import DATA_DIR, SNAPSHOT_ENDPOINT
+from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR, SNAPSHOT_ENDPOINT
 from governenv.graphql import query_id
 from governenv.queries import VOTES
 
-from scripts.process_event_study import df_proposals_adj
 
+# Load proposals
+df_proposals_adj = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc.csv")
+proposals_list = df_proposals_adj["id"].tolist()
 
-# Fetch votes
+# Check existing files to avoid re-fetching
 save_path = DATA_DIR / "snapshot" / "votes"
 files_list = glob.glob(str(save_path / "*.jsonl"))
 files_list_str = [file.split("/")[-1].split(".")[0] for file in files_list]
+todos = [idx for idx in proposals_list if str(idx) not in files_list_str]
 
-for idx in tqdm(df_proposals_adj["id"].tolist(), total=len(df_proposals_adj)):
+for idx in tqdm(todos):
     if idx in files_list_str:
         continue
     else:
-        print(f"Fetching votes for proposal {idx}")
         try:
             query_id(
                 save_path=save_path,
