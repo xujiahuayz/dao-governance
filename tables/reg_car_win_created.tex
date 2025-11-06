@@ -1,0 +1,21 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                    &\multicolumn{3}{c}{CAR[-5,5]}                                    \\\cmidrule(lr){2-4}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
+\midrule
+${\it Small Win}^{vn}_{i,t}$&       0.045\sym{***}&                     &                     \\
+                    &      (0.01)         &                     &                     \\
+${\it Small Win}^{vp}_{i,t}$&                     &      -0.000         &                     \\
+                    &                     &      (0.01)         &                     \\
+${\it Small Win}^{vp,vn}_{i,t}$&                     &                     &       0.015         \\
+                    &                     &                     &      (0.01)         \\
+\midrule
+Token FE            &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         \\
+Observations        &       1,505         &       1,505         &       1,505         \\
+Adjusted R²         &       0.224         &       0.222         &       0.222         \\
+\bottomrule
+\end{tabular}
+}

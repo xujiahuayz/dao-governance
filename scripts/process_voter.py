@@ -31,12 +31,20 @@ def standardized_hhi(counts: list) -> float:
     return (hhi - (1 / n)) / (1 - (1 / n))
 
 
-def calc_frequency(choices: list) -> list:
+def calc_frequency(choices: list) -> defaultdict:
     """Function to calculate choice frequency."""
     frequency = defaultdict(int)
     for c in choices:
         frequency[c] += 1
-    return frequency.values()
+    return frequency
+
+
+def calc_vp(choices: list, vps: list) -> defaultdict:
+    """Function to calculate choice vp."""
+    vp_dict = defaultdict(float)
+    for idx, c in enumerate(choices):
+        vp_dict[c] += vps[idx]
+    return vp_dict
 
 
 def calc_delegation(
@@ -66,14 +74,18 @@ def calc_delegation(
 if __name__ == "__main__":
     # Load the proposal data with smart contract and block info
     df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
-    df_proposals["address"] = df_proposals["address"].apply(literal_eval)
+    # df_proposals = df_proposals.loc[
+    #     df_proposals["id"]
+    #     == "0x8eb143cdf1608513078270f6c0302e30faa2155cce748e74678bde2ef4091f46"
+    # ]
+    for col in ["address", "choices", "scores", "scores_by_strategy"]:
+        df_proposals[col] = df_proposals[col].apply(literal_eval)
 
     # Load the vote data
     df_votes = pd.read_csv(PROCESSED_DATA_DIR / "votes.csv")
     df_votes["voter"] = df_votes["voter"].str.lower()
 
     df_proposals_participation = []
-    error_proposals = []
     for _, row in tqdm(df_proposals.iterrows(), total=len(df_proposals)):
         # Initialize proposal participation data
         proposal_participation = deepcopy(row)
@@ -87,6 +99,18 @@ if __name__ == "__main__":
         delegation = row["delegation"]
         start_ts = row["start_ts"]
         end_ts = row["end_ts"]
+        win_choice = str(
+            sorted(
+                zip(
+                    [str(idx + 1) for idx, _ in enumerate(row["choices"])],
+                    row["scores"],
+                ),
+                key=lambda x: x[1],
+                reverse=True,
+            )[0][0]
+            if row["scores"]
+            else None
+        )
 
         # Load the voter data
         df_vote_subset = df_votes[df_votes["proposal_id"] == proposal_id].copy()
@@ -246,6 +270,7 @@ if __name__ == "__main__":
                     "contract": holding["contract"],
                     "choice": vote_row["choice"],
                     "reason": 1 if pd.notna(vote_row["reason"]) else 0,
+                    "created": vote_row["created"],
                     "timing": (int(vote_row["created"]) - int(start_ts))
                     / (int(end_ts) - int(start_ts)),
                 }
@@ -265,23 +290,62 @@ if __name__ == "__main__":
         non_whale_vote = {
             k: v for k, v in voting["voters"].items() if v["label"] == "non_whales"
         }
+        non_whale_vote = dict(
+            sorted(non_whale_vote.items(), key=lambda item: item[1]["vp"])
+        )
         whale_vote = {
             k: v for k, v in voting["voters"].items() if v["label"] == "whales"
         }
+        whale_vote = dict(sorted(whale_vote.items(), key=lambda item: item[1]["vp"]))
+
+        first_whale_vote = (
+            min([v["created"] for k, v in whale_vote.items()]) if whale_vote else np.nan
+        )
 
         # Calculate standardized HHI for whale and non-whale voters
+        whale_freq = calc_frequency([v["choice"] for k, v in whale_vote.items()])
+        non_whale_freq = calc_frequency(
+            [v["choice"] for k, v in non_whale_vote.items()]
+        )
+        whale_vp = calc_vp(
+            [v["choice"] for k, v in whale_vote.items()],
+            [v["vp"] for k, v in whale_vote.items()],
+        )
+        non_whale_vp = calc_vp(
+            [v["choice"] for k, v in non_whale_vote.items()],
+            [v["vp"] for k, v in non_whale_vote.items()],
+        )
+
         proposal_participation["whale_hhi"] = (
-            standardized_hhi(
-                calc_frequency([v["choice"] for k, v in whale_vote.items()])
-            )
+            standardized_hhi(whale_freq.values())
             if len(df_vote_subset["type"].unique()) == 1
             else np.nan
         )
         proposal_participation["non_whale_hhi"] = (
-            standardized_hhi(
-                calc_frequency([v["choice"] for k, v in non_whale_vote.items()])
-            )
+            standardized_hhi(non_whale_freq.values())
             if len(df_vote_subset["type"].unique()) == 1
+            else np.nan
+        )
+
+        # Calculate the winrate
+        proposal_participation["whale_win_vn"] = (
+            int(win_choice == str(max(whale_freq, key=whale_freq.get)))
+            if whale_freq and len(df_vote_subset["type"].unique()) and win_choice
+            else np.nan
+        )
+        proposal_participation["whale_win_vp"] = (
+            int(win_choice == str(max(whale_vp, key=whale_vp.get)))
+            if whale_vp and len(df_vote_subset["type"].unique()) and win_choice
+            else np.nan
+        )
+        proposal_participation["non_whale_win_vn"] = (
+            int(win_choice == str(max(non_whale_freq, key=non_whale_freq.get)))
+            if non_whale_freq and len(df_vote_subset["type"].unique()) and win_choice
+            else np.nan
+        )
+        proposal_participation["non_whale_win_vp"] = (
+            int(win_choice == str(max(non_whale_vp, key=non_whale_vp.get)))
+            if non_whale_vp and len(df_vote_subset["type"].unique()) and win_choice
             else np.nan
         )
 
@@ -292,6 +356,11 @@ if __name__ == "__main__":
         whale_votable_contract_set = set(
             k for k, v in whale_vote.items() if v["contract"] is True
         )
+
+        non_whale_votable_contract_no_delegate = deepcopy(
+            non_whale_votable_contract_set
+        )
+        whale_votable_contract_no_delegate = deepcopy(whale_votable_contract_set)
 
         if delegation == "delegation":
             non_whale_votable_contract_set = non_whale_votable_contract_set | set(
@@ -406,8 +475,10 @@ if __name__ == "__main__":
 
         # Update the proposal participation data
         holder_num = total_number_of_holders
-        whale_num = len(total_whale_set)
-        non_whale_num = len(total_non_whale_set)
+        whale_num = len(total_whale_set | whale_votable_contract_no_delegate)
+        non_whale_num = len(
+            total_non_whale_set | non_whale_votable_contract_no_delegate
+        )
         proposal_participation["holder_num"] = holder_num
         proposal_participation["whale_num"] = whale_num
         proposal_participation["non_whale_num"] = non_whale_num
@@ -427,9 +498,16 @@ if __name__ == "__main__":
                 if proposal_participation[f"{group}_vote_num"] > 0
                 else np.nan
             )
+        if (
+            proposal_participation["whale_turnout"] > 1
+            or proposal_participation["non_whale_turnout"] > 1
+        ):
+            continue
 
         # Append the proposal participation data
         df_proposals_participation.append(proposal_participation)
+        # if whale_vote and non_whale_vote:
+        #     break
 
     df_proposals_participation = pd.DataFrame(df_proposals_participation)
 
@@ -446,14 +524,24 @@ if __name__ == "__main__":
             )
         )
 
-    # Filter out proposals with invalid turnout rates
-    df_proposals_participation = df_proposals_participation.loc[
-        (df_proposals_participation["whale_turnout"] <= 1)
-        & (df_proposals_participation["non_whale_turnout"] <= 1)
-    ]
+    # Calculate the winning metrics
+    df_proposals_participation["non_whale_victory_vn"] = (
+        (df_proposals_participation["non_whale_win_vn"] == 1)
+        & (df_proposals_participation["whale_win_vn"] == 0)
+    ).astype(int)
+
+    df_proposals_participation["non_whale_victory_vp"] = (
+        (df_proposals_participation["non_whale_win_vp"] == 1)
+        & (df_proposals_participation["whale_win_vp"] == 0)
+    ).astype(int)
+
+    df_proposals_participation["non_whale_victory_vp_vn"] = (
+        (df_proposals_participation["non_whale_victory_vn"] == 1)
+        & (df_proposals_participation["whale_win_vp"] == 0)
+    ).astype(int)
 
     df_proposals_participation = df_proposals_participation[
-        ["id", "space", "gecko_id"]
+        ["id", "space"]
         # Participation metrics
         + [
             col
@@ -478,9 +566,13 @@ if __name__ == "__main__":
                 f"{_}_{direction}_delegation_num",
             ]
         ]
+        # Winning metrics
+        + ["non_whale_victory_vn", "non_whale_victory_vp", "non_whale_victory_vp_vn"]
     ]
+
+    # Turnout should be comparable to delegation rates
     for group in ["non_whale", "whale"]:
-        for metric in ["num", "vote_num", "turnout", "hhi"]:
+        for metric in ["num", "vote_num", "turnout"]:
             df_proposals_participation[f"{group}_{metric}"] = (
                 df_proposals_participation.apply(
                     lambda row: (
@@ -491,16 +583,31 @@ if __name__ == "__main__":
                     axis=1,
                 )
             )
-    df_proposals_participation["non_whale_timing_avg"] = (
-        df_proposals_participation.apply(
-            lambda row: (
-                np.nan
-                if np.isnan(row["whale_timing_avg"])
-                else row["non_whale_timing_avg"]
-            ),
-            axis=1,
-        )
-    )
+
+    # # HHI and timing should be comparable between whales and non-whales
+    # df_proposals_participation["non_whale_hhi"] = df_proposals_participation.apply(
+    #     lambda row: (np.nan if np.isnan(row["whale_hhi"]) else row["non_whale_hhi"]),
+    #     axis=1,
+    # )
+
+    # df_proposals_participation["non_whale_timing_avg"] = (
+    #     df_proposals_participation.apply(
+    #         lambda row: (
+    #             np.nan
+    #             if np.isnan(row["whale_timing_avg"])
+    #             else row["non_whale_timing_avg"]
+    #         ),
+    #         axis=1,
+    #     )
+    # )
+    # df_proposals_participation["non_whale_win"] = df_proposals_participation.apply(
+    #     lambda row: (np.nan if np.isnan(row["whale_win"]) else row["non_whale_win"]),
+    #     axis=1,
+    # )
+    # df_proposals_participation["whale_win"] = df_proposals_participation.apply(
+    #     lambda row: (np.nan if np.isnan(row["non_whale_win"]) else row["whale_win"]),
+    #     axis=1,
+    # )
     df_proposals_participation.to_csv(
-        PROCESSED_DATA_DIR / "proposals_participation.csv", index=False
+        PROCESSED_DATA_DIR / "proposals_voter.csv", index=False
     )

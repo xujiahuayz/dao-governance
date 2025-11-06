@@ -15,6 +15,12 @@ df_proposals_adj = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.cs
 df_charts = pd.read_csv(PROCESSED_DATA_DIR / "charts.csv")
 df_charts["date"] = pd.to_datetime(df_charts["date"])
 
+# Load voter participation data
+df_voter = pd.read_csv(PROCESSED_DATA_DIR / "proposals_voter.csv").drop(
+    columns=["space"]
+)
+df_proposals_adj = df_proposals_adj.merge(df_voter, on="id", how="left")
+
 # Proposal created and proposal end
 for stage in ["created", "end"]:
     df_proposals_adj[stage] = pd.to_datetime(df_proposals_adj[stage])
@@ -65,19 +71,6 @@ for stage in ["created", "end"]:
         event_window["ar"] = event_window["eret"] - (
             alpha + beta * event_window["emret"]
         )
-
-        # # calculate the cumulative abnormal return
-        # for window in (2, 3, 4, 5):
-        #     df = event_window.loc[
-        #         event_window["index"].between(-window, window)
-        #     ].sort_values("index")
-        #     df[f"car_{window}"] = df["ar"].cumsum()
-        #     event_window = event_window.merge(
-        #         df[["index", f"car_{window}"]],
-        #         on="index",
-        #         how="left",
-        #     )
-
         event_window["car"] = event_window["ar"].cumsum()
 
         # Proposal identifier
@@ -87,6 +80,7 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
+    panel = panel.merge(df_voter, on="id", how="left")
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",
         index=False,
@@ -94,5 +88,4 @@ for stage in ["created", "end"]:
 
     panel.groupby("index")["car"].mean().plot()
     plt.legend()
-    plt.plot()
     plt.show()
