@@ -1,0 +1,25 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\
+\midrule
+${\it Multiple Choices}_{i,t}$&       0.993         &       1.299\sym{*}  &       1.795         \\
+                    &      (0.69)         &      (0.66)         &      (1.14)         \\
+${\it Weighted}_{i,t}$&       4.029\sym{***}&       2.730\sym{***}&       2.664\sym{***}\\
+                    &      (0.76)         &      (0.74)         &      (0.80)         \\
+${\it Quorum}_{i,t}$&       0.802\sym{*}  &       1.505\sym{*}  &       0.441         \\
+                    &      (0.48)         &      (0.91)         &      (0.68)         \\
+${\it Discussion}_{i,t}$&       0.878         &       0.627         &       0.869         \\
+                    &      (0.73)         &      (0.64)         &      (0.68)         \\
+${\it Delegation}_{i,t}$&       2.463\sym{***}&       0.032         &       1.090\sym{***}\\
+                    &      (0.45)         &      (0.37)         &      (0.41)         \\
+Constant            &      -8.332\sym{***}&      -7.605\sym{***}&      -8.252\sym{***}\\
+                    &      (1.17)         &      (0.76)         &      (0.97)         \\
+\midrule
+Observations        &       2,681         &       2,681         &       2,681         \\
+Pseudo R²           &       0.657         &       0.367         &       0.382         \\
+\bottomrule
+\end{tabular}
+}

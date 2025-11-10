@@ -11,24 +11,11 @@ from tqdm import tqdm
 import numpy as np
 
 from governenv.constants import PROCESSED_DATA_DIR
+from governenv.utils import standardized_hhi
 
 
 WHALE_THRESHOLD = 0.05
 os.makedirs(PROCESSED_DATA_DIR / "holding_pct", exist_ok=True)
-
-
-def standardized_hhi(counts: list) -> float:
-    """Function to calculate standardized HHI."""
-    if len(counts) == 0:
-        return np.nan
-    total = sum(counts)
-    if total == 0:
-        return np.nan
-    hhi = sum((count / total) ** 2 for count in counts)
-    n = len(counts)
-    if n == 1:
-        return 1.0
-    return (hhi - (1 / n)) / (1 - (1 / n))
 
 
 def calc_frequency(choices: list) -> defaultdict:
@@ -316,12 +303,22 @@ if __name__ == "__main__":
             [v["vp"] for k, v in non_whale_vote.items()],
         )
 
-        proposal_participation["whale_hhi"] = (
+        proposal_participation["whale_vn_hhi"] = (
             standardized_hhi(whale_freq.values())
             if len(df_vote_subset["type"].unique()) == 1
             else np.nan
         )
-        proposal_participation["non_whale_hhi"] = (
+        proposal_participation["non_whale_vn_hhi"] = (
+            standardized_hhi(non_whale_freq.values())
+            if len(df_vote_subset["type"].unique()) == 1
+            else np.nan
+        )
+        proposal_participation["whale_vs_hhi"] = (
+            standardized_hhi(whale_freq.values())
+            if len(df_vote_subset["type"].unique()) == 1
+            else np.nan
+        )
+        proposal_participation["non_whale_vs_hhi"] = (
             standardized_hhi(non_whale_freq.values())
             if len(df_vote_subset["type"].unique()) == 1
             else np.nan
@@ -550,7 +547,8 @@ if __name__ == "__main__":
                 f"{_}_num",
                 f"{_}_vote_num",
                 f"{_}_turnout",
-                f"{_}_hhi",
+                f"{_}_vs_hhi",
+                f"{_}_vn_hhi",
                 f"{_}_delegation_turnout",
                 f"{_}_reason_rate",
                 f"{_}_timing_avg",

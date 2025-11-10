@@ -1,0 +1,24 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{c}}
+\toprule
+                    &\multicolumn{2}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{2}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{2}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}\\
+                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\
+\midrule
+$\textit{Delegator}_{i,t}^{\textit{Whale}}$&      14.860\sym{*}  &                     &      10.236\sym{*}  &                     &      10.723\sym{*}  &                     \\
+                    &      (7.87)         &                     &      (5.91)         &                     &      (6.06)         &                     \\
+$\textit{Delegator}_{i,t}^{\textit{Small}}$&      57.251         &                     &      30.542         &                     &      31.959         &                     \\
+                    &     (46.92)         &                     &     (34.99)         &                     &     (36.47)         &                     \\
+$\textit{Delegatee}_{i,t}^{\textit{Whale}}$&                     &      11.834         &                     &       7.195         &                     &       7.602         \\
+                    &                     &      (7.85)         &                     &      (5.71)         &                     &      (5.91)         \\
+$\textit{Delegatee}_{i,t}^{\textit{Small}}$&                     &    -108.126         &                     &     -89.867         &                     &     -99.424         \\
+                    &                     &    (201.13)         &                     &    (183.93)         &                     &    (187.73)         \\
+Constant            &      -9.422\sym{*}  &      -8.112         &      -8.011\sym{**} &      -6.532\sym{**} &      -8.246\sym{**} &      -6.676\sym{**} \\
+                    &      (4.81)         &      (5.08)         &      (3.80)         &      (3.15)         &      (3.94)         &      (3.29)         \\
+\midrule
+Observations        &         629         &         629         &         629         &         629         &         629         &         629         \\
+Pseudo R²           &       0.322         &       0.325         &       0.153         &       0.133         &       0.163         &       0.141         \\
+\bottomrule
+\end{tabular}
+}

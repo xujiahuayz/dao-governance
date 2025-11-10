@@ -1,0 +1,23 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\
+\midrule
+$\textit{HHI}_{i,t}^{\textit{Whale,vn}}$&      -3.608\sym{***}&                     &                     \\
+                    &      (0.23)         &                     &                     \\
+$\textit{HHI}_{i,t}^{\textit{Small,vn}}$&       0.325         &                     &      -0.541         \\
+                    &      (0.42)         &                     &      (0.46)         \\
+$\textit{HHI}_{i,t}^{\textit{Whale,vs}}$&                     &       0.957\sym{**} &       1.470\sym{***}\\
+                    &                     &      (0.44)         &      (0.56)         \\
+$\textit{HHI}_{i,t}^{\textit{Small,vs}}$&                     &      -1.396\sym{***}&                     \\
+                    &                     &      (0.40)         &                     \\
+Constant            &       0.698\sym{**} &      -2.388\sym{***}&      -3.580\sym{***}\\
+                    &      (0.34)         &      (0.48)         &      (0.63)         \\
+\midrule
+Observations        &         890         &         890         &         890         \\
+Pseudo R²           &       0.350         &       0.036         &       0.027         \\
+\bottomrule
+\end{tabular}
+}

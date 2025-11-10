@@ -21,6 +21,11 @@ df_voter = pd.read_csv(PROCESSED_DATA_DIR / "proposals_voter.csv").drop(
 )
 df_proposals_adj = df_proposals_adj.merge(df_voter, on="id", how="left")
 
+# Load the proposals characteristics
+df_proposals_char = pd.read_csv(PROCESSED_DATA_DIR / "proposals_char.csv")[
+    ["id", "n_choices", "duration", "quorum", "quadratic", "weighted", "ranked_choice"]
+]
+
 # Proposal created and proposal end
 for stage in ["created", "end"]:
     df_proposals_adj[stage] = pd.to_datetime(df_proposals_adj[stage])
@@ -80,7 +85,8 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    panel = panel.merge(df_voter, on="id", how="left")
+    for df in [df_voter, df_proposals_char]:
+        panel = panel.merge(df, on="id", how="left")
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",
         index=False,

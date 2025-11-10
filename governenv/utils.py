@@ -284,15 +284,18 @@ def get_date_range(start_date: str, end_date: str):
 
 
 # Math
-def calc_hhi(values):
-    """Compute the Herfindahl-Hirschman Index (robust version)."""
-    if not values:
+def standardized_hhi(counts: list) -> float:
+    """Function to calculate standardized HHI."""
+    if len(counts) == 0:
         return np.nan
-    total = sum(values)
-    if total <= 0:
+    total = sum(counts)
+    if total == 0:
         return np.nan
-    shares = np.array(values, dtype=float) / total
-    return float(np.sum(shares**2))
+    hhi = sum((count / total) ** 2 for count in counts)
+    n = len(counts)
+    if n == 1:
+        return 1.0
+    return (hhi - (1 / n)) / (1 - (1 / n))
 
 
 if __name__ == "__main__":
