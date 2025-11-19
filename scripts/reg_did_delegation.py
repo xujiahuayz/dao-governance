@@ -113,18 +113,6 @@ for idx, (space, group) in enumerate(
 df_did_panel = pd.DataFrame(panel)
 
 plt.figure(figsize=(10, 6))
-# plt.plot(
-#     df_did_panel.loc[df_did_panel["treat"] == 1]
-#     .groupby("event_time")["non_whale_participation"]
-#     .mean(),
-#     label="Treatment",
-# )
-# plt.plot(
-#     df_did_panel.loc[df_did_panel["treat"] == 0]
-#     .groupby("event_time")["non_whale_participation"]
-#     .mean(),
-#     label="Control",
-# )
 plt.plot(
     df_did_panel.loc[df_did_panel["treat"] == 1]
     .groupby("event_time")["non_whale_participation"]
