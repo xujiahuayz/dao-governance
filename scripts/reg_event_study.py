@@ -9,7 +9,27 @@ from governenv.constants import (
     EVENT_WINDOW,
     EST_LOWER,
     EST_UPPER,
+    TOPICS,
 )
+
+VOTE_CHAR = [
+    "non_whale_victory_vn",
+    "non_whale_victory_vp",
+    "non_whale_victory_vp_vn",
+    "non_whale_turnout",
+    "whale_turnout",
+]
+
+PROPOSAL_CHAR = [
+    "n_choices",
+    "duration",
+    "quorum",
+    "quadratic",
+    "weighted",
+    "ranked_choice",
+]
+
+TOPIC_COLUMNS = [topic.replace(" ", "_") for topic in TOPICS]
 
 df_proposals_adj = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
 df_charts = pd.read_csv(PROCESSED_DATA_DIR / "charts.csv")
@@ -24,6 +44,11 @@ df_proposals_adj = df_proposals_adj.merge(df_voter, on="id", how="left")
 # Load the proposals characteristics
 df_proposals_char = pd.read_csv(PROCESSED_DATA_DIR / "proposals_char.csv")[
     ["id", "n_choices", "duration", "quorum", "quadratic", "weighted", "ranked_choice"]
+]
+
+# Load topic characteristics
+df_proposals_topic = pd.read_csv(PROCESSED_DATA_DIR / "proposals_topic.csv")[
+    ["id"] + TOPIC_COLUMNS
 ]
 
 # Proposal created and proposal end
@@ -76,17 +101,25 @@ for stage in ["created", "end"]:
         event_window["ar"] = event_window["eret"] - (
             alpha + beta * event_window["emret"]
         )
+        event_window["beta"] = beta
         event_window["car"] = event_window["ar"].cumsum()
 
-        # Proposal identifier
-        event_window["id"] = row["id"]
+        # Identifiers
         event_window["space"] = space
+        event_window["id"] = row["id"]
 
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    for df in [df_voter, df_proposals_char]:
+    for df in [df_voter, df_proposals_char, df_proposals_topic]:
         panel = panel.merge(df, on="id", how="left")
+
+    panel = panel[
+        ["gecko_id", "space", "date", "index", "car"]
+        + VOTE_CHAR
+        + PROPOSAL_CHAR
+        + TOPIC_COLUMNS
+    ]
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",
         index=False,

@@ -1,0 +1,25 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{2}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}\\
+                    &\multicolumn{1}{c}{${\it Turnout}^{Small}_{i,t}$}&\multicolumn{1}{c}{${\it Turnout}^{Whale}_{i,t}$}\\
+\midrule
+${\it Protocol Security}_{i,t}$&       0.005\sym{**} &       0.008         \\
+                    &      (0.00)         &      (0.01)         \\
+${\it Treasury Expenditure}_{i,t}$&       0.000         &       0.018\sym{*}  \\
+                    &      (0.00)         &      (0.01)         \\
+${\it User Incentive Increase}_{i,t}$&       0.002         &       0.008         \\
+                    &      (0.00)         &      (0.01)         \\
+${\it Tokenomics}_{i,t}$&       0.002         &       0.002         \\
+                    &      (0.00)         &      (0.01)         \\
+${\it Voting Mechanism Change}_{i,t}$&      -0.001         &      -0.047\sym{*}  \\
+                    &      (0.01)         &      (0.03)         \\
+\midrule
+Token FE            &           Y         &           Y         \\
+Year FE             &           Y         &           Y         \\
+Observations        &       2,667         &       2,371         \\
+Adjusted R²         &       0.521         &       0.712         \\
+\bottomrule
+\end{tabular}
+}

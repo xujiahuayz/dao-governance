@@ -6,6 +6,8 @@ from datetime import datetime
 import heapq
 import re
 from typing import Any, Iterable, Optional
+from collections import defaultdict
+from ast import literal_eval
 
 from hexbytes import HexBytes
 import jellyfish
@@ -20,7 +22,7 @@ from web3._utils.filters import construct_event_filter_params
 from web3.datastructures import AttributeDict
 from web3.providers import HTTPProvider
 
-from governenv.constants import EXKW
+from governenv.constants import EXKW, WHALE_THRESHOLD
 
 
 def kw_filt(url: str) -> bool:
@@ -42,7 +44,6 @@ def slash_filt(data: dict[str, str]) -> dict[str, str]:
 
 
 # Fuzzy Matching
-
 PUNC = """ |,|\.|;|:|\||\(|\)|&|'|"|\+|-|/"""
 
 PHRASE_MAP = {
@@ -296,6 +297,117 @@ def standardized_hhi(counts: list) -> float:
     if n == 1:
         return 1.0
     return (hhi - (1 / n)) / (1 - (1 / n))
+
+
+def calc_frequency(choices: list) -> defaultdict:
+    """Function to calculate choice frequency."""
+    frequency = defaultdict(int)
+    for c in choices:
+        frequency[c] += 1
+    return frequency
+
+
+def calc_vp(choices: list, vps: list) -> defaultdict:
+    """Function to calculate choice vp."""
+    vp_dict = defaultdict(float)
+    for idx, c in enumerate(choices):
+        vp_dict[c] += vps[idx]
+    return vp_dict
+
+
+def calc_delegation(
+    records: list,
+    directions: str,
+    groups: str,
+    total_holdings: float,
+) -> int:
+    """Function to calculate delegation counts."""
+
+    direction_str = "delegator" if directions == "from" else "delegatee"
+    if groups == "whale":
+        filtered_set = set(
+            record[direction_str]
+            for record in records
+            if record[f"{direction_str}_holding"] >= (WHALE_THRESHOLD * total_holdings)
+        )
+    else:
+        filtered_set = set(
+            record[direction_str]
+            for record in records
+            if record[f"{direction_str}_holding"] < (WHALE_THRESHOLD * total_holdings)
+        )
+    return len(filtered_set)
+
+
+def process_vote(df: pd.DataFrame) -> pd.DataFrame:
+    """Function to process vote data"""
+
+    df_list = []
+    df["choice"] = df["choice"].apply(literal_eval)
+
+    match df["type"].unique()[0]:
+        case "dict":
+            for _, row in df.iterrows():
+                if len(row["choice"]) == 0:
+                    continue
+                all_weights = sum(row["choice"].values())
+                for choice, weight in row["choice"].items():
+                    row_copy = row.copy()
+                    row_copy["choice"] = choice
+                    row_copy["vp"] = weight / all_weights * row_copy["vp"]
+                    df_list.append(row_copy)
+            df = pd.DataFrame(df_list)
+        case "list":
+            for _, row in df.iterrows():
+                if len(row["choice"]) == 0:
+                    continue
+                row["choice"] = row["choice"][0]
+                df_list.append(row)
+            df = pd.DataFrame(df_list)
+
+    return df
+
+
+def voter_split(
+    df: pd.DataFrame,
+    total_holding_data: dict,
+    total_holding: float,
+    start_ts: int,
+    end_ts: int,
+) -> tuple[dict, list]:
+    """Split voters into whales and non-whales based on holding percentage."""
+    voting = {}
+    unknown_voters = []
+    # iterate through voters
+    for _, row in df.iterrows():
+        voter = row["voter"]
+        if voter in total_holding_data:
+            holding = total_holding_data[voter]
+            label = (
+                "whales"
+                if holding["holding"] >= (WHALE_THRESHOLD * total_holding)
+                else "non_whales"
+            )
+            voting[voter] = {
+                "label": label,
+                "vp": row["vp"],
+                "holding": holding["holding"],
+                "contract": holding["contract"],
+                "choice": row["choice"],
+                "reason": 1 if pd.notna(row["reason"]) else 0,
+                "created": row["created"],
+                "timing": (int(row["created"]) - int(start_ts))
+                / (int(end_ts) - int(start_ts)),
+            }
+        else:
+            unknown_voters.append(
+                {
+                    "voter": voter,
+                    "vp": row["vp"],
+                }
+            )
+
+    return voting, unknown_voters
 
 
 if __name__ == "__main__":

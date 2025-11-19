@@ -3,6 +3,8 @@ Class for the LLM model
 """
 
 import time
+from typing import Optional
+
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -15,7 +17,7 @@ def build_batch(
     system_instruction: str,
     json_schema: dict,
     model: str = "gpt-4.1",
-    temperature: float = 0,
+    temperature: Optional[float] = 0,
 ) -> dict:
     """
     Function to build a batch for OpenAI API
@@ -26,7 +28,7 @@ def build_batch(
         {"role": "user", "content": user_msg},
     ]
 
-    return {
+    batch_item = {
         "custom_id": custom_id,
         "method": "POST",
         "url": "/v1/chat/completions",
@@ -37,9 +39,13 @@ def build_batch(
                 "type": "json_schema",
                 "json_schema": json_schema,
             },
-            "temperature": temperature,
         },
     }
+
+    if temperature is not None:
+        batch_item["body"]["temperature"] = temperature
+
+    return batch_item
 
 
 class ChatGPT:
@@ -78,21 +84,30 @@ class ChatGPT:
         self,
         message: str,
         instruction: str | None = None,
+        json_schema: dict | None = None,
         temperature: float = 0,
         logprobs: bool = False,
         top_logprobs: int | None = None,
-        top_p: float = 1.0,
     ) -> str | tuple[str, dict[str, float]]:
         time.sleep(2)
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=self._build_prompt(message, instruction),
-            temperature=temperature,
-            logprobs=logprobs,
-            top_logprobs=top_logprobs,
-            top_p=top_p,
-        ).choices[0]
 
+        params = {
+            "model": self.model,
+            "messages": self._build_prompt(message, instruction),
+            "temperature": temperature,
+        }
+
+        if json_schema:
+            params["response_format"] = {
+                "type": "json_schema",
+                "json_schema": json_schema,
+            }
+
+        if logprobs:
+            params["logprobs"] = logprobs
+            params["top_logprobs"] = top_logprobs
+
+        response = self.client.chat.completions.create(**params).choices[0]
         if logprobs:
             return (
                 response.message.content,

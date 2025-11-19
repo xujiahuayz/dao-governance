@@ -1,29 +1,23 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{14}{c}}
+\begin{tabular}{l*{4}{c}}
 \toprule
-                    &\multicolumn{7}{c}{CAR[-2,2]}                                                                                                                            &\multicolumn{7}{c}{CAR[-5,5]}                                                                                                                            \\\cmidrule(lr){2-8}\cmidrule(lr){9-15}
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         &\multicolumn{1}{c}{(9)}         &\multicolumn{1}{c}{(10)}         &\multicolumn{1}{c}{(11)}         &\multicolumn{1}{c}{(12)}         &\multicolumn{1}{c}{(13)}         &\multicolumn{1}{c}{(14)}         \\
+                    &\multicolumn{4}{c}{CAR[-5,5]}                                                          \\\cmidrule(lr){2-5}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
 \midrule
-$\textit{Voting}_{i,t}$&       0.000         &                     &                     &                     &                     &                     &                     &      -0.017         &                     &                     &                     &                     &                     &                     \\
-                    &      (0.02)         &                     &                     &                     &                     &                     &                     &      (0.02)         &                     &                     &                     &                     &                     &                     \\
-$\textit{Incentives}_{i,t}$&                     &      -0.027         &                     &                     &                     &                     &                     &                     &       0.021         &                     &                     &                     &                     &                     \\
-                    &                     &      (0.04)         &                     &                     &                     &                     &                     &                     &      (0.07)         &                     &                     &                     &                     &                     \\
-$\textit{Governance Council}_{i,t}$&                     &                     &       0.062\sym{**} &                     &                     &                     &                     &                     &                     &       0.044         &                     &                     &                     &                     \\
-                    &                     &                     &      (0.02)         &                     &                     &                     &                     &                     &                     &      (0.05)         &                     &                     &                     &                     \\
-$\textit{Ecosystem Development}_{i,t}$&                     &                     &                     &      -0.008         &                     &                     &                     &                     &                     &                     &       0.001         &                     &                     &                     \\
-                    &                     &                     &                     &      (0.01)         &                     &                     &                     &                     &                     &                     &      (0.02)         &                     &                     &                     \\
-$\textit{Grants}_{i,t}$&                     &                     &                     &                     &      -0.031         &                     &                     &                     &                     &                     &                     &      -0.045         &                     &                     \\
-                    &                     &                     &                     &                     &      (0.02)         &                     &                     &                     &                     &                     &                     &      (0.03)         &                     &                     \\
-$\textit{Liquidity Management}_{i,t}$&                     &                     &                     &                     &                     &       0.004         &                     &                     &                     &                     &                     &                     &       0.040\sym{*}  &                     \\
-                    &                     &                     &                     &                     &                     &      (0.01)         &                     &                     &                     &                     &                     &                     &      (0.02)         &                     \\
-$\textit{Treasury Operations}_{i,t}$&                     &                     &                     &                     &                     &                     &      -0.022         &                     &                     &                     &                     &                     &                     &      -0.085\sym{***}\\
-                    &                     &                     &                     &                     &                     &                     &      (0.02)         &                     &                     &                     &                     &                     &                     &      (0.03)         \\
+user_incentive_increase&       0.001         &                     &                     &                     \\
+                    &      (0.01)         &                     &                     &                     \\
+treasury_expenditure&                     &      -0.018         &                     &                     \\
+                    &                     &      (0.01)         &                     &                     \\
+voting_mechanism_change&                     &                     &       0.037\sym{*}  &                     \\
+                    &                     &                     &      (0.02)         &                     \\
+protocol_security   &                     &                     &                     &      -0.021\sym{*}  \\
+                    &                     &                     &                     &      (0.01)         \\
 \midrule
-Token FE            &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
-Observations        &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         &         812         \\
-Adjusted R²         &      -0.055         &      -0.055         &      -0.049         &      -0.055         &      -0.054         &      -0.055         &      -0.054         &      -0.133         &      -0.133         &      -0.131         &      -0.133         &      -0.132         &      -0.128         &      -0.123         \\
+Token FE            &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         \\
+Observations        &       1,640         &       1,640         &       1,640         &       1,640         \\
+Adjusted R²         &       0.198         &       0.200         &       0.199         &       0.199         \\
 \bottomrule
 \end{tabular}
 }

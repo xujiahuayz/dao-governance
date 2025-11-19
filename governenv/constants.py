@@ -32,7 +32,7 @@ DATA_CUTOFF_DATE = "2025-09-01"
 # Transfer Data Update
 CURRENT_BLOCK = 23514780
 DUST_THRESHOLD = 1
-WHALE_THRESHOLD = 0.1
+WHALE_THRESHOLD = 0.05
 
 # API Endpoints
 SNAPSHOT_ENDPOINT = f"https://hub.snapshot.org/graphql?apiKey={SNAPSHOT_API_KEY}"
@@ -49,6 +49,15 @@ SNAPSHOT_DELEGATION_START_BLOCK = 11225329
 EST_LOWER = -250
 EST_UPPER = -20
 EVENT_WINDOW = 5
+
+# Topic List
+TOPICS = [
+    "user incentive increase",
+    "treasury expenditure",
+    "voting mechanism change",
+    "protocol security",
+    "tokenomics",
+]
 
 # HTTP Request Headers
 HEADERS = {
@@ -294,4 +303,43 @@ STAKING_TOKEN = {
         "decimal": 18,
         "blockNumber": 13826037,
     },
+}
+
+space_labal_dict = {
+    # Lending
+    "aavedao.eth": "aave",
+    # DEX
+    "vote.airswap.eth": "airswap",  # missing
+    # Staking AI
+    "alphakekai.eth": "AlphaKEK.AI",
+    # Staking Wallet
+    "ambire.eth": "ambire",
+    # Staking Stablecoin
+    "ampleforthorg.eth": "ampleforth",
+    # AI
+    "arc.market": "arc",  # equal
+    # Token Offchain
+    "assangedao.eth": "assangedao",
+    # Token AI
+    "autonolas.eth": "autonolas",
+    # Token (Only)
+    "aventus-gov.eth": "avt",  # equal
+    # Token (Only?)
+    "banklessvault.eth": "bankless dao",
+    # Staking
+    "blackpoolhq.eth": "blackpool",
+    # Token (Only)
+    "bobacatdao.eth": "BobaCat",
+    # Token (Only)
+    "2720.eth": "Buddha",  # equal
+    # Chain
+    "clvorg.eth": "clover",
+    # Token AI
+    "cvp.eth": "powerpool.finance",
+    # Token (Only)
+    "people-dao.eth": "constitutiondao",
+    # Token (Only)
+    "vote.cryodao.eth": "CryoDAO",
+    # DEX + Lending
+    "curve.eth": "curve",
 }

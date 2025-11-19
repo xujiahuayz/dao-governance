@@ -1,0 +1,27 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{2}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}\\
+                    &\multicolumn{1}{c}{${\it Turnout}^{Small}_{i,t}$}&\multicolumn{1}{c}{${\it Turnout}^{Whale}_{i,t}$}\\
+\midrule
+${\it Weighted}_{i,t}$&      -0.027\sym{***}&       0.050\sym{***}\\
+                    &      (0.00)         &      (0.01)         \\
+${\it Quadratic Voting}_{i,t}$&      -0.034\sym{***}&       0.001         \\
+                    &      (0.01)         &      (0.05)         \\
+${\it Ranked Choice}_{i,t}$&      -0.029\sym{***}&       0.025         \\
+                    &      (0.01)         &      (0.05)         \\
+${\it Quorum}_{i,t}$&      -0.014\sym{**} &       0.041         \\
+                    &      (0.01)         &      (0.03)         \\
+${\it Multiple Choices}_{i,t}$&       0.001         &      -0.006         \\
+                    &      (0.00)         &      (0.01)         \\
+${\it Discussion}_{i,t}$&       0.000         &       0.013         \\
+                    &      (0.00)         &      (0.01)         \\
+\midrule
+Token FE            &           Y         &           Y         \\
+Year FE             &           Y         &           Y         \\
+Observations        &       2,667         &       2,371         \\
+Adjusted R²         &       0.535         &       0.711         \\
+\bottomrule
+\end{tabular}
+}

@@ -3,6 +3,14 @@ Prompts, instructions, and json schemas
 """
 
 # Prompts
+TOPIC_PROMPT = """Given the following DAO governance proposal, determine whether \
+it is directly relevant to {topic}.\
+
+Proposal:
+{proposal}
+(End of Proposal)
+"""
+
 IDF_PROMPT = """Given the following contents extracted from the website HTML or TXT, determine \
 whether it satisfies the following criteria.
 
@@ -35,18 +43,37 @@ Contents:
 """
 
 # Instructions
-IDF_INSTRUCT = """You are a decentralized autonomous organizations (DAO) expert \
-who is proficient in evaluating forum discussions. Your output should follow this\
-format: '{"is_forum_discussion": <true/false>}'"""
+TOPIC_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
+Your response should follow this format: '{"result": <true/false>}'."""
 
-EVAL_INSTRUCT = """You are a decentralized autonomous organizations (DAO) expert \
-who is proficient in evaluating forum discussions. Your output format should be as follows:
+IDF_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
+Your output should follow this format: '{"result": <true/false>}'."""
+
+EVAL_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
+Your output format should be as follows:
+
 Support: {Yes/No}
 Professionalism: {Yes/No}
 Objectiveness: {Yes/No}
-Unanimity: {Yes/No}"""
+Unanimity: {Yes/No}."""
 
 # JSON Schemas
+
+JSON_SCHEMA = {
+    "name": "dao",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "result": {
+                "type": "boolean",
+            },
+        },
+        "required": ["result"],
+        "additionalProperties": False,
+    },
+    "strict": True,
+}
+
 IDF_JSON_SCHEMA = {
     "name": "dao",
     "schema": {
