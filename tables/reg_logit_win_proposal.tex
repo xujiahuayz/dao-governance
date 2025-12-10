@@ -1,25 +1,23 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{3}{c}}
+\begin{tabular}{l*{9}{c}}
 \toprule
-                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
-                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\
+                    &\multicolumn{3}{c}{${\it Small Win}^{vn}_{i,t}$}                 &\multicolumn{3}{c}{${\it Small Win}^{vp}_{i,t}$}                 &\multicolumn{3}{c}{${\it Small Win}^{vp,vn}_{i,t}$}              \\\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         &\multicolumn{1}{c}{(9)}         \\
 \midrule
-${\it Multiple Choices}_{i,t}$&       0.993         &       1.299\sym{*}  &       1.795         \\
-                    &      (0.69)         &      (0.66)         &      (1.14)         \\
-${\it Weighted}_{i,t}$&       4.029\sym{***}&       2.730\sym{***}&       2.664\sym{***}\\
-                    &      (0.76)         &      (0.74)         &      (0.80)         \\
-${\it Quorum}_{i,t}$&       0.802\sym{*}  &       1.505\sym{*}  &       0.441         \\
-                    &      (0.48)         &      (0.91)         &      (0.68)         \\
-${\it Discussion}_{i,t}$&       0.878         &       0.627         &       0.869         \\
-                    &      (0.73)         &      (0.64)         &      (0.68)         \\
-${\it Delegation}_{i,t}$&       2.463\sym{***}&       0.032         &       1.090\sym{***}\\
-                    &      (0.45)         &      (0.37)         &      (0.41)         \\
-Constant            &      -8.332\sym{***}&      -7.605\sym{***}&      -8.252\sym{***}\\
-                    &      (1.17)         &      (0.76)         &      (0.97)         \\
+${\it User}_{i,t}^{\textit{Small}}$&       2.471\sym{***}&                     &       5.409\sym{***}&       3.122\sym{***}&                     &      17.352\sym{*}  &       3.151\sym{***}&                     &      18.560\sym{*}  \\
+                    &      (0.75)         &                     &      (1.45)         &      (0.82)         &                     &     (10.02)         &      (0.83)         &                     &     (10.39)         \\
+${\it Multiple Choices}_{i,t}$&                     &       0.962         &       0.847         &                     &       1.312\sym{*}  &       1.019         &                     &       1.834         &       1.036         \\
+                    &                     &      (0.71)         &      (0.56)         &                     &      (0.76)         &      (1.32)         &                     &      (1.17)         &      (1.32)         \\
+${\it Weighted}_{i,t}$&                     &       4.356\sym{***}&       4.677\sym{***}&                     &       3.199\sym{***}&       3.953\sym{***}&                     &       2.907\sym{***}&       4.017\sym{***}\\
+                    &                     &      (0.67)         &      (0.72)         &                     &      (0.68)         &      (1.12)         &                     &      (0.69)         &      (1.13)         \\
+${\it Delegation}_{i,t}$&                     &       3.181\sym{***}&       2.335\sym{**} &                     &       0.889         &       2.173\sym{*}  &                     &       1.683\sym{***}&       2.298\sym{*}  \\
+                    &                     &      (0.48)         &      (0.92)         &                     &      (0.58)         &      (1.20)         &                     &      (0.43)         &      (1.23)         \\
+Constant            &      -4.295\sym{***}&      -7.764\sym{***}&     -11.783\sym{***}&      -6.279\sym{***}&      -6.879\sym{***}&     -24.231\sym{**} &      -6.261\sym{***}&      -7.867\sym{***}&     -25.478\sym{**} \\
+                    &      (0.92)         &      (1.02)         &      (2.20)         &      (0.77)         &      (0.77)         &     (11.17)         &      (0.77)         &      (1.08)         &     (11.58)         \\
 \midrule
-Observations        &       2,681         &       2,681         &       2,681         \\
-Pseudo R²           &       0.657         &       0.367         &       0.382         \\
+Observations        &       1,768         &       2,681         &       1,768         &       1,768         &       2,681         &       1,768         &       1,768         &       2,681         &       1,768         \\
+Pseudo R²           &       0.046         &       0.647         &       0.682         &       0.043         &       0.345         &       0.438         &       0.044         &       0.375         &       0.448         \\
 \bottomrule
 \end{tabular}
 }

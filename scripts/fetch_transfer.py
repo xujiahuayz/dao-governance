@@ -194,31 +194,31 @@ if __name__ == "__main__":
         end_block = CURRENT_BLOCK
         blocks = split_blocks(start_block, end_block, STEP, address)
         print(f"Fetching transfer for {address} at blocks {blocks}")
-        # with multiprocessing.Manager() as manager:
-        #     api_queue = manager.Queue()
+        with multiprocessing.Manager() as manager:
+            api_queue = manager.Queue()
 
-        #     for api_key in INFURA_API_KEYS:
-        #         api_queue.put(INFURA_API_BASE + api_key)
+            for api_key in INFURA_API_KEYS:
+                api_queue.put(INFURA_API_BASE + api_key)
 
-        #     os.makedirs(f"{DATA_DIR}/transfer/{address}", exist_ok=True)
+            os.makedirs(f"{DATA_DIR}/transfer/{address}", exist_ok=True)
 
-        #     blocks = split_blocks(start_block, end_block, STEP, address)
-        #     if len(blocks) == 0:
-        #         continue
+            blocks = split_blocks(start_block, end_block, STEP, address)
+            if len(blocks) == 0:
+                continue
 
-        #     num_processes = min(len(INFURA_API_KEYS), os.cpu_count())
+            num_processes = min(len(INFURA_API_KEYS), os.cpu_count())
 
-        #     with multiprocessing.Pool(processes=num_processes) as pool:
-        #         pool.starmap(
-        #             fetch_transfer_multiprocess,
-        #             [
-        #                 (
-        #                     *block_range,
-        #                     address,
-        #                     api_queue,
-        #                     f"{DATA_DIR}/transfer/{address}/{block_range[0]}_{block_range[1]}.jsonl",
-        #                     abi,
-        #                 )
-        #                 for block_range in blocks
-        #             ],
-        #         )
+            with multiprocessing.Pool(processes=num_processes) as pool:
+                pool.starmap(
+                    fetch_transfer_multiprocess,
+                    [
+                        (
+                            *block_range,
+                            address,
+                            api_queue,
+                            f"{DATA_DIR}/transfer/{address}/{block_range[0]}_{block_range[1]}.jsonl",
+                            abi,
+                        )
+                        for block_range in blocks
+                    ],
+                )

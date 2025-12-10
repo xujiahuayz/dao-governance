@@ -57,6 +57,21 @@ TOPICS = [
     "voting mechanism change",
     "protocol security",
     "tokenomics",
+    "yield increase",
+    "liquidity provider rewards",
+]
+
+# Discussion criteria
+CRITERIA = [
+    "Support",
+    "Professionalism",
+    "Objectiveness",
+    "Unanimity",
+    "Supportiveness",
+    "Concensus",
+    "Technical Depth",
+    "Evidential Support",
+    "Data Intensity",
 ]
 
 # HTTP Request Headers
@@ -342,4 +357,51 @@ space_labal_dict = {
     "vote.cryodao.eth": "CryoDAO",
     # DEX + Lending
     "curve.eth": "curve",
+}
+
+# Discussion Forum
+SHUT_DOWN = [
+    "prismafinance.eth",
+    "primexyz.eth",
+    "poolpool.pooltogether.eth",
+    "rook.eth",
+    "tomoondao.eth",
+    "cvp.eth",
+    "phonon.eth",
+    "freerossdao.eth",
+    "hapione.eth",
+    "yam.eth",
+    "rarible.eth",
+    "vote.airswap.eth",
+    "banklessvault.eth",
+    "synthereum.eth",
+    "mstablegovernance.eth",
+    "pickle.eth",
+    "pooltogether.eth",
+]
+DISCORD = [
+    "baconcoin.eth",
+    "vote.cryodao.eth",
+    "vote.turbocouncil.eth",
+    "aviator-dao.eth",
+    "researchhub.eth",
+    "fyde.eth",
+    "guildfiworld.eth",
+    "dopdao.eth",
+    "clvorg.eth",
+    "ownthedoge.eth",
+    "holographxyz.eth",
+    "autonolas.eth",
+]
+TELEGRAM = ["bobacatdao.eth", "ambire.eth", "mdt.eth"]
+GITHUB = ["hbot-prp.eth"]
+
+OTHERS = ["mixin-autonomous-organization.eth", "merchminter.eth", "alphakekai.eth"]
+SPECIAL = {
+    "https://forum.ampleforth.org/t/deploy-unused-dao-ampl-into-rotation-vault": "815",
+    "https://forum.ampleforth.org/t/geyser-refresh-for-q3-2025": "857",
+    "https://forum.ampleforth.org/t/proposal-to-compensate-bill-broker-lps-for-impermanent-loss-during-fee-curve-transition/": "863",
+    "https://forum.nftx.org/t/xip-32-2023-treasury-mgmt-lp-position-experiment": "558",
+    "https://gov.stakedao.org/t/sdir-19-add-apw-ll-to-the-sdt-gauge": "738",
+    "https://gov.perp.fi/t/proposal-for-compensation-for-flash-crash-of-18th-april/419?u=tongnk": "419",
 }

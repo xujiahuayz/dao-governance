@@ -11,7 +11,8 @@ df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
 df_proposals_topics = []
 for _, row in df_proposals.iterrows():
     fid = row["id"]
-    proposal_topics = {"id": fid}
+    body = row["body"]
+    proposal_topics = {"id": fid, "body": body}
     for topic in TOPICS:
         topic_file = f"{PROCESSED_DATA_DIR}/topic/{topic.replace(' ', '_')}/{fid}.json"
         with open(topic_file, "r", encoding="utf-8") as fin:

@@ -296,7 +296,15 @@ def standardized_hhi(counts: list) -> float:
     n = len(counts)
     if n == 1:
         return 1.0
-    return (hhi - (1 / n)) / (1 - (1 / n))
+    std_hhi = (hhi - (1 / n)) / (1 - (1 / n))
+
+    std_hhi = max(std_hhi, 0.0)
+
+    # threshold tiny values
+    if std_hhi < 1e-4:
+        std_hhi = 0.0
+
+    return std_hhi
 
 
 def calc_frequency(choices: list) -> defaultdict:

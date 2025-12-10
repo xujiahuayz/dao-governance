@@ -1,98 +1,134 @@
-"""Script to process discussion data for regression analysis."""
+"""Script to fetch discussion."""
 
-import glob
-import time
+import re
+import json
 import os
+import time
 
 import pandas as pd
+import numpy as np
 import requests
-from tenacity import (
-    retry,
-    stop_after_attempt,
-    wait_exponential,
-    retry_if_exception_type,
-)
 from tqdm import tqdm
 
-from governenv.constants import HEADERS, DATA_DIR
-from governenv.utils import kw_filt
-from scripts.process_event_study import df_proposals_adj
+from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR, SHUT_DOWN, SPECIAL
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-    retry=retry_if_exception_type(Exception),
+os.makedirs(DATA_DIR / "discussion", exist_ok=True)
+
+
+def check_forum_link(link: str) -> bool:
+    """Check if the link is a forum link."""
+
+    return len(parts := link.split("/")) > 3 and parts[3] == "t"
+
+
+def can_int(x) -> bool:
+    """Check if x can be converted to int."""
+    try:
+        int(x)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+# Load proposals data
+df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
+df_proposals = df_proposals[["id", "space", "body", "discussion"]]
+
+# Split proposals with and without discussion links
+df_proposals_w_discussion = df_proposals.loc[~df_proposals["discussion"].isna()].copy()
+df_proposals_wo_discussion = df_proposals.loc[df_proposals["discussion"].isna()].copy()
+
+# Extract discussion links from body for proposals without discussion links
+df_proposals_wo_discussion["discussion"] = df_proposals_wo_discussion["body"].apply(
+    lambda x: (re.findall(r"https?://[^\s)\]>]+(?<![.,])", str(x)))
 )
-def fetch_http_response(url: str, timeout: int = 10) -> str:
-    """
-    Fetches the HTTP response from a given URL.
-    """
-    time.sleep(1)  # to avoid rate limiting
-    response = requests.get(url, headers=HEADERS, timeout=timeout)
+df_proposals_wo_discussion["discussion"] = df_proposals_wo_discussion[
+    "discussion"
+].apply(lambda x: list(set([_ for _ in x if check_forum_link(_)])))
+df_proposals_wo_discussion = df_proposals_wo_discussion.loc[
+    df_proposals_wo_discussion["discussion"].apply(lambda x: len(x) == 1)
+]
+df_proposals_wo_discussion["discussion"] = df_proposals_wo_discussion[
+    "discussion"
+].apply(lambda x: x[0])
 
-    # if the status_code is not 200, raise an error
-    if response.status_code != 200:
-        raise Exception(f"{response.status_code}")
+# Keep only forum links in proposals with discussion links
+df_proposals_w_discussion = df_proposals_w_discussion.loc[
+    df_proposals_w_discussion["discussion"].apply(check_forum_link)
+]
 
-    return response.text
-
-
-if __name__ == "__main__":
-
-    # Load the proposal data with discussion info
-    df_proposals_adj = df_proposals_adj.loc[
-        df_proposals_adj["have_discussion"] == True, ["id", "discussion"]
-    ]
-
-    # Apply keyword filtering on discussion URLs
-    df_proposals_adj["discussion_kw_filtered"] = df_proposals_adj["discussion"].apply(
-        kw_filt
+# Combine proposals with and without discussion links
+df_proposals = pd.concat(
+    [df_proposals_w_discussion, df_proposals_wo_discussion], ignore_index=True
+)
+df_proposals["discussion_id"] = df_proposals["discussion"].apply(
+    lambda x: (
+        x.split("/")[5]
+        if len(x.split("/")) >= 6 and can_int(x.split("/")[5])
+        else np.nan
     )
-    df_proposals_discuss = df_proposals_adj.loc[
-        df_proposals_adj["discussion_kw_filtered"] == True
-    ]
+)
+df_proposals["discussion_root"] = df_proposals["discussion"].apply(
+    lambda x: x.split("/")[2]
+)
 
-    os.makedirs(DATA_DIR / "discussion", exist_ok=True)
-    finished_files = glob.glob(str(DATA_DIR / "discussion" / "*.html"))
-    finished_ids = [file.split("/")[-1].replace(".html", "") for file in finished_files]
+for url, discussion_id in SPECIAL.items():
+    df_proposals.loc[df_proposals["discussion"] == url, "discussion_id"] = discussion_id
 
-    print(len(finished_ids))
+df_proposals = df_proposals.loc[
+    (~df_proposals["discussion_id"].isna()) & (~df_proposals["space"].isin(SHUT_DOWN))
+].copy()
 
-    # random shuffle the dataframe rows
-    df_proposals_discuss = df_proposals_discuss.sample(
-        frac=1, random_state=42
-    ).reset_index(drop=True)
+df_proposals.to_csv(PROCESSED_DATA_DIR / "proposals_discussion.csv", index=False)
 
-    # Fetch and save the discussion content for each proposal
-    access_deny = {
-        "id": [],
-        "url": [],
-    }
+# Fetch balancer forum discussion
+for space in df_proposals["space"].unique():
+    os.makedirs(DATA_DIR / "discussion" / space, exist_ok=True)
 
-    for _, row in tqdm(
-        df_proposals_discuss.iterrows(), total=len(df_proposals_discuss)
+    if space in SHUT_DOWN:
+        print(f"Skipping {space} as the forum is shut down.")
+        continue
+
+    for idx, row in tqdm(
+        df_proposals.loc[df_proposals["space"] == space].iterrows(),
+        total=len(df_proposals.loc[df_proposals["space"] == space]),
+        desc=f"Fetching discussions for {space}",
     ):
-        proposal_id = row["id"]
-        discussion_url = row["discussion"]
-        if str(proposal_id) in finished_ids:
+        header = row["discussion_root"]
+
+        # Handle special cases
+        if row["discussion"] in SPECIAL:
+            discussion_id = SPECIAL[row["discussion"]]
+        else:
+            discussion_id = row["discussion"].split("/")[5]
+
+        # Fetch discussion JSON
+        file_path = DATA_DIR / "discussion" / space / f"{discussion_id}.json"
+        if file_path.exists():
             continue
+        time.sleep(5)
+
+        URL = f"https://{header}/t/{discussion_id}.json?track_visit=true&forceLoad=true"
         try:
-            content = fetch_http_response(discussion_url)
-            # check if content is empty
-            if not content:
-                raise Exception(f"Empty content from {discussion_url}")
-
-            with open(
-                DATA_DIR / "discussion" / f"{proposal_id}.html",
-                "w",
-                encoding="utf-8",
-            ) as f:
-                f.write(content)
+            res = requests.get(URL, timeout=10)
         except Exception as e:
-            print(f"Failed to fetch discussion for url {discussion_url}: {e}")
-            if "403" in str(e):
-                access_deny["id"].append(proposal_id)
-                access_deny["url"].append(discussion_url)
+            print(
+                f"Error fetching discussion {discussion_id} for proposal {row['id']}: {e}"
+            )
+            continue
 
-    access_deny_df = pd.DataFrame(access_deny)
+        if res.status_code != 200:
+            print(
+                f"Failed to fetch discussion {discussion_id} for proposal {row['id']}"
+            )
+            continue
+        res = res.json()
+
+        # Check if discussion exists
+        if "post_stream" not in res:
+            print(f"Discussion {discussion_id} not found, skipping.")
+            continue
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(res, f, ensure_ascii=False, indent=4)

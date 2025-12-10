@@ -1,23 +1,25 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{4}{c}}
+\begin{tabular}{l*{5}{c}}
 \toprule
-                    &\multicolumn{4}{c}{CAR[-5,5]}                                                          \\\cmidrule(lr){2-5}
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+                    &\multicolumn{5}{c}{CAR[-5,5]}                                                                                \\\cmidrule(lr){2-6}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         \\
 \midrule
-user_incentive_increase&       0.001         &                     &                     &                     \\
-                    &      (0.01)         &                     &                     &                     \\
-treasury_expenditure&                     &      -0.018         &                     &                     \\
-                    &                     &      (0.01)         &                     &                     \\
-voting_mechanism_change&                     &                     &       0.037\sym{*}  &                     \\
-                    &                     &                     &      (0.02)         &                     \\
-protocol_security   &                     &                     &                     &      -0.021\sym{*}  \\
-                    &                     &                     &                     &      (0.01)         \\
+yield_increase      &      -0.016         &                     &                     &                     &                     \\
+                    &      (0.02)         &                     &                     &                     &                     \\
+treasury_expenditure&                     &      -0.018         &                     &                     &                     \\
+                    &                     &      (0.01)         &                     &                     &                     \\
+voting_mechanism_change&                     &                     &       0.037\sym{*}  &                     &                     \\
+                    &                     &                     &      (0.02)         &                     &                     \\
+protocol_security   &                     &                     &                     &      -0.021\sym{*}  &                     \\
+                    &                     &                     &                     &      (0.01)         &                     \\
+tokenomics          &                     &                     &                     &                     &      -0.008         \\
+                    &                     &                     &                     &                     &      (0.01)         \\
 \midrule
-Token FE            &           Y         &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         \\
-Observations        &       1,640         &       1,640         &       1,640         &       1,640         \\
-Adjusted R²         &       0.198         &       0.200         &       0.199         &       0.199         \\
+Token FE            &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Observations        &       1,640         &       1,640         &       1,640         &       1,640         &       1,640         \\
+Adjusted R²         &       0.199         &       0.200         &       0.199         &       0.199         &       0.198         \\
 \bottomrule
 \end{tabular}
 }

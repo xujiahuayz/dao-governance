@@ -10,6 +10,7 @@ from governenv.constants import (
     EST_LOWER,
     EST_UPPER,
     TOPICS,
+    CRITERIA,
 )
 
 VOTE_CHAR = [
@@ -27,6 +28,16 @@ PROPOSAL_CHAR = [
     "quadratic",
     "weighted",
     "ranked_choice",
+]
+DISCUSSION_CHAR = [
+    *CRITERIA,
+    "reply_number",
+    "view_number",
+    "like_number",
+    "post_number",
+    "hhi_post_number",
+    "hhi_word_count",
+    "discussion_created",
 ]
 
 TOPIC_COLUMNS = [topic.replace(" ", "_") for topic in TOPICS]
@@ -50,6 +61,11 @@ df_proposals_char = pd.read_csv(PROCESSED_DATA_DIR / "proposals_char.csv")[
 df_proposals_topic = pd.read_csv(PROCESSED_DATA_DIR / "proposals_topic.csv")[
     ["id"] + TOPIC_COLUMNS
 ]
+
+# Load discussion characteristics
+df_proposals_discussion = pd.read_csv(
+    PROCESSED_DATA_DIR / "proposals_discussion_char.csv"
+)[["id"] + DISCUSSION_CHAR]
 
 # Proposal created and proposal end
 for stage in ["created", "end"]:
@@ -111,7 +127,12 @@ for stage in ["created", "end"]:
         panel.append(event_window)
 
     panel = pd.concat(panel, ignore_index=True)
-    for df in [df_voter, df_proposals_char, df_proposals_topic]:
+    for df in [
+        df_voter,
+        df_proposals_char,
+        df_proposals_topic,
+        df_proposals_discussion,
+    ]:
         panel = panel.merge(df, on="id", how="left")
 
     panel = panel[
@@ -119,6 +140,7 @@ for stage in ["created", "end"]:
         + VOTE_CHAR
         + PROPOSAL_CHAR
         + TOPIC_COLUMNS
+        + DISCUSSION_CHAR
     ]
     panel.to_csv(
         PROCESSED_DATA_DIR / f"event_study_panel_{stage}.csv",

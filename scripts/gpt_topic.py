@@ -24,6 +24,11 @@ for _, row in df_proposals.iterrows():
 for topic in TOPICS:
     os.makedirs(f"{PROCESSED_DATA_DIR}/topic/{topic.replace(" ", "_")}", exist_ok=True)
     for fid, proposal in tqdm(proposal_dict.items()):
+        if os.path.exists(
+            f"{PROCESSED_DATA_DIR}/topic/{topic.replace(' ', '_')}/{fid}.json"
+        ):
+            continue
+
         res = chat_gpt(
             message=TOPIC_PROMPT.format(topic=topic, proposal=proposal),
             instruction=TOPIC_INSTRUCT,

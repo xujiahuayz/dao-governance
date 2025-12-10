@@ -29,7 +29,7 @@ def load_whale(token_address: str, block: int, cex_dex: set) -> dict:
         holding = json.load(f)
 
         # filter out cex
-        holding = {k: v for k, v in holding.items() if k not in cex_dex}
+        holding = {k: v["holding"] for k, v in holding.items() if k not in cex_dex}
 
         # isolate the whales and non-whales
         all_holding = sum(holding.values())
@@ -198,10 +198,24 @@ def agg_router(g: pd.DataFrame, tol: float = 1) -> pd.DataFrame:
 if __name__ == "__main__":
 
     # load the proposal data with block and smart contract info
-    df_proposals_adj = pd.read_csv(
-        PROCESSED_DATA_DIR / "proposals_adjusted_with_sc_block.csv"
+    df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
+    for col in ["address", "scores"]:
+        df_proposals[col] = df_proposals[col].apply(literal_eval)
+
+    # sort the address list for easier grouping
+    df_proposals["addresses"] = df_proposals["address"].apply(
+        lambda x: sorted([_["address"] for _ in x])
     )
-    df_proposals_adj["scores"] = df_proposals_adj["scores"].apply(literal_eval)
+
+    # explode the dataframe by address
+    df_address = []
+    for idx, row in df_proposals.iterrows():
+        for addr in row["addresses"]:
+            address_row = row.copy()
+            address_row["address"] = addr
+            df_address.append(address_row)
+
+    df_proposals = pd.DataFrame(df_address)
 
     # load the cex and dex set
     with open(PROCESSED_DATA_DIR / "cex_dex.pkl", "rb") as f:
@@ -210,7 +224,7 @@ if __name__ == "__main__":
     flow = []
 
     for address, group in tqdm(
-        df_proposals_adj.groupby("address"), total=df_proposals_adj["address"].nunique()
+        df_proposals.groupby("address"), total=df_proposals["address"].nunique()
     ):
         # load the transfer data
         df_transfer = pd.read_csv(PROCESSED_DATA_DIR / "transfer" / f"{address}.csv")
@@ -225,8 +239,6 @@ if __name__ == "__main__":
                 # get the block range for the stage
                 lower_block = proposal[f"{stage}_ts_-5d_block"]
                 upper_block = proposal[f"{stage}_ts_+5d_block"]
-                lower_price = proposal[f"{stage}_-5d_price"]
-                upper_price = proposal[f"{stage}_+5d_price"]
 
                 # get the transfer data in the block range
                 df_stage = df_transfer.loc[
@@ -292,6 +304,7 @@ if __name__ == "__main__":
                     .reset_index()
                 )
                 df_stage_agg["proposal_id"] = proposal["id"]
+                df_stage_agg["proposal_address"] = address
                 df_stage_agg["stage"] = stage
 
                 flow.append(df_stage_agg)
@@ -299,57 +312,57 @@ if __name__ == "__main__":
     df_flow = pd.concat(flow, ignore_index=True)
     df_flow.to_csv(PROCESSED_DATA_DIR / "transfer_characteristics.csv", index=False)
 
-    # pick the directed edges you care about
-    EDGE_LIST = [
-        ("cex_dex", "whale"),
-        ("whale", "cex_dex"),
-        ("cex_dex", "non_whale"),
-        ("non_whale", "cex_dex"),
-    ]
-    edge_df = pd.DataFrame(EDGE_LIST, columns=["identity_from", "identity_to"])
+    # # pick the directed edges you care about
+    # EDGE_LIST = [
+    #     ("cex_dex", "whale"),
+    #     ("whale", "cex_dex"),
+    #     ("cex_dex", "non_whale"),
+    #     ("non_whale", "cex_dex"),
+    # ]
+    # edge_df = pd.DataFrame(EDGE_LIST, columns=["identity_from", "identity_to"])
 
-    # Filter to just the edges of interest
-    df_txn0 = df_flow.merge(edge_df, on=["identity_from", "identity_to"], how="inner")
+    # # Filter to just the edges of interest
+    # df_txn0 = df_flow.merge(edge_df, on=["identity_from", "identity_to"], how="inner")
 
-    # Collapse duplicates just in case
-    df_txn0 = (
-        df_txn0.groupby(["proposal_id", "stage", "identity_from", "identity_to"])[
-            "amount"
-        ]
-        .sum()
-        .reset_index()
-    )
+    # # Collapse duplicates just in case
+    # df_txn0 = (
+    #     df_txn0.groupby(["proposal_id", "stage", "identity_from", "identity_to"])[
+    #         "amount"
+    #     ]
+    #     .sum()
+    #     .reset_index()
+    # )
 
-    # cartesian-product to "complete the edge space" with zeros
-    keys = df_txn0[["proposal_id", "stage"]].drop_duplicates()
+    # # cartesian-product to "complete the edge space" with zeros
+    # keys = df_txn0[["proposal_id", "stage"]].drop_duplicates()
 
-    # cross join (works in pandas>=1.2 using merge with a dummy key)
-    keys["key"] = 1
-    edge_df["key"] = 1
-    full = keys.merge(edge_df, on="key", how="outer").drop(columns="key")
+    # # cross join (works in pandas>=1.2 using merge with a dummy key)
+    # keys["key"] = 1
+    # edge_df["key"] = 1
+    # full = keys.merge(edge_df, on="key", how="outer").drop(columns="key")
 
-    # left-join the actual amounts; fill missing with 0
-    full = full.merge(
-        df_txn0, on=["proposal_id", "stage", "identity_from", "identity_to"], how="left"
-    ).fillna({"amount": 0.0})
+    # # left-join the actual amounts; fill missing with 0
+    # full = full.merge(
+    #     df_txn0, on=["proposal_id", "stage", "identity_from", "identity_to"], how="left"
+    # ).fillna({"amount": 0.0})
 
-    # compute per-(proposal, stage) totals and percentages (safe with zeros)
-    full["amount_total"] = full.groupby(["proposal_id", "stage"])["amount"].transform(
-        "sum"
-    )
-    # avoid division by zero: if a proposal-stage has no flow in your filtered edges, keep pct=0
-    full["amount_pct"] = 0.0
-    mask = full["amount_total"] > 0
-    full.loc[mask, "amount_pct"] = (
-        full.loc[mask, "amount"] / full.loc[mask, "amount_total"]
-    )
+    # # compute per-(proposal, stage) totals and percentages (safe with zeros)
+    # full["amount_total"] = full.groupby(["proposal_id", "stage"])["amount"].transform(
+    #     "sum"
+    # )
+    # # avoid division by zero: if a proposal-stage has no flow in your filtered edges, keep pct=0
+    # full["amount_pct"] = 0.0
+    # mask = full["amount_total"] > 0
+    # full.loc[mask, "amount_pct"] = (
+    #     full.loc[mask, "amount"] / full.loc[mask, "amount_total"]
+    # )
 
-    df_mean_unweighted = (
-        full.groupby(["stage", "identity_from", "identity_to"])["amount_pct"]
-        .mean()
-        .reset_index()
-    )
-    df_mean_unweighted.to_csv(
-        PROCESSED_DATA_DIR / "txn.csv",
-        index=False,
-    )
+    # df_mean_unweighted = (
+    #     full.groupby(["stage", "identity_from", "identity_to"])["amount_pct"]
+    #     .mean()
+    #     .reset_index()
+    # )
+    # df_mean_unweighted.to_csv(
+    #     PROCESSED_DATA_DIR / "txn.csv",
+    #     index=False,
+    # )

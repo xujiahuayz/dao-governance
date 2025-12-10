@@ -1,0 +1,23 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                    &\multicolumn{1}{c}{${\it Participation}^{Small}_{i,t}$}&\multicolumn{1}{c}{${\it Participation}^{Whale}_{i,t}$}&\multicolumn{1}{c}{CAR[-5,5]}\\\cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
+\midrule
+${\it Support}_{i,t}$&      -0.003         &      -0.012         &      -0.001         \\
+                    &      (0.00)         &      (0.03)         &      (0.01)         \\
+${\it Professionalism}_{i,t}$&      -0.005         &      -0.021         &       0.140\sym{**} \\
+                    &      (0.00)         &      (0.07)         &      (0.05)         \\
+${\it Unanimity}_{i,t}$&      -0.001         &      -0.014         &      -0.030\sym{*}  \\
+                    &      (0.00)         &      (0.02)         &      (0.02)         \\
+${\it Objectiveness}_{i,t}$&       0.005         &       0.039\sym{*}  &      -0.044\sym{***}\\
+                    &      (0.00)         &      (0.02)         &      (0.01)         \\
+\midrule
+Token FE            &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         \\
+Observations        &         847         &         843         &         708         \\
+Adjusted R²         &       0.733         &       0.735         &       0.051         \\
+\bottomrule
+\end{tabular}
+}

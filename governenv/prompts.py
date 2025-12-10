@@ -11,54 +11,35 @@ Proposal:
 (End of Proposal)
 """
 
-IDF_PROMPT = """Given the following contents extracted from the website HTML or TXT, determine \
-whether it satisfies the following criteria.
+DISCUSSION_PROMPT = """You are given a DAO governance proposal ("Post") and its \
+associated discussion thread ("Discussion"). Your task is to evaluate the \
+**Discussion** according to the following criterion: **{criterion}**.
 
-Criteria:
-1. The content of the website is a forum discussion.
-2. The forum discussion has at least one response.
-(End of Criteria)
+Instructions:
+- The Post and Discussion entries are numbered.
+- If a discussion entry is a reply to another entry, this is indicated in parentheses (e.g., "reply to 5").
+- User roles such as [moderator], [admin], or [staff] may appear in square brackets.
+- Focus your evaluation strictly on the Discussion, not on the Post itself.
 
-Contents:
-{content}
-(End of Contents)
+Post:
+{post}
+(End of Post)
+
+Discussion:
+{discussion}
+(End of Discussion)
 """
 
-EVAL_PROMPT = """Given the following contents extracted from the webpage \
-(HTML or plain text), evaluate the *discussion portion* (i.e., replies, \
-comments, and exchanges between participants, not the proposal text itself):
-
-Criteria:
-1. Support
-2. Professionalism
-3. Objectiveness
-4. Unanimity
-(End of Criteria)
-
-Respond only with "Yes" or "No" for each criterion.
-
-Contents:
-{content}
-(End of Contents)
-"""
 
 # Instructions
 TOPIC_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
 Your response should follow this format: '{"result": <true/false>}'."""
 
-IDF_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
-Your output should follow this format: '{"result": <true/false>}'."""
+DISCUSSION_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
+Your response should follow this format: '{"result": <true/false>}'."""
 
-EVAL_INSTRUCT = """You are an expert in decentralized autonomous organizations (DAOs). \
-Your output format should be as follows:
-
-Support: {Yes/No}
-Professionalism: {Yes/No}
-Objectiveness: {Yes/No}
-Unanimity: {Yes/No}."""
 
 # JSON Schemas
-
 JSON_SCHEMA = {
     "name": "dao",
     "schema": {

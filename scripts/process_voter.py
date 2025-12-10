@@ -31,6 +31,7 @@ for col in ["address", "choices", "scores", "scores_by_strategy"]:
 df_votes = pd.read_csv(PROCESSED_DATA_DIR / "votes.csv")
 df_votes["voter"] = df_votes["voter"].str.lower()
 
+df_proposal_voter = {"id": [], "space": [], "created": [], "voter": [], "label": []}
 df_proposals_participation = []
 for _, row in tqdm(df_proposals.iterrows(), total=len(df_proposals)):
     # Initialize proposal participation data
@@ -73,7 +74,7 @@ for _, row in tqdm(df_proposals.iterrows(), total=len(df_proposals)):
         # Load the holding data
         with open(
             PROCESSED_DATA_DIR
-            / "holding_dep"
+            / "holding"
             / f"{token_address}"
             / f"{token_address}_{creation_block}.json",
             "r",
@@ -179,6 +180,13 @@ for _, row in tqdm(df_proposals.iterrows(), total=len(df_proposals)):
         start_ts,
         end_ts,
     )
+
+    for voter, vote_info in voting.items():
+        df_proposal_voter["id"].append(proposal_id)
+        df_proposal_voter["space"].append(space)
+        df_proposal_voter["created"].append(pd.to_datetime(row["created_ts"], unit="s"))
+        df_proposal_voter["voter"].append(voter)
+        df_proposal_voter["label"].append(vote_info["label"])
 
     # Skip proposals with unknown voters
     if len(unknown_voters) > 0:
@@ -491,3 +499,6 @@ for group in ["non_whale", "whale"]:
 df_proposals_participation.to_csv(
     PROCESSED_DATA_DIR / "proposals_voter.csv", index=False
 )
+
+df_proposals_voter = pd.DataFrame(df_proposal_voter)
+df_proposals_voter.to_csv(PROCESSED_DATA_DIR / "proposal_voter_label.csv", index=False)

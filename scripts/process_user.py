@@ -11,13 +11,14 @@ from tqdm import tqdm
 from governenv.constants import DATA_DIR, PROCESSED_DATA_DIR
 
 
+# Wrong labels to remove or change
 REMOVE = {
-    "synthereum.eth": "uniswap",
-    "pagedao.eth": "uniswap",
-    "pickle.eth": "uniswap",
-    "primexyz.eth": "balancer",
+    "synthereum.eth": ["uniswap"],
+    "pagedao.eth": ["uniswap"],
+    "pickle.eth": ["uniswap"],
+    "primexyz.eth": ["balancer"],
+    "blackpoolhq.eth": ["blackpool", "staked bpt"],
 }
-
 CHANGE = {"timelessfi.eth": "timeless", "freerossdao.eth": "freerossdao"}
 
 df_proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
@@ -38,7 +39,7 @@ for space, addr_list in tqdm(space_address.items()):
     for addr in addr_list:
         label_row = df_label.loc[df_label["ADDRESS"] == addr]
         if not label_row.empty:
-            if (space in REMOVE) and (label_row["LABEL"].values[0] == REMOVE[space]):
+            if (space in REMOVE) and (label_row["LABEL"].values[0] in REMOVE[space]):
                 continue
             if space in CHANGE:
                 space_label_dict[space].add(CHANGE[space])
