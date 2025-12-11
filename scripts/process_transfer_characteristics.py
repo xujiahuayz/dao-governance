@@ -312,57 +312,65 @@ if __name__ == "__main__":
     df_flow = pd.concat(flow, ignore_index=True)
     df_flow.to_csv(PROCESSED_DATA_DIR / "transfer_characteristics.csv", index=False)
 
-    # # pick the directed edges you care about
-    # EDGE_LIST = [
-    #     ("cex_dex", "whale"),
-    #     ("whale", "cex_dex"),
-    #     ("cex_dex", "non_whale"),
-    #     ("non_whale", "cex_dex"),
-    # ]
-    # edge_df = pd.DataFrame(EDGE_LIST, columns=["identity_from", "identity_to"])
+    df_flow = (
+        df_flow.groupby(["stage", "identity_from", "identity_to", "proposal_id"])[
+            "amount"
+        ]
+        .sum()
+        .reset_index()
+    )
 
-    # # Filter to just the edges of interest
-    # df_txn0 = df_flow.merge(edge_df, on=["identity_from", "identity_to"], how="inner")
+    # pick the directed edges you care about
+    EDGE_LIST = [
+        ("cex_dex", "whale"),
+        ("whale", "cex_dex"),
+        ("cex_dex", "non_whale"),
+        ("non_whale", "cex_dex"),
+    ]
+    edge_df = pd.DataFrame(EDGE_LIST, columns=["identity_from", "identity_to"])
 
-    # # Collapse duplicates just in case
-    # df_txn0 = (
-    #     df_txn0.groupby(["proposal_id", "stage", "identity_from", "identity_to"])[
-    #         "amount"
-    #     ]
-    #     .sum()
-    #     .reset_index()
-    # )
+    # Filter to just the edges of interest
+    df_txn0 = df_flow.merge(edge_df, on=["identity_from", "identity_to"], how="inner")
 
-    # # cartesian-product to "complete the edge space" with zeros
-    # keys = df_txn0[["proposal_id", "stage"]].drop_duplicates()
+    # Collapse duplicates just in case
+    df_txn0 = (
+        df_txn0.groupby(["proposal_id", "stage", "identity_from", "identity_to"])[
+            "amount"
+        ]
+        .sum()
+        .reset_index()
+    )
 
-    # # cross join (works in pandas>=1.2 using merge with a dummy key)
-    # keys["key"] = 1
-    # edge_df["key"] = 1
-    # full = keys.merge(edge_df, on="key", how="outer").drop(columns="key")
+    # cartesian-product to "complete the edge space" with zeros
+    keys = df_txn0[["proposal_id", "stage"]].drop_duplicates()
 
-    # # left-join the actual amounts; fill missing with 0
-    # full = full.merge(
-    #     df_txn0, on=["proposal_id", "stage", "identity_from", "identity_to"], how="left"
-    # ).fillna({"amount": 0.0})
+    # cross join (works in pandas>=1.2 using merge with a dummy key)
+    keys["key"] = 1
+    edge_df["key"] = 1
+    full = keys.merge(edge_df, on="key", how="outer").drop(columns="key")
 
-    # # compute per-(proposal, stage) totals and percentages (safe with zeros)
-    # full["amount_total"] = full.groupby(["proposal_id", "stage"])["amount"].transform(
-    #     "sum"
-    # )
-    # # avoid division by zero: if a proposal-stage has no flow in your filtered edges, keep pct=0
-    # full["amount_pct"] = 0.0
-    # mask = full["amount_total"] > 0
-    # full.loc[mask, "amount_pct"] = (
-    #     full.loc[mask, "amount"] / full.loc[mask, "amount_total"]
-    # )
+    # left-join the actual amounts; fill missing with 0
+    full = full.merge(
+        df_txn0, on=["proposal_id", "stage", "identity_from", "identity_to"], how="left"
+    ).fillna({"amount": 0.0})
 
-    # df_mean_unweighted = (
-    #     full.groupby(["stage", "identity_from", "identity_to"])["amount_pct"]
-    #     .mean()
-    #     .reset_index()
-    # )
-    # df_mean_unweighted.to_csv(
-    #     PROCESSED_DATA_DIR / "txn.csv",
-    #     index=False,
-    # )
+    # compute per-(proposal, stage) totals and percentages (safe with zeros)
+    full["amount_total"] = full.groupby(["proposal_id", "stage"])["amount"].transform(
+        "sum"
+    )
+    # avoid division by zero: if a proposal-stage has no flow in your filtered edges, keep pct=0
+    full["amount_pct"] = 0.0
+    mask = full["amount_total"] > 0
+    full.loc[mask, "amount_pct"] = (
+        full.loc[mask, "amount"] / full.loc[mask, "amount_total"]
+    )
+
+    df_mean_unweighted = (
+        full.groupby(["stage", "identity_from", "identity_to"])["amount_pct"]
+        .mean()
+        .reset_index()
+    )
+    df_mean_unweighted.to_csv(
+        PROCESSED_DATA_DIR / "txn.csv",
+        index=False,
+    )

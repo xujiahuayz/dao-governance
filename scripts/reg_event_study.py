@@ -30,7 +30,7 @@ PROPOSAL_CHAR = [
     "ranked_choice",
 ]
 DISCUSSION_CHAR = [
-    *CRITERIA,
+    *[_.lower().replace(" ", "_") for _ in CRITERIA],
     "reply_number",
     "view_number",
     "like_number",
@@ -136,7 +136,7 @@ for stage in ["created", "end"]:
         panel = panel.merge(df, on="id", how="left")
 
     panel = panel[
-        ["gecko_id", "space", "date", "index", "car"]
+        ["id", "gecko_id", "space", "date", "index", "car"]
         + VOTE_CHAR
         + PROPOSAL_CHAR
         + TOPIC_COLUMNS
