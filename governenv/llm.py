@@ -12,24 +12,47 @@ from governenv.settings import OPENAI_API_KEY
 
 
 def build_batch(
-    custom_id: str,
+    custom_idx: str,
     user_msg: str,
     system_instruction: str,
     json_schema: dict,
-    model: str = "gpt-4.1",
-    temperature: Optional[float] = 0,
+    image_url: Optional[str] = None,
+    few_shot_examples: Optional[list] = None,
+    model: str = "gpt-4o",
 ) -> dict:
-    """
-    Function to build a batch for OpenAI API
-    """
+    """Function to construct a valid GPT-4o batch request with image and schema."""
 
+    # system instruction
     messages = [
         {"role": "system", "content": system_instruction},
-        {"role": "user", "content": user_msg},
     ]
 
-    batch_item = {
-        "custom_id": custom_id,
+    # few shot examples
+    if few_shot_examples:
+        messages = messages + few_shot_examples
+
+    # user message with image URL if provided
+    if image_url:
+        messages += [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": user_msg},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": image_url, "detail": "high"},
+                    },
+                ],
+            },
+        ]
+    else:
+        # user message without image URL
+        messages += [
+            {"role": "user", "content": user_msg},
+        ]
+
+    return {
+        "custom_id": custom_idx,
         "method": "POST",
         "url": "/v1/chat/completions",
         "body": {
@@ -39,13 +62,11 @@ def build_batch(
                 "type": "json_schema",
                 "json_schema": json_schema,
             },
+            "temperature": 0,
+            "logprobs": True,
+            "top_logprobs": 2,
         },
     }
-
-    if temperature is not None:
-        batch_item["body"]["temperature"] = temperature
-
-    return batch_item
 
 
 class ChatGPT:
@@ -55,7 +76,7 @@ class ChatGPT:
 
     def __init__(
         self,
-        model: str = "gpt-4.1",
+        model: str = "gpt-4o",
         api_key: str | None = OPENAI_API_KEY,
     ):
         self.client = OpenAI(api_key=api_key)

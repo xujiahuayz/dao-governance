@@ -161,9 +161,6 @@ def query_id(
 
                     # Update last_created timestamp
                     last_created = rows[-1][time_var]
-                    print(
-                        f"Fetched {datetime.datetime.fromtimestamp(last_created)} for {idx}"
-                    )
                     if length == batch_size:
                         # Remove the last_created update from the write operation
                         rows = [row for row in rows if row[time_var] != last_created]

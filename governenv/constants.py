@@ -1,15 +1,17 @@
 """Constants."""
 
+import os
+
 from governenv.settings import (
     PROJECT_ROOT,
     SNAPSHOT_API_KEY,
     INFURA_API_KEY,
+    DATA_DIR,
+    PROCESSED_DATA_DIR,
 )
 
 # Directories and File Paths
-DATA_DIR = PROJECT_ROOT / "data"
 ABI_DIR = PROJECT_ROOT / "abi"
-PROCESSED_DATA_DIR = PROJECT_ROOT / "processed_data"
 FIGURE_DIR = PROJECT_ROOT / "figures"
 SNAPSHOT_PATH = DATA_DIR / "snapshot.jsonl.gz"
 SNAPSHOT_PATH_PROPOSALS = DATA_DIR / "snapshot_proposals.jsonl.gz"

@@ -25,7 +25,8 @@ class DefiLlama:
     def __init__(self):
         self.protocols = self._get_protocols()
         self.fee_protocols = self._get_fee_protocols()
-        self.user_protocols = self._get_user_protocols()
+        # self.user_protocols = self._get_user_protocols()
+        self.user_protocols = {}
 
     # Method to fetch list
     def _get_protocols(
@@ -220,8 +221,12 @@ class DefiLlama:
         result = {"timestamp": None, "height": None}
 
         while length == 0:
+            # result = requests.get(
+            #     f"{self.PRO_URL}/{DEFILLAMA_API_KEY}/coins/block/ethereum/{timestamp}",
+            #     timeout=60,
+            # ).json()
             result = requests.get(
-                f"{self.PRO_URL}/{DEFILLAMA_API_KEY}/coins/block/ethereum/{timestamp}",
+                f"https://coins.llama.fi/block/ethereum/{timestamp}",
                 timeout=60,
             ).json()
             length = len(result)

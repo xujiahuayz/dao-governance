@@ -78,128 +78,130 @@ export $(cat .env | xargs)
 
 ## Data Feching
 
-### 1. fetch snapshot spaces data
+### fetch snapshot space, proposal, and network data
 
 ```
-python scripts/fetch_spaces.py
+python scripts/fetch/fetch_proposals.py
 ```
 
-### 2. fetch snapshot proposals data
+- Output: 
+  - data/snapshot.json.gz
+  - data/snapshot_spaces.json.gz
+  - data/snapshot_networks.json.gz
+
+### fetch coingecko data
 
 ```
-python scripts/fetch_proposals.py
+python scripts/fetch/fetch_coingecko.py
 ```
+- Output:
+  - data/coingecko_coins.csv
+  - data/coingecko/coins/*.json
+  - data/coingecko/market_charts/*.json
 
-### 3. fetch coingecko data
 
-```
-python scripts/fetch_coingecko.py
-```
-
-### 4. fetch defillama data
-
-```
-python scripts/fetch_defillama.py
-```
-
-### 5. fetch risk-free rate
+### fetch risk-free rate
 
 ```
-Python scripts/fetch_rf
+python scripts/fetch/fetch_rf.py
 ```
+- Output: 
+  - data/rf.csv
 
-- Output: data / rf.csv
+### fetch ethereum smart contract and label data from snowflake flipside
 
-### 6. fetch ethereum smart contract data
+- Output: 
+  - data/smart_contracts_eth.json.gz
+  - data/labels_smart_contracts_eth.json.gz
 
-- Run following command is snowflake
+### fetch on-chain delegation
 ```
-COPY INTO @~/eth_contract/
-FROM (
-  SELECT *
-  FROM ETHEREUM_ONCHAIN_CORE_DATA.CORE.DIM_CONTRACTS
-)
-FILE_FORMAT = (TYPE = PARQUET COMPRESSION = SNAPPY)
-SINGLE = FALSE
-MAX_FILE_SIZE = 536870912   -- ~512 MB compressed
-OVERWRITE = TRUE;
-
-LIST @~/eth_contract/;
+python scripts/fetch/fetch_delegations_onchain.py
 ```
+- Output:
+  - data/snapshot_set_delegation_onchain.jsonl.gz
+  - data/snapshot_clear_delegation_onchain.jsonl.gz
+  
+## Dataset Processing and Merging
 
-- Unload the data
-```
-GET @~/eth_contract/ file://./data/ethereum/contract PATTERN='.*[.]parquet' PARALLEL=7;
-```
-
-## General Data Processing
-
-### 1. merge proposals
+### merge proposals
 
 ```
-python script/merge_proposals
+python scripts/process/merge_proposals.py
 ```
 
-- Output: processed_data / proposals_spaces.csv
+- Output: 
+  - processed_data/proposals_spaces.csv
 
-### 2. process coingecko market charts and market index
-
-```
-python script/process_charts.py
-```
-
-- Output: processed_data / coingecko_charts.csv
-
-#### 3. merge spaces data with Coingecko data
+### process coingecko market charts and market index
 
 ```
-python scripts / merge_spaces_gecko.py
+python scripts/process/process_charts.py
 ```
 
-- Output: processed_data / spaces_gecko.csv
+- Output: 
+  - processed_data/coingecko_charts.csv
 
-### 4. process coingecko id Ethereum smart contract
+#### merge spaces data with Coingecko data
 
 ```
-python script/process_smart_contract.py
+python scripts/process/merge_spaces_gecko.py
 ```
 
-- Output: processed_data / coingecko_id_smart_contract_eth.json.gz
+- Output: 
+  - processed_data/spaces_gecko.csv
+
+### process coingecko id Ethereum smart contract
+
+```
+python scripts/process/process_smart_contract.py
+```
+
+- Output: 
+  - processed_data/coingecko_id_smart_contract_eth.json.gz
 
 ## Event Study
 
 ### CAR Processing
 
-#### 1. process event study CAR
+#### process event study CAR
 
 ```
-python scripts / process_event_study_car
+python scripts/process/process_event_study.py
 ```
 
-### Vote Characteristics Regression
+- Output: 
+  - processed_data/proposals_event_study.csv
 
-#### 1. fetch block timestamp
-
-```
-python scripts/fetch_block_ts.py
-```
-
-- Output: data / block_ts.jsonl.gz
-
-#### 2. process_votes
+#### process smart contracts
 
 ```
-python scripts / process_votes.py
-```
-
-#### 3. process smart contracts
-
-```
-python scripts / process_proposals_with_sc.py
+python scripts/process/process_proposals_with_sc.py
 ```
 - Output: processed_data / proposals_with_sc.csv
 
-#### 4. Convert proposal timestamp to block in order to merge the holding
+#### fetch transfers
+
+```
+python scripts/fetch/fetch_transfers.py
+```
+- Output: data/transfer/*/*.csv
+
+#### process transfer
+```
+python scripts/process/process_transfers.py
+```
+- Output: processed_data/transfer/*.csv
+
+### Vote Characteristics Regression
+
+#### process_votes
+
+```
+python scripts/process/process_votes.py
+```
+
+#### Convert proposal timestamp to block in order to merge the holding
 
 ```
 python scripts / fetch_ts_block.py

@@ -27,7 +27,7 @@ dependencies = [
     "dotenv",
     "web3",
     "stata_setup",
-    "sklearn",
+    "scikit-learn",
     "plotly",
     "nbformat",
     "kaleido",
