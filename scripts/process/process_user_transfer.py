@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 import pandas as pd
 import numpy as np
-from governenv.constant import DATA_PATH, PROCESSED_DATA_PATH
+from governenv.constants import DATA_PATH, PROCESSED_DATA_PATH
 
 INPUT_GLOB = f"{DATA_PATH}/dao/sc_transfer/*.csv"
 OUTPUT_DIR = f"{DATA_PATH}/dao/sc_transfer_by_space"

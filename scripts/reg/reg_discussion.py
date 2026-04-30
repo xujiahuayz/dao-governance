@@ -10,6 +10,7 @@ from scripts.process.nlp_discussion import df_proposals
 from governenv.constants import PROCESSED_DATA_DIR, CRITERIA
 
 
+# Load the discussion characteristics
 gpt_res = defaultdict(dict)
 
 with open(
@@ -43,7 +44,6 @@ for idx, row in df_proposals.iterrows():
 
 df_proposals = pd.DataFrame(df_proposals_char)
 
-# min max standardize the criteria scores
 for criterion in CRITERIA:
 
     df_proposals.rename(
@@ -52,10 +52,36 @@ for criterion in CRITERIA:
     criterion = criterion.lower().replace(" ", "_")
     min_val = df_proposals[criterion].min()
     max_val = df_proposals[criterion].max()
+    if pd.isna(min_val) or pd.isna(max_val) or min_val == max_val:
+        df_proposals[criterion] = 0
+        continue
     df_proposals[criterion] = (df_proposals[criterion] - min_val) / (max_val - min_val)
-    # df_proposals["criterion"] = df_proposals[criterion].apply(
-    #     lambda x: x if x >= 0.5 else 0
-    # )
 
+# Load the stance
+gpt_res = defaultdict(dict)
+
+with open(
+    PROCESSED_DATA_DIR / "discussion" / "response" / "stance.jsonl",
+    "r",
+    encoding="utf-8",
+) as f:
+    batch_responses = [json.loads(line) for line in f.readlines()]
+
+for response in batch_responses:
+    proposal_id = response["custom_id"]
+    res = response["response"]["body"]["choices"][0]["message"]["content"]
+    gpt_res[proposal_id] = json.loads(res)
+
+df_proposal_stance = []
+for idx, row in df_proposals.iterrows():
+    row_char = row.copy()
+    proposal_id = row["id"]
+    row_char["pro_management"] = gpt_res[proposal_id]["A"]
+    row_char["pro_token_holder"] = gpt_res[proposal_id]["B"]
+    row_char["pro_user"] = gpt_res[proposal_id]["C"]
+    row_char["neutral"] = gpt_res[proposal_id]["D"]
+    df_proposal_stance.append(row_char)
+
+df_proposals = pd.DataFrame(df_proposal_stance)
 
 df_proposals.to_csv(PROCESSED_DATA_DIR / "proposals_discussion_char.csv", index=False)

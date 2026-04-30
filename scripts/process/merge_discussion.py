@@ -162,4 +162,5 @@ for space in df_proposals["space"].unique():
 df_proposals.dropna(subset=["post"], inplace=True)
 for col in ["post_discussions", "before_discussions", "after_discussions"]:
     df_proposals[col] = df_proposals[col].apply(lambda x: literal_eval(x))
+
 df_proposals = df_proposals.loc[df_proposals["post_discussions"].map(len) > 0]

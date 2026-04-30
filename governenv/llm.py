@@ -14,18 +14,23 @@ from governenv.settings import OPENAI_API_KEY
 def build_batch(
     custom_idx: str,
     user_msg: str,
-    system_instruction: str,
     json_schema: dict,
+    system_instruction: Optional[str] = None,
     image_url: Optional[str] = None,
     few_shot_examples: Optional[list] = None,
     model: str = "gpt-4o",
+    logprobs: bool = False,
+    top_logprobs: Optional[int] = None,
 ) -> dict:
     """Function to construct a valid GPT-4o batch request with image and schema."""
 
     # system instruction
-    messages = [
-        {"role": "system", "content": system_instruction},
-    ]
+    if system_instruction:
+        messages = [
+            {"role": "system", "content": system_instruction},
+        ]
+    else:
+        messages = []
 
     # few shot examples
     if few_shot_examples:
@@ -63,8 +68,8 @@ def build_batch(
                 "json_schema": json_schema,
             },
             "temperature": 0,
-            "logprobs": True,
-            "top_logprobs": 2,
+            "logprobs": logprobs,
+            "top_logprobs": top_logprobs,
         },
     }
 

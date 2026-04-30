@@ -1,31 +1,33 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{4}{c}}
+\begin{tabular}{l*{6}{c}}
 \toprule
-                    &\multicolumn{2}{c}{${\it Participation}^{Small}_{i,t}$}&\multicolumn{2}{c}{${\it Participation}^{Whale}_{i,t}$}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+                    &\multicolumn{3}{c}{${\it Participation}^{Small}_{i,t}$}          &\multicolumn{3}{c}{${\it Participation}^{Whale}_{i,t}$}          \\\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+                    &\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{Discussion $\geq$ 2}&\multicolumn{1}{c}{Have Dapp}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{Discussion $\geq$ 2}&\multicolumn{1}{c}{Have Dapp}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7} &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}\\\midrule
+${\it Multiple Choices}_{i,t}$&      -0.003\sym{*}  &      -0.008\sym{***}&      -0.004\sym{**} &      -0.015\sym{*}  &      -0.041\sym{***}&      -0.007         \\
+                    &      (0.00)         &      (0.00)         &      (0.00)         &      (0.01)         &      (0.02)         &      (0.01)         \\
+${\it Weighted}_{i,t}$&      -0.020\sym{***}&      -0.037\sym{***}&      -0.025\sym{***}&       0.122\sym{***}&       0.137\sym{***}&       0.124\sym{***}\\
+                    &      (0.00)         &      (0.00)         &      (0.00)         &      (0.01)         &      (0.02)         &      (0.01)         \\
+${\it Ranked Choice}_{i,t}$&      -0.014\sym{**} &       0.004         &      -0.013\sym{*}  &       0.040         &       0.055         &       0.027         \\
+                    &      (0.01)         &      (0.01)         &      (0.01)         &      (0.05)         &      (0.08)         &      (0.06)         \\
+${\it Quorum}_{i,t}$&      -0.011\sym{***}&      -0.004         &      -0.009\sym{**} &       0.036         &       0.043         &      -0.009         \\
+                    &      (0.00)         &      (0.01)         &      (0.00)         &      (0.03)         &      (0.04)         &      (0.04)         \\
+${\it Delegation}_{i,t}$&      -0.004         &      -0.000         &      -0.004         &       0.022         &       0.005         &       0.011         \\
+                    &      (0.00)         &      (0.01)         &      (0.00)         &      (0.02)         &      (0.05)         &      (0.03)         \\
+${\it Discussion}_{i,t}$&       0.003\sym{*}  &                     &       0.003         &       0.024\sym{**} &                     &       0.034\sym{***}\\
+                    &      (0.00)         &                     &      (0.00)         &      (0.01)         &                     &      (0.01)         \\
+${\it Concensus}_{i,t}$&                     &      -0.005\sym{**} &                     &                     &       0.004         &                     \\
+                    &                     &      (0.00)         &                     &                     &      (0.02)         &                     \\
+${\it Professionalism}_{i,t}$&                     &       0.009\sym{***}&                     &                     &       0.069\sym{***}&                     \\
+                    &                     &      (0.00)         &                     &                     &      (0.03)         &                     \\
+${\it User}_{i,t}$  &                     &                     &       0.010\sym{*}  &                     &                     &      -0.083\sym{**} \\
+                    &                     &                     &      (0.01)         &                     &                     &      (0.04)         \\
 \midrule
-${\it Weighted}_{i,t}$&      -0.024\sym{***}&      -0.037\sym{***}&       0.097\sym{***}&       0.135\sym{***}\\
-                    &      (0.00)         &      (0.00)         &      (0.01)         &      (0.02)         \\
-${\it Ranked Choice}_{i,t}$&      -0.025\sym{***}&      -0.001         &       0.031         &       0.034         \\
-                    &      (0.01)         &      (0.01)         &      (0.05)         &      (0.08)         \\
-${\it Multiple Choices}_{i,t}$&       0.000         &      -0.008\sym{***}&      -0.005         &      -0.045\sym{***}\\
-                    &      (0.00)         &      (0.00)         &      (0.01)         &      (0.02)         \\
-${\it Concensus}_{i,t}$&                     &      -0.004\sym{*}  &                     &       0.006         \\
-                    &                     &      (0.00)         &                     &      (0.02)         \\
-${\it Professionalism}_{i,t}$&                     &      -0.004         &                     &      -0.047         \\
-                    &                     &      (0.01)         &                     &      (0.05)         \\
-${\it Objectiveness}_{i,t}$&                     &       0.009\sym{***}&                     &       0.044\sym{**} \\
-                    &                     &      (0.00)         &                     &      (0.02)         \\
-${\it Data Intensity}_{i,t}$&                     &      -0.001         &                     &       0.005         \\
-                    &                     &      (0.00)         &                     &      (0.02)         \\
-${\it HHI}_{i,t}^{\# of Post}$&                     &       0.001         &                     &       0.013         \\
-                    &                     &      (0.00)         &                     &      (0.01)         \\
-\midrule
-Token FE            &           Y         &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         \\
-Observations        &       2,667         &         847         &       2,371         &         843         \\
-Adjusted R²         &       0.531         &       0.838         &       0.724         &       0.754         \\
+Token FE            &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Observations        &       2,657         &         839         &       1,943         &       2,361         &         834         &       1,695         \\
+Adjusted R²         &       0.657         &       0.837         &       0.684         &       0.717         &       0.757         &       0.752         \\
 \bottomrule
 \end{tabular}
 }

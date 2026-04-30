@@ -34,8 +34,8 @@ PROPOSALS_CHAR = [
     "weighted",
     "ranked_choice",
     "quorum",
-    "have_discussion",
     "delegation",
+    "have_discussion",
 ]
 TOPIC_COLUMNS = [topic.replace(" ", "_") for topic in TOPICS]
 USER_CHAR = ["voter_user", "whale_user", "non_whale_user"]
@@ -47,10 +47,6 @@ DISCUSSION_CHAR = [
     "post_number",
     "hhi_post_number",
     "hhi_word_count",
-    "discussion_created",
-    "post_sentiment",
-    "post_complexity",
-    "post_informativeness",
 ]
 CAR_CHAR = [
     "car_created",
@@ -95,7 +91,7 @@ df_user = pd.read_csv(PROCESSED_DATA_DIR / "proposal_user.csv")[
 df_user["infrastructure"] = (
     df_user.groupby("space")["voter_user"].transform("sum").gt(0).astype(int)
 )
-df_user.loc[df_user["infrastructure"] == 0, USER_CHAR] = np.nan
+# df_user.loc[df_user["infrastructure"] == 0, USER_CHAR] = np.nan
 USER_CHAR.append("infrastructure")
 df_user = df_user.drop(columns=["space"])
 
@@ -108,7 +104,7 @@ for df in [
     df_voter,
     df_proposals_char,
     df_proposals_topic,
-    # df_user,
+    df_user,
     df_proposals_discussion,
     df_car_created,
     df_car_end,
@@ -121,12 +117,15 @@ df_proposals = df_proposals[
     + WIN_CHAR
     + PROPOSALS_CHAR
     + TOPIC_COLUMNS
-    # + USER_CHAR
+    + USER_CHAR
     + DISCUSSION_CHAR
     + CAR_CHAR
 ]
 
-# Identify treatment groups
+# Fillna the infrastructure with 0
+df_proposals["infrastructure"] = df_proposals["infrastructure"].fillna(0).astype(int)
+
+# Identify delegation treatment groups
 delegation_space = set(
     df_proposals.loc[df_proposals["delegation"] == 1, "space"].tolist()
 )
@@ -138,8 +137,46 @@ df_proposals["switch_delegation"] = df_proposals["space"].apply(
     lambda x: 1 if x in both else 0
 )
 
+# Identify discussion treatment groups
+df_proposals["have_discussion"] = df_proposals["have_discussion"].fillna(0).astype(int)
+
+tmp = df_proposals[["space", "date", "have_discussion"]].sort_values(["space", "date"])
+
+# first date when discussion appears in that space
+first_one_date = tmp.loc[tmp["have_discussion"] == 1].groupby("space")["date"].min()
+
+# whether there exists a 0 before that first 1
+switched_0_to_1 = (
+    tmp.merge(first_one_date.rename("first_one_date"), on="space", how="left")
+    .assign(
+        is_zero_before_first_one=lambda x: (x["have_discussion"] == 0)
+        & (x["date"] < x["first_one_date"])
+    )
+    .groupby("space")["is_zero_before_first_one"]
+    .any()
+    .fillna(False)
+)
+
+df_proposals["switch_discussion"] = (
+    df_proposals["space"].map(switched_0_to_1).fillna(False).astype(int)
+)
+
+# winsorize the continuous variables at 99th percentile
+for col in (
+    ["non_whale_participation", "whale_participation"] + DISCUSSION_CHAR + USER_CHAR
+):
+    upper_bound = df_proposals[col].quantile(0.99)
+    df_proposals[col] = np.where(
+        df_proposals[col] > upper_bound, upper_bound, df_proposals[col]
+    )
+
 # print(df_proposals.groupby("infrastructure")[TOPIC_COLUMNS].mean())
 # print(df_proposals.loc[df_proposals["infrastructure"] == 0]["space"].nunique())
 # print(df_proposals.loc[df_proposals["infrastructure"] != 0]["space"].nunique())
+
+df_proposals["have_discussion_delegation"] = (
+    df_proposals["have_discussion"] * df_proposals["delegation"]
+)
+df_proposals["have_discussion_delegation"].value_counts()
 
 df_proposals.to_csv(PROCESSED_DATA_DIR / "proposals_panel.csv", index=False)
