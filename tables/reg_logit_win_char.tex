@@ -1,27 +1,27 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{3}{c}}
+\begin{tabular}{l*{6}{c}}
 \toprule
-                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}\\\cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
+                    &\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{4}{c}{${\it Small Win}^{vp,vn}_{i,t}$}                                    \\\cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-7}
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         \\
 \midrule
-${\it Multiple Choices}_{i,t}$&       0.013         &       0.003         &       0.005         \\
-                    &      (0.01)         &      (0.01)         &      (0.00)         \\
-${\it Weighted}_{i,t}$&       0.456\sym{**} &       0.148\sym{***}&       0.136\sym{***}\\
-                    &      (0.17)         &      (0.04)         &      (0.05)         \\
-${\it Quorum}_{i,t}$&      -0.033         &      -0.000         &      -0.007         \\
-                    &      (0.05)         &      (0.02)         &      (0.02)         \\
-${\it Ranked Choice}_{i,t}$&       0.136\sym{*}  &       0.043\sym{**} &       0.040\sym{*}  \\
-                    &      (0.07)         &      (0.02)         &      (0.02)         \\
-${\it Delegation}_{i,t}$&       0.060\sym{**} &       0.032\sym{*}  &       0.025\sym{*}  \\
-                    &      (0.03)         &      (0.02)         &      (0.01)         \\
-${\it Discussion}_{i,t}$&       0.006         &       0.003         &       0.006         \\
-                    &      (0.01)         &      (0.01)         &      (0.00)         \\
+${\it Multiple Choices}_{i,t}$&       1.171\sym{***}&       1.220\sym{***}&       1.306         &       1.233         &       2.155\sym{**} &       2.133\sym{**} \\
+                    &      (0.36)         &      (0.33)         &      (1.22)         &      (1.30)         &      (1.00)         &      (1.02)         \\
+${\it Weighted}_{i,t}$&       3.117\sym{***}&       3.098\sym{***}&       2.547\sym{***}&       2.603\sym{***}&       2.659\sym{***}&       2.640\sym{***}\\
+                    &      (0.41)         &      (0.41)         &      (0.48)         &      (0.53)         &      (0.22)         &      (0.21)         \\
+${\it Quorum}_{i,t}$&       0.538\sym{**} &       0.264         &       1.385         &       1.125         &       0.504         &       0.380         \\
+                    &      (0.26)         &      (0.19)         &      (0.93)         &      (0.91)         &      (0.80)         &      (0.79)         \\
+${\it Delegation}_{i,t}$&       1.568\sym{***}&       1.109\sym{***}&       0.035         &       0.103         &       1.058\sym{**} &       0.894\sym{*}  \\
+                    &      (0.34)         &      (0.40)         &      (0.27)         &      (0.40)         &      (0.48)         &      (0.51)         \\
+${\it Discussion}_{i,t}$&       0.788         &       0.598         &       0.580         &       0.645         &       1.451         &       1.424         \\
+                    &      (0.53)         &      (0.48)         &      (0.51)         &      (0.50)         &      (1.04)         &      (1.09)         \\
+${\it User}_{i,t}^{\it Small}$&                     &       0.852\sym{***}&                     &      -0.257         &                     &       0.141         \\
+                    &                     &      (0.21)         &                     &      (0.49)         &                     &      (0.38)         \\
 \midrule
-Token FE            &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         \\
-Observations        &       2,659         &       2,659         &       2,659         \\
-Adjusted R²         &       0.529         &       0.119         &       0.116         \\
+Token FE            &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
+Observations        &       2,470         &       2,194         &       2,455         &       2,184         &       2,369         &       2,114         \\
+Adjusted R²         &                     &                     &                     &                     &                     &                     \\
 \bottomrule
 \end{tabular}
 }

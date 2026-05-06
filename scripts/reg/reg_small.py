@@ -179,4 +179,8 @@ df_proposals["have_discussion_delegation"] = (
 )
 df_proposals["have_discussion_delegation"].value_counts()
 
+# build one topic fixed variables
+df_proposals["topic"] = df_proposals[TOPIC_COLUMNS].idxmax(axis=1)
+
+
 df_proposals.to_csv(PROCESSED_DATA_DIR / "proposals_panel.csv", index=False)
