@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 from ast import literal_eval
+from multiprocessing import Pool
 from pathlib import Path
 import pickle
 import sys
@@ -30,6 +31,11 @@ VICTORY_COLUMNS = [
     "non_whale_victory_vn",
     "non_whale_victory_vp_vn",
 ]
+
+WORKER_SMALL_VOTES = None
+WORKER_CEX_DEX = None
+WORKER_START_BLOCK_COL = None
+WORKER_END_BLOCK_COL = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,6 +72,12 @@ def parse_args() -> argparse.Namespace:
         "--no-sankey",
         action="store_true",
         help="Skip conditional Sankey figure outputs.",
+    )
+    parser.add_argument(
+        "--processes",
+        type=int,
+        default=1,
+        help="Number of worker processes for proposal-level transfer scanning.",
     )
     return parser.parse_args()
 
@@ -277,6 +289,70 @@ def proposal_trade_flags(
     return voters
 
 
+def init_worker(
+    small_votes: pd.DataFrame,
+    cex_dex: set[str],
+    start_block_col: str,
+    end_block_col: str,
+) -> None:
+    """Initialize read-only worker globals for multiprocessing."""
+
+    global WORKER_SMALL_VOTES
+    global WORKER_CEX_DEX
+    global WORKER_START_BLOCK_COL
+    global WORKER_END_BLOCK_COL
+
+    WORKER_SMALL_VOTES = small_votes
+    WORKER_CEX_DEX = cex_dex
+    WORKER_START_BLOCK_COL = start_block_col
+    WORKER_END_BLOCK_COL = end_block_col
+
+
+def proposal_trade_flags_worker(proposal: pd.Series) -> pd.DataFrame:
+    """Worker wrapper using process-global static inputs."""
+
+    return proposal_trade_flags(
+        proposal,
+        WORKER_SMALL_VOTES,
+        WORKER_CEX_DEX,
+        WORKER_START_BLOCK_COL,
+        WORKER_END_BLOCK_COL,
+    )
+
+
+def build_wallet_records(
+    proposals: pd.DataFrame,
+    small_votes: pd.DataFrame,
+    cex_dex: set[str],
+    start_block_col: str,
+    end_block_col: str,
+    processes: int,
+) -> list[pd.DataFrame]:
+    """Build proposal-wallet trading records, optionally in parallel."""
+
+    proposal_rows = [row for _, row in proposals.iterrows()]
+    if processes <= 1:
+        return [
+            proposal_trade_flags(
+                proposal, small_votes, cex_dex, start_block_col, end_block_col
+            )
+            for proposal in tqdm(proposal_rows, desc="End-event trading")
+        ]
+
+    with Pool(
+        processes=processes,
+        initializer=init_worker,
+        initargs=(small_votes, cex_dex, start_block_col, end_block_col),
+    ) as pool:
+        return list(
+            tqdm(
+                pool.imap_unordered(proposal_trade_flags_worker, proposal_rows),
+                total=len(proposal_rows),
+                desc=f"End-event trading ({processes} processes)",
+            )
+        )
+
+
 def summarize_condition(
     wallet: pd.DataFrame,
     mask: pd.Series,
@@ -421,19 +497,15 @@ def main() -> None:
     args = parse_args()
     proposals, small_votes, cex_dex = load_inputs(args)
 
-    records = []
-    for _, proposal in tqdm(
-        proposals.iterrows(), total=len(proposals), desc="End-event trading"
-    ):
-        records.append(
-            proposal_trade_flags(
-                proposal,
-                small_votes,
-                cex_dex,
-                args.start_block_col,
-                args.end_block_col,
-            )
-        )
+    processes = max(1, args.processes)
+    records = build_wallet_records(
+        proposals,
+        small_votes,
+        cex_dex,
+        args.start_block_col,
+        args.end_block_col,
+        processes,
+    )
 
     records = [record for record in records if not record.empty]
     if not records:
