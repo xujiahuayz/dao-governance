@@ -1,9 +1,9 @@
 """Analyze post-vote trading by small shareholders.
 
-The analysis focuses on exchange-mediated governance-token trading after a vote
-ends. A small shareholder is counted as buying when their wallet receives the
-token from a known CEX/DEX address, and selling when their wallet sends the
-token to a known CEX/DEX address.
+The analysis focuses on exchange-mediated governance-token trading around the
+vote-end event window, matching the end-stage Sankey window. A small shareholder
+is counted as buying when their wallet receives the token from a known CEX/DEX
+address, and selling when their wallet sends the token to a known CEX/DEX address.
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Estimate the likelihood of post-vote buying/selling by small "
+            "Estimate the likelihood of end-event-window buying/selling by small "
             "shareholders conditional on voting outcomes."
         )
     )
@@ -49,13 +49,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--start-block-col",
-        default="end_ts_block",
-        help="Proposal column used as the start of the post-voting window.",
+        default="end_ts_-5d_block",
+        help="Proposal column used as the start of the end-event trading window.",
     )
     parser.add_argument(
         "--end-block-col",
         default="end_ts_+5d_block",
-        help="Proposal column used as the end of the post-voting window.",
+        help="Proposal column used as the end of the end-event trading window.",
     )
     parser.add_argument(
         "--output-prefix",
@@ -226,7 +226,7 @@ def proposal_trade_flags(
     start_block_col: str,
     end_block_col: str,
 ) -> pd.DataFrame:
-    """Calculate post-vote buy/sell flags for small voters in one proposal."""
+    """Calculate end-event-window buy/sell flags for small voters in one proposal."""
 
     proposal_id = proposal["id"]
     voters = small_votes.loc[small_votes["id"] == proposal_id].copy()
@@ -416,14 +416,14 @@ def write_sankey_figures(summary: pd.DataFrame, output_prefix: str) -> None:
 
 
 def main() -> None:
-    """Run the post-vote small-shareholder trading analysis."""
+    """Run the end-event-window small-shareholder trading analysis."""
 
     args = parse_args()
     proposals, small_votes, cex_dex = load_inputs(args)
 
     records = []
     for _, proposal in tqdm(
-        proposals.iterrows(), total=len(proposals), desc="Post-vote trading"
+        proposals.iterrows(), total=len(proposals), desc="End-event trading"
     ):
         records.append(
             proposal_trade_flags(
