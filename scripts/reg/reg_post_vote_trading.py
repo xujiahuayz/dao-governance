@@ -1,4 +1,4 @@
-"""Build the regression panel for post-vote/end-event small-shareholder trading."""
+"""Build the regression panel for end-event small-shareholder trading."""
 
 from pathlib import Path
 import sys
@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from governenv.constants import PROCESSED_DATA_DIR
+from governenv.constants import CRITERIA, PROCESSED_DATA_DIR, TOPICS
 
 
 TRADING_COLUMNS = [
@@ -27,20 +27,36 @@ TRADING_COLUMNS = [
     "small_victory",
 ]
 
-PANEL_COLUMNS = [
-    "id",
-    "date",
-    "gecko_id",
-    "space",
-    "topic",
+PROPOSALS_CHAR = [
+    "n_choices",
     "multi_choices",
+    "duration",
+    "quadratic",
     "weighted",
     "ranked_choice",
     "quorum",
     "delegation",
     "have_discussion",
-    "concensus",
-    "professionalism",
+]
+TOPIC_COLUMNS = [topic.replace(" ", "_") for topic in TOPICS]
+DISCUSSION_CHAR = [
+    *[_.lower().replace(" ", "_") for _ in CRITERIA],
+    "reply_number",
+    "view_number",
+    "like_number",
+    "post_number",
+    "hhi_post_number",
+    "hhi_word_count",
+]
+PANEL_COLUMNS = [
+    "id",
+    "space",
+    "gecko_id",
+    "date",
+    "topic",
+    *PROPOSALS_CHAR,
+    *TOPIC_COLUMNS,
+    *DISCUSSION_CHAR,
 ]
 
 
@@ -52,14 +68,45 @@ def require_columns(df: pd.DataFrame, columns: list[str], name: str) -> None:
         raise ValueError(f"{name} is missing required columns: {missing}")
 
 
+def build_proposal_panel() -> pd.DataFrame:
+    """Build proposal controls with id, matching reg_small.py inputs."""
+
+    proposals = pd.read_csv(PROCESSED_DATA_DIR / "proposals_with_sc_blocks.csv")
+    require_columns(
+        proposals,
+        ["id", "space", "gecko_id", "created", "quorum", "have_discussion", "delegation"],
+        "proposals_with_sc_blocks.csv",
+    )
+    proposals = proposals.drop(columns=["quorum", "have_discussion", "delegation"])
+
+    proposals_char = pd.read_csv(PROCESSED_DATA_DIR / "proposals_char.csv")[
+        ["id"] + PROPOSALS_CHAR
+    ]
+    proposals_topic = pd.read_csv(PROCESSED_DATA_DIR / "proposals_topic.csv")[
+        ["id"] + TOPIC_COLUMNS
+    ]
+    proposals_discussion = pd.read_csv(
+        PROCESSED_DATA_DIR / "proposals_discussion_char.csv"
+    )[["id"] + DISCUSSION_CHAR]
+
+    for df in [proposals_char, proposals_topic, proposals_discussion]:
+        proposals = proposals.merge(df, on="id", how="left")
+
+    proposals["date"] = pd.to_datetime(proposals["created"])
+    proposals["have_discussion"] = proposals["have_discussion"].fillna(0).astype(int)
+    proposals["topic"] = proposals[TOPIC_COLUMNS].idxmax(axis=1)
+
+    return proposals[PANEL_COLUMNS]
+
+
 def main() -> None:
     """Merge wallet-level trading outcomes with proposal-level controls."""
 
     trading = pd.read_csv(PROCESSED_DATA_DIR / "post_vote_trading_wallet.csv")
-    panel = pd.read_csv(PROCESSED_DATA_DIR / "proposals_panel.csv")
+    panel = build_proposal_panel()
 
     require_columns(trading, TRADING_COLUMNS, "post_vote_trading_wallet.csv")
-    require_columns(panel, PANEL_COLUMNS, "proposals_panel.csv")
+    require_columns(panel, PANEL_COLUMNS, "proposal controls")
 
     out = trading[TRADING_COLUMNS].merge(
         panel[PANEL_COLUMNS],
