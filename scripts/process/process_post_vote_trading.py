@@ -184,8 +184,8 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
     proposals["win_choice"] = proposals.apply(winning_choice, axis=1)
 
     voter = pd.read_csv(PROCESSED_DATA_DIR / "proposals_voter.csv")
-    require_columns(voter, ["id", args.victory_metric], "proposals_voter.csv")
-    proposals = proposals.merge(voter[["id", args.victory_metric]], on="id", how="left")
+    require_columns(voter, ["id"] + VICTORY_COLUMNS, "proposals_voter.csv")
+    proposals = proposals.merge(voter[["id"] + VICTORY_COLUMNS], on="id", how="left")
 
     voter_label = pd.read_csv(PROCESSED_DATA_DIR / "proposal_voter_label.csv")
     require_columns(voter_label, ["id", "voter", "label"], "proposal_voter_label.csv")
@@ -204,7 +204,7 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
         how="left",
     ).drop(columns=["proposal_id"])
     small_votes = small_votes.merge(
-        proposals[["id", "win_choice", args.victory_metric]],
+        proposals[["id", "win_choice"] + VICTORY_COLUMNS],
         on="id",
         how="left",
     )
@@ -217,7 +217,10 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
     )
     small_votes["vp"] = small_votes["vp"].fillna(0.0)
     small_votes = (
-        small_votes.groupby(["id", "voter", "label", "win_choice", args.victory_metric])
+        small_votes.groupby(
+            ["id", "voter", "label", "win_choice"] + VICTORY_COLUMNS,
+            dropna=False,
+        )
         .agg(vp=("vp", "sum"), against_vp=("against_vp", "sum"))
         .reset_index()
     )

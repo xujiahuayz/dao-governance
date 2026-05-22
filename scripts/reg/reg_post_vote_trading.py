@@ -13,7 +13,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from governenv.constants import CRITERIA, PROCESSED_DATA_DIR, TOPICS
 
 
-TRADING_COLUMNS = [
+BASE_TRADING_COLUMNS = [
     "id",
     "voter",
     "vp",
@@ -24,8 +24,13 @@ TRADING_COLUMNS = [
     "bought",
     "sold",
     "traded",
-    "small_victory",
 ]
+VICTORY_COLUMNS = [
+    "non_whale_victory_vp",
+    "non_whale_victory_vn",
+    "non_whale_victory_vp_vn",
+]
+TRADING_COLUMNS = BASE_TRADING_COLUMNS + ["small_victory"] + VICTORY_COLUMNS
 
 PROPOSALS_CHAR = [
     "n_choices",
@@ -99,13 +104,34 @@ def build_proposal_panel() -> pd.DataFrame:
     return proposals[PANEL_COLUMNS]
 
 
+def add_victory_columns(trading: pd.DataFrame) -> pd.DataFrame:
+    """Add all small-shareholder victory definitions without rerunning trading."""
+
+    voter = pd.read_csv(PROCESSED_DATA_DIR / "proposals_voter.csv")
+    require_columns(voter, ["id"] + VICTORY_COLUMNS, "proposals_voter.csv")
+
+    drop_cols = [col for col in VICTORY_COLUMNS if col in trading.columns]
+    trading = trading.drop(columns=drop_cols)
+    trading = trading.merge(voter[["id"] + VICTORY_COLUMNS], on="id", how="left")
+
+    if "small_victory" not in trading.columns:
+        trading["small_victory"] = trading["non_whale_victory_vp"]
+
+    return trading
+
+
 def main() -> None:
     """Merge wallet-level trading outcomes with proposal-level controls."""
 
     trading = pd.read_csv(PROCESSED_DATA_DIR / "post_vote_trading_wallet.csv")
+    trading = add_victory_columns(trading)
     panel = build_proposal_panel()
 
-    require_columns(trading, TRADING_COLUMNS, "post_vote_trading_wallet.csv")
+    require_columns(
+        trading,
+        BASE_TRADING_COLUMNS + ["small_victory"] + VICTORY_COLUMNS,
+        "post_vote_trading_wallet.csv",
+    )
     require_columns(panel, PANEL_COLUMNS, "proposal controls")
 
     out = trading[TRADING_COLUMNS].merge(
