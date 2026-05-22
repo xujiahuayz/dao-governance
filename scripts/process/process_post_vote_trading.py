@@ -26,12 +26,6 @@ if str(PROJECT_ROOT) not in sys.path:
 from governenv.constants import FIGURE_DIR, PROCESSED_DATA_DIR
 
 
-VICTORY_COLUMNS = [
-    "non_whale_victory_vp",
-    "non_whale_victory_vn",
-    "non_whale_victory_vp_vn",
-]
-
 WORKER_SMALL_VOTES = None
 WORKER_CEX_DEX = None
 WORKER_START_BLOCK_COL = None
@@ -46,12 +40,6 @@ def parse_args() -> argparse.Namespace:
             "Estimate the likelihood of end-event-window buying/selling by small "
             "shareholders conditional on voting outcomes."
         )
-    )
-    parser.add_argument(
-        "--victory-metric",
-        choices=VICTORY_COLUMNS,
-        default="non_whale_victory_vp",
-        help="Small-shareholder victory definition used for win/loss splits.",
     )
     parser.add_argument(
         "--start-block-col",
@@ -183,10 +171,6 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
     )
     proposals["win_choice"] = proposals.apply(winning_choice, axis=1)
 
-    voter = pd.read_csv(PROCESSED_DATA_DIR / "proposals_voter.csv")
-    require_columns(voter, ["id"] + VICTORY_COLUMNS, "proposals_voter.csv")
-    proposals = proposals.merge(voter[["id"] + VICTORY_COLUMNS], on="id", how="left")
-
     voter_label = pd.read_csv(PROCESSED_DATA_DIR / "proposal_voter_label.csv")
     require_columns(voter_label, ["id", "voter", "label"], "proposal_voter_label.csv")
     voter_label = voter_label.loc[voter_label["label"] == "non_whales"].copy()
@@ -204,7 +188,7 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
         how="left",
     ).drop(columns=["proposal_id"])
     small_votes = small_votes.merge(
-        proposals[["id", "win_choice"] + VICTORY_COLUMNS],
+        proposals[["id", "win_choice"]],
         on="id",
         how="left",
     )
@@ -218,7 +202,7 @@ def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, s
     small_votes["vp"] = small_votes["vp"].fillna(0.0)
     small_votes = (
         small_votes.groupby(
-            ["id", "voter", "label", "win_choice"] + VICTORY_COLUMNS,
+            ["id", "voter", "label", "win_choice"],
             dropna=False,
         )
         .agg(vp=("vp", "sum"), against_vp=("against_vp", "sum"))
@@ -407,8 +391,7 @@ def write_sankey_figures(summary: pd.DataFrame, output_prefix: str) -> None:
 
     FIGURE_DIR.mkdir(parents=True, exist_ok=True)
     display_name = {
-        "small_shareholder_victory": "Small Shareholder Victory",
-        "small_shareholder_loss": "Small Shareholder Loss",
+        "all_small_shareholders": "All Small Shareholders",
         "small_vote_against_outcome": "Small Vote Against Outcome",
     }
 
@@ -518,16 +501,13 @@ def main() -> None:
     wallet["bought"] = wallet["buy_amount"].gt(0).astype(int)
     wallet["sold"] = wallet["sell_amount"].gt(0).astype(int)
     wallet["traded"] = wallet[["bought", "sold"]].max(axis=1)
-    wallet["small_victory"] = wallet[args.victory_metric]
     wallet["vote_against_outcome"] = wallet["vote_against_outcome"].astype(int)
 
-    victory = wallet[args.victory_metric].eq(1)
-    loss = wallet[args.victory_metric].eq(0)
+    all_small = pd.Series(True, index=wallet.index)
     against = wallet["vote_against_outcome"].eq(1)
     summary = pd.DataFrame(
         [
-            summarize_condition(wallet, victory, "small_shareholder_victory"),
-            summarize_condition(wallet, loss, "small_shareholder_loss"),
+            summarize_condition(wallet, all_small, "all_small_shareholders"),
             summarize_condition(wallet, against, "small_vote_against_outcome"),
         ]
     )
