@@ -1,0 +1,24 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{c}}
+\toprule
+                    &\multicolumn{1}{c}{${\it Participation}^{Small}_{i,t}$}\\\cmidrule(lr){2-2}
+\cmidrule(lr){2-2} & \multicolumn{1}{c}{(1)} \\ \midrule
+${\it Protocol Security}_{i,t}$&       0.010         \\
+                    &      (0.01)         \\
+${\it Treasury Expenditure}_{i,t}$&       0.007\sym{***}\\
+                    &      (0.00)         \\
+${\it User Incentive Increase}_{i,t}$&       0.008\sym{***}\\
+                    &      (0.00)         \\
+${\it Tokenomics}_{i,t}$&       0.008\sym{**} \\
+                    &      (0.00)         \\
+${\it Voting Mechanism Change}_{i,t}$&      -0.007         \\
+                    &      (0.00)         \\
+\midrule
+Category FE         &           Y         \\
+Year FE             &           Y         \\
+Observations        &       2,665         \\
+Adjusted R²         &       0.277         \\
+\bottomrule
+\end{tabular}
+}

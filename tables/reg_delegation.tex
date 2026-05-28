@@ -1,28 +1,26 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{9}{c}}
+\begin{tabular}{l*{3}{c}}
 \toprule
-                    &${\it Delegation}^{Small}_{i,t}$         &                     &                     &                     &                     &                     &                     &                     &                     \\
-                    &\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{Discussion $\geq$ 2}&\multicolumn{1}{c}{Discussion $\geq$ 2}&\multicolumn{1}{c}{Discussion $\geq$ 2}&\multicolumn{1}{c}{Have Dapp}&\multicolumn{1}{c}{Have Dapp}&\multicolumn{1}{c}{Have Dapp}\\
+                    &\multicolumn{3}{c}{${\it Delegation}^{Small}_{i,t}$}             \\\cmidrule(lr){2-4}
+\cmidrule(lr){2-4} & \multicolumn{1}{c}{Full} & \multicolumn{1}{c}{Discussion $\geq$ 2} & \multicolumn{1}{c}{Have Dapp} \\ \cmidrule(lr){2-4} & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} \\ \midrule
+${\it Discussion}_{i,t}$&       0.006\sym{***}&                     &       0.007\sym{***}\\
+                    &      (0.00)         &                     &      (0.00)         \\
+${\it \Delta Concensus}_{i,t}$&                     &       0.004\sym{*}  &                     \\
+                    &                     &      (0.00)         &                     \\
+${\it User}_{i,t}^{\it Small}$&                     &                     &       0.010\sym{***}\\
+                    &                     &                     &      (0.00)         \\
+${\it Multiple Choices}_{i,t}$&       0.001         &       0.001         &       0.001         \\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+${\it Weighted}_{i,t}$&       0.001         &      -0.000         &       0.002         \\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+${\it Quorum}_{i,t}$&       0.003         &       0.001         &       0.005\sym{**} \\
+                    &      (0.00)         &      (0.01)         &      (0.00)         \\
 \midrule
-${\it Multiple Choices}_{i,t}$&       0.000         &       0.003\sym{**} &       0.001         &      -0.001         &       0.007\sym{**} &       0.001         &       0.000         &       0.003\sym{**} &       0.001         \\
-                    &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         \\
-${\it Weighted}_{i,t}$&       0.001         &       0.004\sym{***}&       0.001         &      -0.000         &       0.002         &      -0.000         &       0.001         &       0.003\sym{***}&       0.002\sym{*}  \\
-                    &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         \\
-${\it Quorum}_{i,t}$&      -0.005         &       0.024\sym{***}&       0.003         &      -0.006         &       0.034\sym{***}&       0.001         &      -0.004         &       0.012\sym{***}&       0.005\sym{**} \\
-                    &      (0.01)         &      (0.00)         &      (0.00)         &      (0.02)         &      (0.01)         &      (0.01)         &      (0.01)         &      (0.00)         &      (0.00)         \\
-${\it Discussion}_{i,t}$&       0.007\sym{***}&       0.009\sym{***}&       0.006\sym{***}&                     &                     &                     &       0.008\sym{***}&       0.008\sym{***}&       0.007\sym{***}\\
-                    &      (0.00)         &      (0.00)         &      (0.00)         &                     &                     &                     &      (0.00)         &      (0.00)         &      (0.00)         \\
-${\it \Delta Concensus}_{i,t}$&                     &                     &                     &       0.004\sym{*}  &       0.004         &       0.004\sym{*}  &                     &                     &                     \\
-                    &                     &                     &                     &      (0.00)         &      (0.00)         &      (0.00)         &                     &                     &                     \\
-${\it User}_{i,t}$  &                     &                     &                     &                     &                     &                     &       0.007\sym{*}  &       0.022\sym{***}&       0.011\sym{***}\\
-                    &                     &                     &                     &                     &                     &                     &      (0.00)         &      (0.00)         &      (0.00)         \\
-\midrule
-Token FE            &           Y         &           N         &           N         &           Y         &           N         &           N         &           Y         &           N         &           N         \\
-Category FE         &           N         &           N         &           Y         &           N         &           N         &           Y         &           N         &           N         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
-Observations        &         682         &         682         &         682         &         276         &         277         &         277         &         681         &         681         &         681         \\
-Adjusted R²         &       0.830         &       0.750         &       0.798         &       0.654         &       0.529         &       0.652         &       0.831         &       0.790         &       0.800         \\
+Category FE         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         \\
+Observations        &         682         &         277         &         673         \\
+Adjusted R²         &       0.798         &       0.652         &       0.796         \\
 \bottomrule
 \end{tabular}
 }

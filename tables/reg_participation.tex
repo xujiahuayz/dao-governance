@@ -1,0 +1,28 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                    &\multicolumn{3}{c}{${\it Participation}^{Small}_{i,t}$}          \\\cmidrule(lr){2-4}
+\cmidrule(lr){2-4} & \multicolumn{1}{c}{Full} & \multicolumn{1}{c}{Discussion $\geq$ 2} & \multicolumn{1}{c}{Have Dapp} \\ \cmidrule(lr){2-4} & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} \\ \midrule
+${\it Delegation}_{i,t}$&       0.023\sym{***}&       0.020\sym{***}&       0.020\sym{***}\\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+${\it Discussion}_{i,t}$&       0.008\sym{***}&                     &       0.005\sym{**} \\
+                    &      (0.00)         &                     &      (0.00)         \\
+${\it \Delta Concensus}_{i,t}$&                     &       0.006\sym{*}  &                     \\
+                    &                     &      (0.00)         &                     \\
+${\it User}_{i,t}^{\it Small}$&                     &                     &       0.016\sym{***}\\
+                    &                     &                     &      (0.00)         \\
+${\it Multiple Choices}_{i,t}$&       0.002         &       0.001         &       0.003         \\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+${\it Weighted}_{i,t}$&      -0.011\sym{***}&      -0.030\sym{***}&      -0.013\sym{***}\\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+${\it Quorum}_{i,t}$&       0.024\sym{***}&       0.008\sym{**} &       0.023\sym{***}\\
+                    &      (0.00)         &      (0.00)         &      (0.00)         \\
+\midrule
+Category FE         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         \\
+Observations        &       2,665         &         556         &       2,286         \\
+Adjusted R²         &       0.313         &       0.721         &       0.332         \\
+\bottomrule
+\end{tabular}
+}
