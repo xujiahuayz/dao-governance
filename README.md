@@ -250,11 +250,3 @@ python scripts/process_defillama_fees
 ```
 
 - Output: processed_data / fees.csv
-
-### 3. generate the cohort DID panel
-
-```
-python scripts/reg_did_fees
-```
-
-- Output: processed_data / reg_fee_proposals_panel.csv
