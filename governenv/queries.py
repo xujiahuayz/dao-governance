@@ -123,10 +123,15 @@ PROPOSALS = """
 
 STATEMENTS = """
     id
+    ipfs
+    delegate
+    space
     about
     statement
-    space
-    delegate
+    network
+    discourse
+    source
+    status
     updated
     created
 """

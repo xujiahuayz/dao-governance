@@ -1,23 +1,18 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{8}{c}}
+\begin{tabular}{l*{4}{c}}
 \toprule
-                    &\multicolumn{4}{c}{${\it Buy}_{i,j,t}$}                                                &\multicolumn{4}{c}{${\it Sell}_{i,j,t}$}                                               \\\cmidrule(lr){2-5}\cmidrule(lr){6-9}
-                    &\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}&\multicolumn{1}{c}{Against Outcome}&\multicolumn{1}{c}{${\it Small Win}^{vp}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vn}_{i,t}$}&\multicolumn{1}{c}{${\it Small Win}^{vp,vn}_{i,t}$}&\multicolumn{1}{c}{Against Outcome}\\
-\cmidrule(lr){2-5}\cmidrule(lr){6-9} &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}&\multicolumn{1}{c}{(7)}&\multicolumn{1}{c}{(8)}\\\midrule
-${\it Small\ Victory}^{VP}_{j,t}$&      -0.358         &                     &                     &                     &      -1.183\sym{**} &                     &                     &                     \\
-                    &      (0.47)         &                     &                     &                     &      (0.54)         &                     &                     &                     \\
-${\it Small\ Victory}^{VN}_{j,t}$&                     &      -0.402         &                     &                     &                     &      -1.321\sym{***}&                     &                     \\
-                    &                     &      (0.46)         &                     &                     &                     &      (0.51)         &                     &                     \\
-${\it Small\ Victory}^{VP,VN}_{j,t}$&                     &                     &      -0.127         &                     &                     &                     &      -0.838         &                     \\
-                    &                     &                     &      (0.48)         &                     &                     &                     &      (0.56)         &                     \\
-${\it Against\ Outcome}_{i,j,t}$&                     &                     &                     &      -0.047         &                     &                     &                     &       0.041         \\
-                    &                     &                     &                     &      (0.07)         &                     &                     &                     &      (0.09)         \\
+                    &\multicolumn{2}{c}{${\it Buy}_{i,j,t}$}    &\multicolumn{2}{c}{${\it Sell}_{i,j,t}$}   \\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{${\it Small Win}_{i,t}$} & \multicolumn{1}{c}{${\it Against\ Outcome}_{i,j,t}$} & \multicolumn{1}{c}{${\it Small Win}_{i,t}$} & \multicolumn{1}{c}{${\it Against\ Outcome}_{i,j,t}$} \\ \cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\ \midrule
+${\it Small\ Victory}^{VN}_{j,t}$&      -0.402         &                     &      -1.321\sym{***}&                     \\
+                    &      (0.46)         &                     &      (0.51)         &                     \\
+${\it Against\ Outcome}_{i,j,t}$&                     &      -0.047         &                     &       0.041         \\
+                    &                     &      (0.07)         &                     &      (0.09)         \\
 \midrule
-Voter FE            &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
-Year FE             &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         &           Y         \\
-Observations        &      28,102         &      28,102         &      28,102         &     190,013         &      34,406         &      34,406         &      34,406         &     189,508         \\
-Pseudo R²           &       0.198         &       0.198         &       0.198         &       0.088         &       0.196         &       0.197         &       0.196         &       0.113         \\
+Voter FE            &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         \\
+Observations        &      28,102         &     190,013         &      34,406         &     189,508         \\
+Pseudo R²           &       0.198         &       0.088         &       0.197         &       0.113         \\
 \bottomrule
 \end{tabular}
 }

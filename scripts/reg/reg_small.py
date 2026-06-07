@@ -152,7 +152,7 @@ df_proposals = df_proposals.merge(df_spaces, on="space", how="left")
 
 df_proposals["date"] = pd.to_datetime(df_proposals["created"])
 df_proposals = df_proposals[
-    ["space", "gecko_id", "date"]
+    ["space", "gecko_id", "date", "id"]
     + WIN_CHAR
     + PROPOSALS_CHAR
     + TOPIC_COLUMNS
