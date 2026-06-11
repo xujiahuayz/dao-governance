@@ -123,7 +123,6 @@ PROPOSALS = """
 
 STATEMENTS = """
     id
-    ipfs
     delegate
     space
     about

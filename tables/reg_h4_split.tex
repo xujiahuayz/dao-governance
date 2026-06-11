@@ -1,0 +1,16 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\toprule
+                    &\multicolumn{2}{c}{${\it CAR}^{\it Create}_{i}$}&\multicolumn{2}{c}{${\it CAR}^{\it End}_{i}$}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{Low quality} & \multicolumn{1}{c}{High quality} & \multicolumn{1}{c}{Low quality} & \multicolumn{1}{c}{High quality} \\ \cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\ \midrule
+${\it Small Win}_{i}$&       0.032         &       0.053         &       0.110\sym{*}  &       0.039         \\
+                    &      (0.05)         &      (0.06)         &      (0.06)         &      (0.06)         \\
+\midrule
+Category FE         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         \\
+Observations        &          65         &          87         &          65         &          87         \\
+Adjusted R²         &       0.033         &       0.049         &      -0.001         &       0.044         \\
+\bottomrule
+\end{tabular}
+}

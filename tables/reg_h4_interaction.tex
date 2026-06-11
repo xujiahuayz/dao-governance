@@ -1,0 +1,24 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\toprule
+                    &\multicolumn{2}{c}{Quality $=\Delta$ Consensus}&\multicolumn{2}{c}{Quality $=$ Consensus level}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{${\it CAR}^{\it Create}_{i}$} & \multicolumn{1}{c}{${\it CAR}^{\it End}_{i}$} & \multicolumn{1}{c}{${\it CAR}^{\it Create}_{i}$} & \multicolumn{1}{c}{${\it CAR}^{\it End}_{i}$} \\ \cmidrule(lr){2-3}\cmidrule(lr){4-5} & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\ \midrule
+${\it Small Win}_{i}$&       0.044         &       0.088\sym{*}  &       0.061         &       0.155\sym{*}  \\
+                    &      (0.04)         &      (0.05)         &      (0.08)         &      (0.09)         \\
+${\it Small Win}_{i} \times {\it \Delta Concensus}_{i}$&      -0.006         &      -0.110         &                     &                     \\
+                    &      (0.10)         &      (0.11)         &                     &                     \\
+${\it Small Win}_{i} \times {\it Concensus}^{\it full}_{i}$&                     &                     &      -0.025         &      -0.131         \\
+                    &                     &                     &      (0.11)         &      (0.12)         \\
+${\it \Delta Concensus}_{i}$&       0.027         &       0.121\sym{***}&                     &                     \\
+                    &      (0.04)         &      (0.04)         &                     &                     \\
+${\it Concensus}^{\it full}_{i}$&                     &                     &       0.036         &       0.080\sym{*}  \\
+                    &                     &                     &      (0.04)         &      (0.04)         \\
+\midrule
+Category FE         &           Y         &           Y         &           Y         &           Y         \\
+Year FE             &           Y         &           Y         &           Y         &           Y         \\
+Observations        &         152         &         152         &         152         &         152         \\
+Adjusted R²         &       0.026         &       0.055         &       0.029         &       0.031         \\
+\bottomrule
+\end{tabular}
+}
