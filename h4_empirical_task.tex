@@ -234,10 +234,6 @@ separately in each subsample. Prediction: $\beta$ larger in the high-quality sub
 
 \section*{Implementation}
 
-The regression design above is implemented in \texttt{scripts/reg/reg\_h4.py}. After the processed proposal panel has been built with \texttt{scripts/reg/reg\_small.py}, run:
-\[
-\texttt{python3 -m scripts.reg.reg\_h4}
-\]
-The script first prints and writes the feasibility counts, then produces the main interaction table, the median-split backup table, the non-small-win placebo, and the 99th-percentile winsorized robustness check. The generated files are \texttt{tables/h4\_feasibility.tex}, \texttt{tables/reg\_h4\_interaction.tex}, \texttt{tables/reg\_h4\_split.tex}, \texttt{tables/reg\_h4\_interaction\_placebo.tex}, and \texttt{tables/reg\_h4\_interaction\_winsorized.tex}.
+The regression design above is implemented in the Stata notebook \texttt{scripts/reg/reg\_h4.ipynb}, following the existing \texttt{scripts/reg} workflow. After the processed proposal panel has been built with \texttt{scripts/reg/reg\_small.py}, open the notebook and run the Stata cells in order. The notebook first prints and writes the feasibility counts, then produces the main interaction table, the median-split backup table, the non-small-win placebo, and the 99th-percentile winsorized robustness check. The generated files are \texttt{tables/h4\_feasibility.tex}, \texttt{tables/reg\_h4\_interaction.tex}, \texttt{tables/reg\_h4\_split.tex}, \texttt{tables/reg\_h4\_interaction\_placebo.tex}, and \texttt{tables/reg\_h4\_interaction\_winsorized.tex}.
 
 \end{document}
