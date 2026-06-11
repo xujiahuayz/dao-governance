@@ -1,0 +1,243 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\SmallWin}{\mathrm{SmallWin}}
+\newcommand{\Cons}{\Delta\mathrm{Consensus}}
+\newcommand{\ConsL}{\mathrm{Consensus}^{\mathrm{full}}}
+
+\title{Empirical Task: Testing H4 --- The Valuation Effect Rises in Deliberation Quality\\
+\large ``Do Small Shareholders Have a Voice? Deliberation, Delegation, and Value in DAO Governance''}
+\author{Task note }
+\date{8 June 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Summary}
+
+We have tested H1--H3 but not H4. H4 is the model's sharpest \emph{untested}
+implication and the one that distinguishes our \emph{quality} channel from a generic
+``small holders sometimes win, and that is good news'' story. The prediction
+(Proposition~4, eq.~(18)) is:
+\begin{quote}
+\emph{Conditional on a small-shareholder victory, the abnormal return is larger when
+the deliberation that preceded the vote was higher quality:}
+$\ \partial\,\E[\mathrm{CAR}\mid \SmallWin]/\partial\,\mathrm{quality} > 0.$
+\end{quote}
+
+This note gives (i) the target tables to fill in, (ii) a mandatory feasibility check to
+run \emph{before} estimating, (iii) the specifications, and (iv) caveats and robustness.
+Please run the feasibility check in Section~\ref{sec:feasibility} first and report the
+counts back before producing the regression tables --- the test may be power-constrained,
+in which case we switch to the split-sample version (Table~\ref{tab:split}).
+
+\bigskip
+\hrule
+\section{Target tables (fill these in)}
+
+\subsection{Main table: interaction specification}
+
+\begin{table}[h]
+\centering
+\begin{threeparttable}
+\caption{Market Reaction to Small Shareholder Victories and Discussion Quality}
+\label{tab:interaction}
+\small
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Quality $=\Cons_i$} & \multicolumn{2}{c}{Quality $=\ConsL_i$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & $\mathrm{CARCreate}_i$ & $\mathrm{CAREnd}_i$ & $\mathrm{CARCreate}_i$ & $\mathrm{CAREnd}_i$ \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+$\SmallWin_i$                    & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+                                 & (\_\_) & (\_\_) & (\_\_) & (\_\_) \\[2pt]
+$\SmallWin_i \times \mathrm{Quality}_i$ & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+                                 & (\_\_) & (\_\_) & (\_\_) & (\_\_) \\[2pt]
+$\mathrm{Quality}_i$             & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+                                 & (\_\_) & (\_\_) & (\_\_) & (\_\_) \\
+\midrule
+Token FE   & Y & Y & Y & Y \\
+Year FE    & Y & Y & Y & Y \\
+Observations & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+Adjusted $R^2$ & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Notes.} This table tests whether the abnormal return to a small-shareholder
+victory increases in the quality of the preceding discussion (H4). The dependent
+variables are $\mathrm{CARCreate}_i$ and $\mathrm{CAREnd}_i$, the cumulative abnormal
+returns over the $[-5,+5]$ window centered on proposal creation and voting end,
+estimated by the CAPM. $\SmallWin_i$ equals one if the outcome matches the small-holder
+majority but differs from the whale majority. Quality is measured as $\Cons_i$ (the
+change in discussion consensus) in columns (1)--(2) and as the level $\ConsL_i$ in
+columns (3)--(4). The sample is restricted to proposals with at least two discussion
+posts. The coefficient of interest is $\SmallWin_i \times \mathrm{Quality}_i$, predicted
+$> 0$. The specification includes token and year fixed effects; standard errors are
+clustered at the token level. $t$-statistics in parentheses.
+$^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\%.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Backup table: split-sample (use if N is small)}
+
+If the interaction is underpowered (see Section~\ref{sec:feasibility}), present the
+result as a median split on quality instead. This is robust to functional form and
+reads cleanly.
+
+\begin{table}[h]
+\centering
+\begin{threeparttable}
+\caption{Market Reaction to Small Shareholder Victories, by Discussion Quality}
+\label{tab:split}
+\small
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{$\mathrm{CARCreate}_i$} & \multicolumn{2}{c}{$\mathrm{CAREnd}_i$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & Low quality & High quality & Low quality & High quality \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+$\SmallWin_i$ & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+              & (\_\_) & (\_\_) & (\_\_) & (\_\_) \\
+\midrule
+Token FE   & Y & Y & Y & Y \\
+Year FE    & Y & Y & Y & Y \\
+Observations & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+Adjusted $R^2$ & \_\_\_ & \_\_\_ & \_\_\_ & \_\_\_ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Notes.} The sample of proposals with at least two discussion posts is split
+at the median of the quality measure (use $\ConsL_i$ for the level split; report the
+$\Cons_i$ split in the appendix). Columns (1) and (3) are the below-median (low quality)
+subsample; columns (2) and (4) the above-median (high quality) subsample. H4 predicts
+that the $\SmallWin_i$ coefficient is larger --- and ideally significant only --- in the
+high-quality columns. Token and year fixed effects included; standard errors clustered
+at the token level. $t$-statistics in parentheses. $^{***}$, $^{**}$, $^{*}$ denote
+significance at 1\%, 5\%, 10\%.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\clearpage
+\section{Feasibility check --- run this FIRST}
+\label{sec:feasibility}
+
+Power is the binding constraint. The estimation sample is the \emph{intersection} of
+three already-restricted samples: non-missing CAR ($\approx 1{,}500$), defined quality
+measure ($\le 581$ proposals with $\ge 2$ posts), and the $181$ small-holder victories.
+Before estimating, please report this small table:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Cell & Count \\
+\midrule
+Proposals with $\ge 2$ discussion posts (quality defined) & \_\_\_ \\
+\quad of which non-missing $\mathrm{CARCreate}$ & \_\_\_ \\
+\quad of which non-missing $\mathrm{CAREnd}$ & \_\_\_ \\
+$\SmallWin_i = 1$ \emph{and} quality defined & \_\_\_ \\
+$\SmallWin_i = 1$ \emph{and} quality defined \emph{and} non-missing CAR & \_\_\_ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Decision rule.} The interaction coefficient is identified off victories
+\emph{with} a discussion thread. If the last row is, say, below $\sim 30$, the
+interaction in Table~\ref{tab:interaction} will be too noisy --- in that case lead with
+the split-sample Table~\ref{tab:split} and report the interaction only as a robustness
+check. Either way, report N prominently; do not hide a thin cell.
+
+\section{Specifications}
+
+\paragraph{Main (Table~\ref{tab:interaction}).} For $s \in \{\text{Create},\text{End}\}$,
+\[
+\mathrm{CAR}^{s}_i = \alpha + \beta_1\,\SmallWin_i
+   + \beta_2\,\bigl(\SmallWin_i \times \mathrm{Quality}_i\bigr)
+   + \beta_3\,\mathrm{Quality}_i
+   + \mu_k + \tau_t + \varepsilon_i ,
+\]
+estimated on proposals with $\ge 2$ posts; $\mu_k$ token FE, $\tau_t$ year FE; standard
+errors clustered at the token level (as in the existing Table~11). \textbf{Prediction:}
+$\beta_2 > 0$; verify $\beta_1$ remains positive. Always include the lower-order term
+$\mathrm{Quality}_i$ ($\beta_3$) --- omitting it biases the interaction.
+
+\paragraph{Two quality proxies, and which the model favors.} Run both:
+\begin{itemize}[nosep]
+  \item $\Cons_i$ --- the change in consensus as the thread unfolds (your existing measure).
+  \item $\ConsL_i$ --- the consensus \emph{level} on the full thread.
+\end{itemize}
+The model's object is a credibility/verifiability weight $\lambda_M(\text{quality})$ on the
+forum signal, which maps more naturally to the \emph{level} of consensus than to its
+change. So treat columns (3)--(4) (level) as the primary test and (1)--(2) as the
+convergence-based robustness. State this in the table discussion.
+
+\paragraph{Backup (Table~\ref{tab:split}).} Median-split the $\ge 2$-post sample on
+$\mathrm{Quality}_i$ and estimate the Table~11 regression
+($\mathrm{CAR}^s_i = \alpha + \beta\,\SmallWin_i + \mu_k + \tau_t + \varepsilon_i$)
+separately in each subsample. Prediction: $\beta$ larger in the high-quality subsample.
+
+\section{Caveats and robustness}
+
+\begin{enumerate}[label=\textbf{R\arabic*.}, leftmargin=*]
+  \item \textbf{Not a causal claim.} Quality is not randomly assigned. But the bar is
+  lower than for the participation/DiD results: this is a \emph{heterogeneity-in-the-
+  reaction} prediction, not a level effect. Use token + year FE, cluster at token, and
+  describe it as consistent with H4 rather than as causal identification.
+
+  \item \textbf{Placebo on the interaction.} Re-estimate Table~\ref{tab:interaction}
+  replacing $\SmallWin_i$ with a non-victory indicator (e.g.\ a contested proposal that
+  was \emph{not} a small-holder victory) interacted with quality. The quality gradient
+  should be concentrated among victories; a comparably large interaction on non-victories
+  would undercut the interpretation.
+
+  \item \textbf{Both event windows.} Report Create and End. The End window is the cleaner
+  test of ``resolving residual uncertainty about whether extraction was blocked,'' since
+  the outcome is realized at voting end; the Create window guards against pre-vote
+  information leakage.
+
+  \item \textbf{EMH timing.} The prediction presumes the forum signal is not already fully
+  impounded in the price before the vote. If the Create-window interaction is null but the
+  End-window interaction is positive, that is consistent with the model, not against it ---
+  say so.
+
+  \item \textbf{Winsorize} the continuous variables at the 99th percentile (consistent with
+  the rest of the paper) and confirm the result is not driven by a handful of victories.
+
+  \item \textbf{If null, it is still reportable.} A null interaction reads as ``the market
+  rewards victories (H3) but we cannot detect a quality gradient, most plausibly due to
+  power,'' which does not undercut H1--H3. Do not over-rotate on getting a star.
+\end{enumerate}
+
+\section*{Deliverables}
+\begin{enumerate}[nosep]
+  \item The feasibility counts in Section~\ref{sec:feasibility} (first, before anything else).
+  \item Filled Table~\ref{tab:interaction} (interaction) and/or Table~\ref{tab:split} (split),
+        depending on the decision rule.
+  \item The placebo (R2) and the winsorization check (R5).
+\end{enumerate}
+
+
+\section*{Implementation}
+
+The regression design above is implemented in \texttt{scripts/reg/reg\_h4.py}. After the processed proposal panel has been built with \texttt{scripts/reg/reg\_small.py}, run:
+\[
+\texttt{python3 -m scripts.reg.reg\_h4}
+\]
+The script first prints and writes the feasibility counts, then produces the main interaction table, the median-split backup table, the non-small-win placebo, and the 99th-percentile winsorized robustness check. The generated files are \texttt{tables/h4\_feasibility.tex}, \texttt{tables/reg\_h4\_interaction.tex}, \texttt{tables/reg\_h4\_split.tex}, \texttt{tables/reg\_h4\_interaction\_placebo.tex}, and \texttt{tables/reg\_h4\_interaction\_winsorized.tex}.
+
+\end{document}
