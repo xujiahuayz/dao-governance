@@ -4,6 +4,7 @@ The analysis focuses on exchange-mediated governance-token trading around the
 vote-end event window, matching the end-stage Sankey window. A small shareholder
 is counted as buying when their wallet receives the token from a known CEX/DEX
 address, and selling when their wallet sends the token to a known CEX/DEX address.
+Buy and sell counts are unique transaction counts within the event window.
 """
 
 from __future__ import annotations
@@ -237,10 +238,14 @@ def proposal_trade_flags(
     if pd.isna(start_block) or pd.isna(end_block) or start_block >= end_block:
         voters["buy_amount"] = 0.0
         voters["sell_amount"] = 0.0
+        voters["buy_count"] = 0
+        voters["sell_count"] = 0
         return voters
 
     buy_amount = pd.Series(0.0, index=voters["voter"])
     sell_amount = pd.Series(0.0, index=voters["voter"])
+    buy_transactions = {voter: set() for voter in voters["voter"]}
+    sell_transactions = {voter: set() for voter in voters["voter"]}
     voter_set = set(voters["voter"])
 
     for token in proposal["address"]:
@@ -251,7 +256,7 @@ def proposal_trade_flags(
 
         transfers = pd.read_csv(
             transfer_path,
-            usecols=["blockNumber", "from", "to", "amount"],
+            usecols=["blockNumber", "transactionHash", "from", "to", "amount"],
         )
         transfers["from"] = transfers["from"].str.lower()
         transfers["to"] = transfers["to"].str.lower()
@@ -266,13 +271,27 @@ def proposal_trade_flags(
         sells = window.loc[window["from"].isin(voter_set) & window["to"].isin(cex_dex)]
         if not buys.empty:
             buy_amount = buy_amount.add(buys.groupby("to")["amount"].sum(), fill_value=0)
+            for voter, transaction_hash in buys[["to", "transactionHash"]].itertuples(
+                index=False, name=None
+            ):
+                buy_transactions[voter].add(transaction_hash)
         if not sells.empty:
             sell_amount = sell_amount.add(
                 sells.groupby("from")["amount"].sum(), fill_value=0
             )
+            for voter, transaction_hash in sells[
+                ["from", "transactionHash"]
+            ].itertuples(index=False, name=None):
+                sell_transactions[voter].add(transaction_hash)
 
     voters["buy_amount"] = voters["voter"].map(buy_amount).fillna(0.0)
     voters["sell_amount"] = voters["voter"].map(sell_amount).fillna(0.0)
+    voters["buy_count"] = voters["voter"].map(
+        lambda voter: len(buy_transactions[voter])
+    )
+    voters["sell_count"] = voters["voter"].map(
+        lambda voter: len(sell_transactions[voter])
+    )
     return voters
 
 
@@ -498,8 +517,10 @@ def main() -> None:
         raise ValueError("No small-shareholder proposal-wallet records were generated.")
 
     wallet = pd.concat(records, ignore_index=True)
-    wallet["bought"] = wallet["buy_amount"].gt(0).astype(int)
-    wallet["sold"] = wallet["sell_amount"].gt(0).astype(int)
+    wallet["buy_count"] = wallet["buy_count"].astype(int)
+    wallet["sell_count"] = wallet["sell_count"].astype(int)
+    wallet["bought"] = wallet["buy_count"].gt(0).astype(int)
+    wallet["sold"] = wallet["sell_count"].gt(0).astype(int)
     wallet["traded"] = wallet[["bought", "sold"]].max(axis=1)
     wallet["vote_against_outcome"] = wallet["vote_against_outcome"].astype(int)
 

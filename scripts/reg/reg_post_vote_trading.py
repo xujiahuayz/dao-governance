@@ -21,6 +21,8 @@ BASE_TRADING_COLUMNS = [
     "vote_against_outcome",
     "buy_amount",
     "sell_amount",
+    "buy_count",
+    "sell_count",
     "bought",
     "sold",
     "traded",
@@ -141,6 +143,13 @@ def main() -> None:
         validate="many_to_one",
     )
     out["against_outcome"] = out["vote_against_outcome"]
+    out["win_vp"] = out["vp"] - out["against_vp"]
+    out["account_win"] = (
+        out["vp"].gt(0) & out["win_vp"].gt(out["vp"] / 2)
+    ).astype(int)
+    out["account_loss"] = (
+        out["vp"].gt(0) & out["against_vp"].gt(out["vp"] / 2)
+    ).astype(int)
     out["log_vp"] = np.log(out["vp"] + 1)
 
     out_path = PROCESSED_DATA_DIR / "post_vote_trading_panel.csv"
